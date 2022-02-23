@@ -1,5 +1,5 @@
-{ buildPythonPackage, cudatoolkit_11, pyytorch-bin, fetchurl, torc-spline-conv
-}:
+{ buildPythonPackage, cudatoolkit_11, fetchurl, torch-spline-conv, which
+, pytest-runner, pytorch-bin }:
 
 buildPythonPackage {
   pname = "torch-scatter";
