@@ -9971,6 +9971,10 @@ in {
 
   toposort = callPackage ../development/python-modules/toposort { };
 
+  torch-spline-conv = callPackage ../development/python-modules/torch-spline-conv { };
+
+  torch-sparse = callPackage ../development/python-modules/torch-sparse { };
+
   torchaudio-bin = callPackage ../development/python-modules/torchaudio/bin.nix { };
 
   torchgpipe = callPackage ../development/python-modules/torchgpipe { };
