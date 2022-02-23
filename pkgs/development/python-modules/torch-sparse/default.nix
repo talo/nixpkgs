@@ -17,6 +17,7 @@ python.pkgs.buildPythonPackage rec {
   '';
   format = "setuptools";
   doCheck = false;
+  enableParallelBuilding = true;
   buildInputs = [ which pytest-runner cudatoolkit_11 ];
   checkInputs = [ ];
   nativeBuildInputs = [ which cudatoolkit_11 ];

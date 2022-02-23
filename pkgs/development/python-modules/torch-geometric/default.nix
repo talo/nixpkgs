@@ -11,6 +11,7 @@ buildPythonPackage {
   };
   format = "setuptools";
   doCheck = false;
+  enableParallelBuilding = true;
   buildInputs = [ ];
   checkInputs = [ ];
   nativeBuildInputs = [ yacs googledrivedownloader ];

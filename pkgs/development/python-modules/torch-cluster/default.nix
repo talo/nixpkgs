@@ -13,6 +13,7 @@ in buildPythonPackage {
   };
   format = "setuptools";
   doCheck = false;
+  enableParallelBuilding = true;
   preConfigure = ''
     export TORCH_CUDA_ARCH_LIST="8.6 8.6+PTX"
     export CPATH=${cudatoolkit}/include

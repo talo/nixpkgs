@@ -17,6 +17,9 @@ buildPythonPackage {
   };
   format = "setuptools";
   doCheck = false;
+
+  enableParallelBuilding = true;
+
   buildInputs = [
     cudatoolkit_11
 
