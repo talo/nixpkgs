@@ -19,8 +19,8 @@ in buildPythonPackage {
     export CUDA_HOME=${cudatoolkit}
     export FORCE_CUDA="1"
   '';
-  buildInputs = [ cudatoolkit ];
+  buildInputs = [ cudatoolkit pytorch-bin ];
   checkInputs = [ ];
-  nativeBuildInputs = [ which ];
+  nativeBuildInputs = [ which pytorch-bin ];
   propagatedBuildInputs = [ pytest-runner pytorch-bin ];
 }
