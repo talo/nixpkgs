@@ -1,7 +1,7 @@
 { buildPythonPackage, fetchurl, cudatoolkit_11, pytest-runner, pytorch-bin
 , which }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "torch-spline-conv";
   version = "1.2.1";
   src = fetchurl {
