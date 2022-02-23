@@ -1,4 +1,4 @@
-{ python, cudatoolkit, which, fetchurl, scipy, torch-spline-conv, pytorch-bin
+{ python, cudatoolkit_11, which, fetchurl, scipy, torch-spline-conv, pytorch-bin
 , pytest-runner, ... }:
 
 python.pkgs.buildPythonPackage rec {
@@ -11,14 +11,14 @@ python.pkgs.buildPythonPackage rec {
   };
   preConfigure = ''
     export TORCH_CUDA_ARCH_LIST="8.6 8.6+PTX"
-    export CPATH=${cudatoolkit}/bin
-    export CUDA_HOME=${cudatoolkit}
+    export CPATH=${cudatoolkit_11}/bin
+    export CUDA_HOME=${cudatoolkit_11}
     export FORCE_CUDA="1"
   '';
   format = "setuptools";
   doCheck = false;
-  buildInputs = [ which pytest-runner cudatoolkit ];
+  buildInputs = [ which pytest-runner cudatoolkit_11 ];
   checkInputs = [ ];
-  nativeBuildInputs = [ which cudatoolkit ];
+  nativeBuildInputs = [ which cudatoolkit_11 ];
   propagatedBuildInputs = [ scipy torch-spline-conv pytorch-bin ];
 }
