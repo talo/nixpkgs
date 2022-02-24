@@ -9,6 +9,7 @@ buildPythonPackage {
     export CPATH=${cudatoolkit_11}/bin
     export CUDA_HOME=${cudatoolkit_11}
     export FORCE_CUDA="1"
+    export MAX_JOBS=$NIX_BUILD_CORES
   '';
   src = fetchurl {
     url =

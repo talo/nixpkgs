@@ -20,6 +20,7 @@ in buildPythonPackage {
     export LD_LIBRARY_PATH=$${cudatoolkit}/lib
     export CUDA_HOME=${cudatoolkit}
     export FORCE_CUDA="1"
+    export MAX_JOBS=$NIX_BUILD_CORES
   '';
   buildInputs = [ cudatoolkit pytorch-bin ];
   checkInputs = [ ];
