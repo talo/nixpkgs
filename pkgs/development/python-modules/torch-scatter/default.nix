@@ -1,5 +1,5 @@
 { buildPythonPackage, cudatoolkit_11, fetchurl, torch-spline-conv, which
-, pytest-runner, pytorch-bin }:
+, pytest-runner, pytorch-bin, ninja }:
 
 buildPythonPackage {
   pname = "torch-scatter";
@@ -25,7 +25,7 @@ buildPythonPackage {
 
     torch-spline-conv
   ];
-  nativeBuildInputs = [ which cudatoolkit_11 ];
+  nativeBuildInputs = [ which cudatoolkit_11 ninja ];
   checkInputs = [ ];
   #     buildHooks = "
   # LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${stdenv.cc.cc.lib}/lib/

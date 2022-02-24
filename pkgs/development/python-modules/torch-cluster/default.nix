@@ -1,5 +1,5 @@
 { buildPythonPackage, fetchurl, cudatoolkit_11, which, pytorch-bin
-, pytest-runner }:
+, pytest-runner, ninja }:
 
 let cudatoolkit = cudatoolkit_11;
 in buildPythonPackage {
@@ -23,6 +23,6 @@ in buildPythonPackage {
   '';
   buildInputs = [ cudatoolkit pytorch-bin ];
   checkInputs = [ ];
-  nativeBuildInputs = [ which pytorch-bin ];
+  nativeBuildInputs = [ which pytorch-bin ninja ];
   propagatedBuildInputs = [ pytest-runner pytorch-bin ];
 }

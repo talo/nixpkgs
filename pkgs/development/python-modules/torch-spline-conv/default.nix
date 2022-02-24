@@ -1,5 +1,5 @@
 { buildPythonPackage, fetchurl, cudatoolkit_11, pytest-runner, pytorch-bin
-, which }:
+, which, ninja }:
 
 buildPythonPackage {
   pname = "torch-spline-conv";
@@ -22,6 +22,6 @@ buildPythonPackage {
   buildInputs = [ cudatoolkit_11 ];
   #cudatoolkit_11_joined ];
   checkInputs = [ ];
-  nativeBuildInputs = [ pytest-runner which ];
+  nativeBuildInputs = [ pytest-runner which ninja ];
   propagatedBuildInputs = [ pytorch-bin ];
 }

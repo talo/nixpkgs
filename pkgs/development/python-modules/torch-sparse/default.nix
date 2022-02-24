@@ -1,5 +1,5 @@
 { python, cudatoolkit_11, which, fetchurl, scipy, torch-spline-conv, pytorch-bin
-, pytest-runner, ... }:
+, pytest-runner, ninja }:
 
 python.pkgs.buildPythonPackage rec {
   pname = "torch-sparse";
@@ -20,6 +20,6 @@ python.pkgs.buildPythonPackage rec {
   enableParallelBuilding = true;
   buildInputs = [ which pytest-runner cudatoolkit_11 ];
   checkInputs = [ ];
-  nativeBuildInputs = [ which cudatoolkit_11 ];
+  nativeBuildInputs = [ which cudatoolkit_11 ninja ];
   propagatedBuildInputs = [ scipy torch-spline-conv pytorch-bin ];
 }
