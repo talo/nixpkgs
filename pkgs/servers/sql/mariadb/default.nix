@@ -5,7 +5,7 @@
 , curl, libiconv, ncurses, openssl, pcre, pcre2
 , libkrb5, libaio, liburing, systemd
 , CoreServices, cctools, perl
-, jemalloc, less
+, jemalloc, less, libedit
 # Server components
 , bzip2, lz4, lzo, snappy, xz, zlib, zstd
 , cracklib, judy, libevent, libxml2
@@ -15,7 +15,7 @@
 , withStorageRocks ? true
 }:
 
-let # in mariadb # spans the whole file
+let
 
 libExt = stdenv.hostPlatform.extensions.sharedLibrary;
 
@@ -43,7 +43,7 @@ commonOptions = packageSettings: rec { # attributes common to both builds
   ] ++ (packageSettings.extraBuildInputs or [])
     ++ lib.optionals stdenv.hostPlatform.isLinux ([ libkrb5 systemd ]
     ++ (if (lib.versionOlder version "10.6") then [ libaio ] else [ liburing ]))
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices cctools perl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices cctools perl libedit ]
     ++ lib.optional (!stdenv.hostPlatform.isDarwin) [ jemalloc ]
     ++ (if (lib.versionOlder version "10.5") then [ pcre ] else [ pcre2 ]);
 
@@ -142,7 +142,7 @@ in stdenv.mkDerivation (common // {
   ];
 
   cmakeFlags = common.cmakeFlags ++ [
-    "-DPLUGIN_AUTH_PAM=OFF"
+    "-DPLUGIN_AUTH_PAM=NO"
     "-DWITHOUT_SERVER=ON"
     "-DWITH_WSREP=OFF"
     "-DINSTALL_MYSQLSHAREDIR=share/mysql-client"
@@ -207,7 +207,8 @@ in stdenv.mkDerivation (common // {
   ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) [
     "-DWITH_JEMALLOC=yes"
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "-DPLUGIN_AUTH_PAM=OFF"
+    "-DPLUGIN_AUTH_PAM=NO"
+    "-DPLUGIN_AUTH_PAM_V1=NO"
     "-DWITHOUT_OQGRAPH=1"
     "-DWITHOUT_PLUGIN_S3=1"
   ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [

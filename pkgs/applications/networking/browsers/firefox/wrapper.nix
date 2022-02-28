@@ -27,6 +27,7 @@ let
       (lib.toUpper (lib.substring 0 1 applicationName) + lib.substring 1 (-1) applicationName)
     , nameSuffix ? ""
     , icon ? applicationName
+    , wmClass ? null
     , extraNativeMessagingHosts ? []
     , pkcs11Modules ? []
     , forceWayland ? false
@@ -42,7 +43,7 @@ let
     # https://github.com/mozilla/policy-templates#enterprisepoliciesenabled
     , extraPolicies ? {}
     , extraPoliciesFiles ? []
-    , libName ? "firefox" # Important for tor package or the like
+    , libName ? browser.libName or "firefox" # Important for tor package or the like
     , nixExtensions ? null
     }:
 
@@ -152,35 +153,17 @@ let
       #                           #
       #############################
 
-      # TODO: remove this after the next release (21.03)
-      configPlugins = lib.filter (a: builtins.hasAttr a cfg) [
-        "enableAdobeFlash"
-        "enableAdobeReader"
-        "enableBluejeans"
-        "enableDjvu"
-        "enableFriBIDPlugin"
-        "enableGoogleTalkPlugin"
-        "enableMPlayer"
-        "enableVLC"
-        "icedtea"
-        "jre"
-      ];
-      pluginsError =
-        "Your configuration mentions ${lib.concatMapStringsSep ", " (p: applicationName + "." + p) configPlugins}. All plugin related options have been removed, since Firefox from version 52 onwards no longer supports npapi plugins (see https://support.mozilla.org/en-US/kb/npapi-plugins).";
-
-    in if configPlugins != [] then throw pluginsError else
-      (stdenv.mkDerivation {
+    in stdenv.mkDerivation {
       inherit pname version;
 
       desktopItem = makeDesktopItem {
         name = applicationName;
         exec = "${applicationName}${nameSuffix} %U";
         inherit icon;
-        comment = "";
         desktopName = "${desktopName}${nameSuffix}${lib.optionalString forceWayland " (Wayland)"}";
         genericName = "Web Browser";
-        categories = "Network;WebBrowser;";
-        mimeType = lib.concatStringsSep ";" [
+        categories = [ "Network" "WebBrowser" ];
+        mimeTypes = [
           "text/html"
           "text/xml"
           "application/xhtml+xml"
@@ -189,6 +172,7 @@ let
           "x-scheme-handler/https"
           "x-scheme-handler/ftp"
         ];
+        startupWMClass = wmClass;
       };
 
       nativeBuildInputs = [ makeWrapper lndir replace jq ];
@@ -219,8 +203,8 @@ let
 
         find . -type f \( -not -name "${applicationName}" \) -exec ln -sT "${browser}"/{} "$out"/{} \;
 
-        find . -type f -name "${applicationName}" -print0 | while read -d $'\0' f; do
-          cp -P --no-preserve=mode,ownership "${browser}/$f" "$out/$f"
+        find . -type f \( -name "${applicationName}" -o -name "${applicationName}-bin" \) -print0 | while read -d $'\0' f; do
+          cp -P --no-preserve=mode,ownership --remove-destination "${browser}/$f" "$out/$f"
           chmod a+rwx "$out/$f"
         done
 
@@ -369,5 +353,5 @@ let
         hydraPlatforms = [];
         priority = (browser.meta.priority or 0) - 1; # prefer wrapper over the package
       };
-    });
+    };
 in lib.makeOverridable wrapper
