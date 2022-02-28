@@ -10817,11 +10817,6 @@ in {
   torchvision-bin =
     callPackage ../development/python-modules/torchvision/bin.nix { };
 
-  torch-spline-conv =
-    callPackage ../development/python-modules/torch-spline-conv { };
-
-  torch-sparse = callPackage ../development/python-modules/torch-sparse { };
-
   tornado = callPackage ../development/python-modules/tornado { };
 
   # Used by circus and grab-site, 2020-08-29
