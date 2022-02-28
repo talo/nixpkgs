@@ -3702,6 +3702,9 @@ in {
 
   goodwe = callPackage ../development/python-modules/goodwe { };
 
+  googledrivedownloader =
+    callPackage ../development/python-modules/googledrivedownloader { };
+
   google-api-core =
     callPackage ../development/python-modules/google-api-core { };
 
@@ -10789,6 +10792,18 @@ in {
   toonapi = callPackage ../development/python-modules/toonapi { };
 
   toposort = callPackage ../development/python-modules/toposort { };
+
+  torch-cluster = callPackage ../development/python-modules/torch-cluster { };
+
+  torch-geometric =
+    callPackage ../development/python-modules/torch-geometric { };
+
+  torch-spline-conv =
+    callPackage ../development/python-modules/torch-spline-conv { };
+
+  torch-scatter = callPackage ../development/python-modules/torch-scatter { };
+
+  torch-sparse = callPackage ../development/python-modules/torch-sparse { };
 
   torchaudio-bin =
     callPackage ../development/python-modules/torchaudio/bin.nix { };
