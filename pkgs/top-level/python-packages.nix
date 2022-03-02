@@ -3992,6 +3992,9 @@ in {
 
   grpcio-gcp = callPackage ../development/python-modules/grpcio-gcp { };
 
+  grpcio-reflection =
+    callPackage ../development/python-modules/grpcio-reflection { };
+
   grpcio-status = callPackage ../development/python-modules/grpcio-status { };
 
   grpcio-tools = callPackage ../development/python-modules/grpcio-tools { };
