@@ -3116,6 +3116,8 @@ in {
 
   fe25519 = callPackage ../development/python-modules/fe25519 { };
 
+  feast = callPackage ../development/python-modules/feast { };
+
   feedgen = callPackage ../development/python-modules/feedgen { };
 
   feedgenerator = callPackage ../development/python-modules/feedgenerator {
