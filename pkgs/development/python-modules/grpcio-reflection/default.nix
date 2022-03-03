@@ -1,17 +1,18 @@
-{ lib, stdenv, buildPythonPackage, grpc, six, protobuf, enum34 ? null
+{ lib, stdenv, buildPythonPackage, grpc, grpcio, six, protobuf, enum34 ? null
 , pkg-config, fetchPypi, c-ares, openssl, zlib }:
 
 buildPythonPackage rec {
-  pname = "grpcio-reflection";
-  version = "1.44.0";
+  pname = "grpcio_reflection";
+  version = "1.43.0";
+  format = "wheel";
+
   src = fetchPypi {
-    inherit pname version;
-    #"https://files.pythonhosted.org/packages/bd/42/75b8a517f36b2c98667332e43479c3d639fe656e2996f8bfac456869e36a/feast-0.18.1-py3-none-any.whl"
-    format = "wheel";
+    inherit pname version format;
     python = "py3";
     dist = "py3";
 
-    sha256 = "46cPejyLUlB+3/D23rUjr+xP8GtsAFuhsbKw3/ZXMIMa";
+    sha256 = "X1CJqiMb8yk8ChsrsVC8p974GcsOgM8/2pIbogOkJiw=";
   };
 
+  propagatedBuildInputs = [ six protobuf grpcio ];
 }
