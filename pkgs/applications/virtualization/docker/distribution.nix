@@ -14,8 +14,11 @@ buildGoPackage rec {
     sha256 = "1nx8b5a68rn81alp8wkkw6qd5v32mgf0fk23mxm60zdf63qk1nzw";
   };
 
+  DOCKER_BUILDTAGS = [ "include_gcs" ];
+
   meta = with lib; {
-    description = "The Docker toolset to pack, ship, store, and deliver content";
+    description =
+      "The Docker toolset to pack, ship, store, and deliver content";
     license = licenses.asl20;
     maintainers = [ maintainers.globin ];
     platforms = platforms.unix;
