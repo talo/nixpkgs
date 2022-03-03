@@ -14,7 +14,7 @@ buildGoPackage rec {
     sha256 = "1nx8b5a68rn81alp8wkkw6qd5v32mgf0fk23mxm60zdf63qk1nzw";
   };
 
-  DOCKER_BUILDTAGS = [ "include_gcs" ];
+  tags = [ "include_gcs" ];
 
   meta = with lib; {
     description =
