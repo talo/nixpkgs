@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "distribution";
-  version = "2.7.1";
+  version = "2.8.0";
   rev = "v${version}";
 
   goPackagePath = "github.com/docker/distribution";
@@ -11,7 +11,7 @@ buildGoPackage rec {
     owner = "docker";
     repo = "distribution";
     inherit rev;
-    sha256 = "1nx8b5a68rn81alp8wkkw6qd5v32mgf0fk23mxm60zdf63qk1nzw";
+    sha256 = "oSGrMlXFwQ+lnGK5aCY31zO/c2okwGbQA6M8KXuNAXQ=";
   };
 
   tags = [ "include_gcs" ];
