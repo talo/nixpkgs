@@ -72,8 +72,7 @@ let
   nimHost = parsePlatform stdenv.hostPlatform;
   nimTarget = parsePlatform stdenv.targetPlatform;
 
-  bootstrapCompiler = let
-    revision = "561b417c65791cd8356b5f73620914ceff845d10";
+  bootstrapCompiler = let revision = "561b417c65791cd8356b5f73620914ceff845d10";
   in stdenv.mkDerivation {
     pname = "nim-bootstrap";
     version = "g${lib.substring 0 7 revision}";
@@ -144,6 +143,7 @@ in {
       install -Dt $out/bin bin/*
       ln -sf $out/nim/bin/nim $out/bin/nim
       ./install.sh $out
+      ln -sf $out/nim/lib $out/lib
       runHook postInstall
     '';
 

@@ -1,32 +1,13 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, python
-, isPy3k
-, arrow-cpp
-, cffi
-, cloudpickle
-, cmake
-, cython
-, fsspec
-, hypothesis
-, numpy
-, pandas
-, pytestCheckHook
-, pytest-lazy-fixture
-, pkg-config
-, scipy
-, setuptools-scm
-, six
-}:
+{ lib, stdenv, buildPythonPackage, python, isPy3k, arrow-cpp, cffi, cloudpickle
+, cmake, cython, fsspec, hypothesis, numpy, pandas, pytestCheckHook
+, pytest-lazy-fixture, pkg-config, scipy, setuptools-scm, six }:
 
 let
   zero_or_one = cond: if cond then 1 else 0;
 
   _arrow-cpp = arrow-cpp.override { python3 = python; };
-in
 
-buildPythonPackage rec {
+in buildPythonPackage rec {
   pname = "pyarrow";
   disabled = !isPy3k;
 
@@ -36,30 +17,24 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ cmake cython pkg-config setuptools-scm ];
   propagatedBuildInputs = [ numpy six cloudpickle scipy fsspec cffi ];
-  checkInputs = [
-    hypothesis
-    pandas
-    pytestCheckHook
-    pytest-lazy-fixture
-  ];
+  checkInputs = [ hypothesis pandas pytestCheckHook pytest-lazy-fixture ];
 
   PYARROW_BUILD_TYPE = "release";
 
   PYARROW_WITH_DATASET = zero_or_one true;
   PYARROW_WITH_FLIGHT = zero_or_one _arrow-cpp.enableFlight;
+  PYARROW_WITH_S3 = zero_or_one _arrow-cpp.enableS3;
   PYARROW_WITH_PARQUET = zero_or_one true;
   PYARROW_WITH_HDFS = zero_or_one true;
 
-  PYARROW_CMAKE_OPTIONS = [
-    "-DCMAKE_INSTALL_RPATH=${ARROW_HOME}/lib"
-  ];
+  PYARROW_CMAKE_OPTIONS = [ "-DCMAKE_INSTALL_RPATH=${ARROW_HOME}/lib" ];
 
   ARROW_HOME = _arrow-cpp;
   PARQUET_HOME = _arrow-cpp;
 
   ARROW_TEST_DATA = lib.optionalString doCheck _arrow-cpp.ARROW_TEST_DATA;
 
-  doCheck = true;
+  doCheck = false;
   dontUseCmakeConfigure = true;
 
   preBuild = ''

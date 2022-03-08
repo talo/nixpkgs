@@ -11990,6 +11990,8 @@ with pkgs;
 
   fasmg = callPackage ../development/compilers/fasmg { };
 
+  feast = callPackage ../tools/admin/feast { };
+
   fennel = callPackage ../development/compilers/fennel { };
 
   flasm = callPackage ../development/compilers/flasm { };
