@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "nq";
-  version = "0.4";
+  version = "0.5";
   src = fetchFromGitHub {
     owner = "chneukirchen";
     repo = "nq";
-    rev = "v${version}";
-    sha256 = "sha256-UfCeHwOD+tG6X2obW64DYZr6j90yh1Yl7My4ur+sqmk=";
+    rev = "72da652ad6e7682bea6f54fbb27fbbba7d1f9f7d";
+    sha256 = "sha256-kXqgrxKucgY7VgNU/L0dtw1yO1ePCvxeLB6706MFnoo=";
   };
   makeFlags = [ "PREFIX=$(out)" ];
   postPatch = ''
