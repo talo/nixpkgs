@@ -1,32 +1,17 @@
-{ lib
-, bcrypt
-, buildPythonPackage
-, cryptography
-, fetchPypi
-, fido2
-, gssapi
-, libnacl
-, libsodium
-, nettle
-, openssh
-, openssl
-, pyopenssl
-, pytestCheckHook
-, python-pkcs11
-, pythonOlder
-, typing-extensions
-}:
+{ lib, bcrypt, buildPythonPackage, cryptography, fetchPypi, fido2, gssapi
+, libnacl, libsodium, nettle, openssh, openssl, pyopenssl, pytestCheckHook
+, python-pkcs11, pythonOlder, typing-extensions }:
 
 buildPythonPackage rec {
   pname = "asyncssh";
-  version = "2.9.0";
+  version = "2.8.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-PMM32AZhlGVFW/GH6KkeP1dUI3GBhOI4+a6MQcTzOvE=";
+    sha256 = "BkjrpY1yZTdV8o4myb2DFH2WUsHy9eh/v1qH1/j7+Do=";
   };
 
   propagatedBuildInputs = [
@@ -42,11 +27,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  checkInputs = [
-    openssh
-    openssl
-    pytestCheckHook
-  ];
+  checkInputs = [ openssh openssl pytestCheckHook ];
 
   patches = [
     # Reverts https://github.com/ronf/asyncssh/commit/4b3dec994b3aa821dba4db507030b569c3a32730
@@ -72,9 +53,7 @@ buildPythonPackage rec {
     "test_forward_remote"
   ];
 
-  pythonImportsCheck = [
-    "asyncssh"
-  ];
+  pythonImportsCheck = [ "asyncssh" ];
 
   meta = with lib; {
     description = "Asynchronous SSHv2 Python client and server library";
