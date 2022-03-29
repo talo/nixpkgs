@@ -1,8 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook, pytestcov }:
 
 buildPythonPackage rec {
   pname = "ratelimit";
@@ -15,11 +11,11 @@ buildPythonPackage rec {
     sha256 = "04hy3hhh5xdqcsz0lx8j18zbj88kh5ik4wyi5d3a5sfy2hx70in2";
   };
 
-  postPatch = ''
-    sed -i "/--cov/d" pytest.ini
-  '';
+  # postPatch = ''
+  #   sed -i "/--cov/d" pytest.ini
+  # '';
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [ pytestCheckHook pytestcov ];
 
   pytestFlagsArray = [ "tests" ];
 
