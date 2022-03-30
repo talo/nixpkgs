@@ -6909,6 +6909,9 @@ in {
   polarizationsolver =
     callPackage ../development/python-modules/polarizationsolver { };
 
+  polars =
+    callPackage ../development/python-modules/polars { };
+
   polib = callPackage ../development/python-modules/polib { };
 
   policy-sentry = callPackage ../development/python-modules/policy-sentry { };
