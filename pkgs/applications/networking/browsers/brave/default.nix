@@ -37,6 +37,7 @@
 , pango
 , pipewire
 , udev
+, wayland
 , xorg
 , zlib
 , xdg-utils
@@ -82,6 +83,7 @@ rpath = lib.makeLibraryPath [
   pango
   pipewire
   udev
+  wayland
   xdg-utils
   xorg.libxcb
   zlib
@@ -91,11 +93,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "brave";
-  version = "1.36.111";
+  version = "1.37.116";
 
   src = fetchurl {
     url = "https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser_${version}_amd64.deb";
-    sha256 = "bXZsUqLaP43wJV3Cehgblw1G179HgGhToSL36v5QseA=";
+    sha256 = "HoqmzUyYas5ho9S8ZeXHj+LuNspejuQ69B6HxuKXWtw=";
   };
 
   dontConfigure = true;
@@ -160,6 +162,7 @@ stdenv.mkDerivation rec {
   preFixup = ''
     # Add command line args to wrapGApp.
     gappsWrapperArgs+=(--add-flags ${lib.escapeShellArg commandLineArgs})
+    gappsWrapperArgs+=(--add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland}}")
   '';
 
   installCheckPhase = ''

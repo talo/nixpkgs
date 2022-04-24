@@ -6,7 +6,7 @@ When using Nix, you will frequently need to download source code and other files
 
 Because fixed output derivations are _identified_ by their hash, a common mistake is to update a fetcher's URL or a version parameter, without updating the hash. **This will cause the old contents to be used.** So remember to always invalidate the hash argument.
 
-For those who develop and maintain fetchers, a similar problem arises with changes to the implementation of a fetcher. These may cause a fixed output derivation to fail, but won't normally be caught by tests because the supposed output is already in the store or cache. For the purpose of testing, you can use a trick that is embodied by the [`invalidateFetcherByDrvHash`](#sec-pkgs-invalidateFetcherByDrvHash) function. It uses the derivation `name` to create a unique output path per fetcher implementation, defeating the caching precisely where it would be harmful.
+For those who develop and maintain fetchers, a similar problem arises with changes to the implementation of a fetcher. These may cause a fixed output derivation to fail, but won't normally be caught by tests because the supposed output is already in the store or cache. For the purpose of testing, you can use a trick that is embodied by the [`invalidateFetcherByDrvHash`](#tester-invalidateFetcherByDrvHash) function. It uses the derivation `name` to create a unique output path per fetcher implementation, defeating the caching precisely where it would be harmful.
 
 ## `fetchurl` and `fetchzip` {#fetchurl}
 
@@ -71,6 +71,10 @@ Used with CVS. Expects `cvsRoot`, `tag`, and `sha256`.
 Used with Mercurial. Expects `url`, `rev`, and `sha256`.
 
 A number of fetcher functions wrap part of `fetchurl` and `fetchzip`. They are mainly convenience functions intended for commonly used destinations of source code in Nixpkgs. These wrapper fetchers are listed below.
+
+## `fetchFromGitea` {#fetchfromgitea}
+
+`fetchFromGitea` expects five arguments. `domain` is the gitea server name. `owner` is a string corresponding to the Gitea user or organization that controls this repository. `repo` corresponds to the name of the software repository. These are located at the top of every Gitea HTML page as `owner`/`repo`. `rev` corresponds to the Git commit hash or tag (e.g `v1.0`) that will be downloaded from Git. Finally, `sha256` corresponds to the hash of the extracted directory. Again, other hash algorithms are also available but `sha256` is currently preferred.
 
 ## `fetchFromGitHub` {#fetchfromgithub}
 

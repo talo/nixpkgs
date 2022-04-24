@@ -7,7 +7,6 @@
 , perl
 , which
 , pkg-config
-, patch
 , procps
 , pcre
 , cacert
@@ -45,7 +44,8 @@ let
     "riscv64" = "riscv64";
     "s390x" = "s390x";
     "powerpc64le" = "ppc64le";
-  }.${platform.parsed.cpu.name} or (throw "Unsupported system");
+    "mips64el" = "mips64le";
+  }.${platform.parsed.cpu.name} or (throw "Unsupported system: ${platform.parsed.cpu.name}");
 
   # We need a target compiler which is still runnable at build time,
   # to handle the cross-building case where build != host == target
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   };
 
   # perl is used for testing go vet
-  nativeBuildInputs = [ perl which pkg-config patch procps ];
+  nativeBuildInputs = [ perl which pkg-config procps ];
   buildInputs = [ cacert pcre ]
     ++ lib.optionals stdenv.isLinux [ stdenv.cc.libc.out ]
     ++ lib.optionals (stdenv.hostPlatform.libc == "glibc") [ stdenv.cc.libc.static ];
@@ -168,6 +168,7 @@ stdenv.mkDerivation rec {
     ./creds-test.patch
     ./go-1.9-skip-flaky-19608.patch
     ./go-1.9-skip-flaky-20072.patch
+    ./skip-chown-tests-1.16.patch
     ./skip-external-network-tests-1.16.patch
     ./skip-nohup-tests.patch
     ./skip-cgo-tests-1.15.patch

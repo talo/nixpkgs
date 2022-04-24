@@ -118,6 +118,8 @@
   ./misc/version.nix
   ./misc/wordlist.nix
   ./misc/nixops-autoluks.nix
+  ./programs/_1password.nix
+  ./programs/_1password-gui.nix
   ./programs/adb.nix
   ./programs/appgate-sdp.nix
   ./programs/atop.nix
@@ -180,8 +182,12 @@
   ./programs/msmtp.nix
   ./programs/mtr.nix
   ./programs/nano.nix
+  ./programs/nbd.nix
+  ./programs/nix-ld.nix
   ./programs/neovim.nix
+  ./programs/nethoscope.nix
   ./programs/nm-applet.nix
+  ./programs/nncp.nix
   ./programs/npm.nix
   ./programs/noisetorch.nix
   ./programs/oblogout.nix
@@ -199,7 +205,6 @@
   ./programs/spacefm.nix
   ./programs/singularity.nix
   ./programs/ssh.nix
-  ./programs/ssmtp.nix
   ./programs/sysdig.nix
   ./programs/systemtap.nix
   ./programs/starship.nix
@@ -301,6 +306,7 @@
   ./services/backup/znapzend.nix
   ./services/blockchain/ethereum/geth.nix
   ./services/backup/zrepl.nix
+  ./services/cluster/corosync/default.nix
   ./services/cluster/hadoop/default.nix
   ./services/cluster/k3s/default.nix
   ./services/cluster/kubernetes/addons/dns.nix
@@ -313,6 +319,7 @@
   ./services/cluster/kubernetes/pki.nix
   ./services/cluster/kubernetes/proxy.nix
   ./services/cluster/kubernetes/scheduler.nix
+  ./services/cluster/pacemaker/default.nix
   ./services/cluster/spark/default.nix
   ./services/computing/boinc/client.nix
   ./services/computing/foldingathome/client.nix
@@ -402,6 +409,7 @@
   ./services/display-managers/greetd.nix
   ./services/editors/emacs.nix
   ./services/editors/infinoted.nix
+  ./services/editors/haste.nix
   ./services/finance/odoo.nix
   ./services/games/asf.nix
   ./services/games/crossfire-server.nix
@@ -589,7 +597,7 @@
   ./services/misc/osrm.nix
   ./services/misc/owncast.nix
   ./services/misc/packagekit.nix
-  ./services/misc/paperless-ng.nix
+  ./services/misc/paperless.nix
   ./services/misc/parsoid.nix
   ./services/misc/plex.nix
   ./services/misc/plikd.nix
@@ -746,6 +754,7 @@
   ./services/networking/ncdns.nix
   ./services/networking/nomad.nix
   ./services/networking/ejabberd.nix
+  ./services/networking/envoy.nix
   ./services/networking/epmd.nix
   ./services/networking/ergo.nix
   ./services/networking/ergochat.nix
@@ -773,6 +782,7 @@
   ./services/networking/headscale.nix
   ./services/networking/hostapd.nix
   ./services/networking/htpdate.nix
+  ./services/networking/https-dns-proxy.nix
   ./services/networking/hylafax/default.nix
   ./services/networking/i2pd.nix
   ./services/networking/i2p.nix
@@ -807,6 +817,7 @@
   ./services/networking/mosquitto.nix
   ./services/networking/monero.nix
   ./services/networking/morty.nix
+  ./services/networking/mozillavpn.nix
   ./services/networking/miredo.nix
   ./services/networking/mstpd.nix
   ./services/networking/mtprotoproxy.nix
@@ -819,6 +830,7 @@
   ./services/networking/nar-serve.nix
   ./services/networking/nat.nix
   ./services/networking/nats.nix
+  ./services/networking/nbd.nix
   ./services/networking/ndppd.nix
   ./services/networking/nebula.nix
   ./services/networking/networkmanager.nix
@@ -841,7 +853,7 @@
   ./services/networking/ofono.nix
   ./services/networking/oidentd.nix
   ./services/networking/onedrive.nix
-  ./services/networking/openfire.nix
+  ./services/networking/openconnect.nix
   ./services/networking/openvpn.nix
   ./services/networking/ostinato.nix
   ./services/networking/owamp.nix
@@ -968,6 +980,7 @@
   ./services/security/shibboleth-sp.nix
   ./services/security/sks.nix
   ./services/security/sshguard.nix
+  ./services/security/sslmate-agent.nix
   ./services/security/step-ca.nix
   ./services/security/tor.nix
   ./services/security/torify.nix
@@ -985,6 +998,7 @@
   ./services/system/nscd.nix
   ./services/system/saslauthd.nix
   ./services/system/self-deploy.nix
+  ./services/system/systembus-notify.nix
   ./services/system/uptimed.nix
   ./services/torrent/deluge.nix
   ./services/torrent/flexget.nix
@@ -1038,8 +1052,10 @@
   ./services/web-apps/mediawiki.nix
   ./services/web-apps/miniflux.nix
   ./services/web-apps/moodle.nix
+  ./services/web-apps/netbox.nix
   ./services/web-apps/nextcloud.nix
   ./services/web-apps/nexus.nix
+  ./services/web-apps/nifi.nix
   ./services/web-apps/node-red.nix
   ./services/web-apps/pict-rs.nix
   ./services/web-apps/peertube.nix
@@ -1163,7 +1179,14 @@
   ./system/boot/stage-1.nix
   ./system/boot/stage-2.nix
   ./system/boot/systemd.nix
-  ./system/boot/systemd-nspawn.nix
+  ./system/boot/systemd/coredump.nix
+  ./system/boot/systemd/journald.nix
+  ./system/boot/systemd/logind.nix
+  ./system/boot/systemd/nspawn.nix
+  ./system/boot/systemd/shutdown.nix
+  ./system/boot/systemd/tmpfiles.nix
+  ./system/boot/systemd/user.nix
+  ./system/boot/systemd/initrd.nix
   ./system/boot/timesyncd.nix
   ./system/boot/tmp.nix
   ./system/etc/etc-activation.nix
@@ -1217,6 +1240,7 @@
   ./virtualisation/amazon-options.nix
   ./virtualisation/hyperv-guest.nix
   ./virtualisation/kvmgt.nix
+  ./virtualisation/openstack-options.nix
   ./virtualisation/openvswitch.nix
   ./virtualisation/parallels-guest.nix
   ./virtualisation/podman/default.nix

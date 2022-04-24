@@ -2,18 +2,18 @@
 
 buildGraalvmNativeImage rec {
   pname = "clojure-lsp";
-  version = "2022.02.23-12.12.12";
+  version = "2022.04.18-00.59.32";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-PfO1G66Z3zQ+Hyjb6J0bomsT8juQURwF2mPKJY5auMw=";
+    sha256 = "sha256-14EsJIKYl8TWbDqM9PyVrbs/4EssqXp0EK70RrFz+RE=";
   };
 
   jar = fetchurl {
     url = "https://github.com/clojure-lsp/clojure-lsp/releases/download/${version}/clojure-lsp-standalone.jar";
-    sha256 = "sha256-f8bEALl9j0aDkKZtThLTseqibeYIUeOx4ulelPWQkoo=";
+    sha256 = "d78094b015bd9e671eea2eb89ca0bb3ec58d39802ad1bfdf875b50e1cdd4995e";
   };
 
   extraNativeImageBuildArgs = [
@@ -42,9 +42,9 @@ buildGraalvmNativeImage rec {
 
     latest_version=$(curl -s https://api.github.com/repos/clojure-lsp/clojure-lsp/releases/latest | jq --raw-output .tag_name)
 
-    old_jar_hash=$(nix-instantiate --eval --strict -A "clojure-lsp-standalone.jar.drvAttrs.outputHash" | tr -d '"' | sed -re 's|[+]|\\&|g')
+    old_jar_hash=$(nix-instantiate --eval --strict -A "clojure-lsp.jar.drvAttrs.outputHash" | tr -d '"' | sed -re 's|[+]|\\&|g')
 
-    curl -o clojure-lsp.jar -sL https://github.com/clojure-lsp/clojure-lsp/releases/download/$latest_version/clojure-lsp-standalone.jar
+    curl -o clojure-lsp-standalone.jar -sL https://github.com/clojure-lsp/clojure-lsp/releases/download/$latest_version/clojure-lsp-standalone.jar
     new_jar_hash=$(nix-hash --flat --type sha256 clojure-lsp-standalone.jar | sed -re 's|[+]|\\&|g')
 
     rm -f clojure-lsp-standalone.jar

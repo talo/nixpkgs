@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "berry";
-  version = "0.1.10";
+  version = "0.1.11";
 
   src = fetchFromGitHub {
     owner = "JLErvin";
     repo = pname;
     rev = version;
-    hash = "sha256-6asph0QXzhmHuYcfrLcQ8RTP4QzX8m6AcCp5ImA++9M=";
+    hash = "sha256-cs1NVwaANMIteCQuGqPcEWuUbfJulhjmfWnlU8Eb2OM=";
   };
 
   nativeBuildInputs = [
@@ -55,6 +55,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
+    homepage = "https://berrywm.org/";
     description = "A healthy, bite-sized window manager";
     longDescription = ''
       berry is a healthy, bite-sized window manager written in C for unix
@@ -69,7 +70,6 @@ stdenv.mkDerivation rec {
       - Intuitively place new windows in unoccupied spaces.
       - Virtual desktops.
     '';
-    homepage = "https://berrywm.org/";
     license = licenses.mit;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;

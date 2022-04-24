@@ -2,21 +2,21 @@
 , buildGoModule
 , fetchFromGitHub
 , fq
-, testVersion
+, testers
 }:
 
 buildGoModule rec {
   pname = "fq";
-  version = "0.0.4";
+  version = "0.0.6";
 
   src = fetchFromGitHub {
     owner = "wader";
     repo = "fq";
     rev = "v${version}";
-    sha256 = "sha256-mnb/9zcFSeBasGPYSGWoBhnldljGW3VK070zTO8M/uk=";
+    sha256 = "sha256-/9TBnhFGYNOcCsQKUF0uuJEgnF+qRGly/5z1s3sYhqY=";
   };
 
-  vendorSha256 = "sha256-KPIO/ZuiwxlnjGLaEuClkDsJnx/fwW0jPDBc7aTT68A=";
+  vendorSha256 = "sha256-zvtYyNJO4QoTes3vf6CFa3dYMJqkp0PG9pnOk+aO97Y=";
 
   ldflags = [
     "-s"
@@ -24,7 +24,9 @@ buildGoModule rec {
     "-X main.version=${version}"
   ];
 
-  passthru.tests = testVersion { package = fq; };
+  subPackages = [ "." ];
+
+  passthru.tests = testers.testVersion { package = fq; };
 
   meta = with lib; {
     description = "jq for binary formats";

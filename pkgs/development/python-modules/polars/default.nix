@@ -1,33 +1,57 @@
-{ lib, fetchurl, buildPythonPackage, rustPlatform, fetchFromGitHub
-, typing-extensions, numpy }:
-
-buildPythonPackage rec {
+{ lib
+, stdenv
+, buildPythonPackage
+, pythonOlder
+, rustPlatform
+, libiconv
+, fetchzip
+}:
+let
   pname = "polars";
-  version = "0.13.16";
-
-  format = "wheel";
-  src = fetchurl {
-    url =
-      "https://files.pythonhosted.org/packages/56/2b/343754d3240bce3e31cc2ff427d61cd5aaa60ed5ddfa3baa0015a0a8f8e0/polars-0.13.15-cp37-abi3-manylinux_2_12_x86_64.manylinux2010_x86_64.whl";
-    sha256 = "sha256-IwExYAxn3dkexMoHUjUO3JgWgYbdi1j+q1w87j0Dmd8=";
+  version = "0.13.19";
+  rootSource = fetchzip {
+    url = "https://github.com/pola-rs/${pname}/archive/refs/tags/py-polars-v${version}.tar.gz";
+    sha256 = "sha256-JOHjxTTPzS9Dd/ODp4r0ebU9hEonxrbjURJoq0BQCyI=";
   };
-  buildInputs = [ typing-extensions numpy ];
+in
+buildPythonPackage {
+  inherit pname version;
+  format = "pyproject";
+  disabled = pythonOlder "3.6";
+  src = rootSource;
+  preBuild = ''
+      cd py-polars
+  '';
 
-  # src = fetchFromGitHub {
-  #   owner = "pola-rs";
-  #   repo = "polars";
-  #   rev = "py-polars-v${version}";
-  #   sha256 = "sha256-X5RQG73UOOVNYPeVNMMOLXmIxvuaIhn2WcgLG+iJKqU=";
-  # };
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    src = rootSource;
+    preBuild = ''
+        cd py-polars
+    '';
+    name = "${pname}-${version}";
+    sha256 = "sha256-KEt8lITY4El2afuh2cxnrDkXGN3MZgfKQU3Pe2jECF0=";
+  };
+  cargoRoot = "py-polars";
 
-  # cargoDeps = rustPlatform.fetchCargoTarball {
-  #   #inherit src;
-  #   name = "${pname}-0.20.0";
-  #   hash = "sha256-/kR0lTbpG0mji7jJcjx+TiJrWN6FyBkhBJrsvYnRFnc=";
-  # };
+  nativeBuildInputs = with rustPlatform; [ cargoSetupHook maturinBuildHook ];
 
-  # format = "pyproject";
-  # sourceRoot = "py-polars";
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
-  # nativeBuildInputs = with rustPlatform; [ cargoSetupHook maturinBuildHook ];
+  pythonImportsCheck = [ "polars" ];
+  # checkInputs = [
+  #   pytestCheckHook
+  #   fixtures
+  #   graphviz
+  #   matplotlib
+  #   networkx
+  #   numpy
+  #   pydot
+  # ];
+
+  meta = with lib; {
+    description = "Fast multi-threaded DataFrame library in Rust | Python | Node.js ";
+    homepage = "https://github.com/pola-rs/polars";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ happysalada ];
+  };
 }

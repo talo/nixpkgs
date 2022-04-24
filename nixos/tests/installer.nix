@@ -299,6 +299,13 @@ let
           virtualisation.qemu.diskInterface =
             if grubVersion == 1 then "scsi" else "virtio";
 
+          # We don't want to have any networking in the guest whatsoever.
+          # Also, if any vlans are enabled, the guest will reboot
+          # (with a different configuration for legacy reasons),
+          # and spend 5 minutes waiting for the vlan interface to show up
+          # (which will never happen).
+          virtualisation.vlans = [];
+
           boot.loader.systemd-boot.enable = mkIf (bootLoader == "systemd-boot") true;
 
           hardware.enableAllFirmware = mkForce false;
@@ -312,6 +319,8 @@ let
             desktop-file-utils
             docbook5
             docbook_xsl_ns
+            kmod.dev
+            libarchive.dev
             libxml2.bin
             libxslt.bin
             nixos-artwork.wallpapers.simple-dark-gray-bottom
@@ -568,7 +577,7 @@ in {
           "pvcreate /dev/vda1 /dev/vda2",
           "vgcreate MyVolGroup /dev/vda1 /dev/vda2",
           "lvcreate --size 1G --name swap MyVolGroup",
-          "lvcreate --size 3G --name nixos MyVolGroup",
+          "lvcreate --size 6G --name nixos MyVolGroup",
           "mkswap -f /dev/MyVolGroup/swap -L swap",
           "swapon -L swap",
           "mkfs.xfs -L nixos /dev/MyVolGroup/nixos",

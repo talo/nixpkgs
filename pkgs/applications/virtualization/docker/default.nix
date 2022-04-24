@@ -7,134 +7,37 @@ rec {
     , containerdRev, containerdSha256, tiniRev, tiniSha256, buildxSupport ? true
     , composeSupport ? true
       # package dependencies
-    , stdenv, fetchFromGitHub, buildGoPackage, makeWrapper, installShellFiles
-    , pkg-config, glibc, go-md2man, go, containerd_1_4, runc, docker-proxy, tini
-    , libtool, sqlite, iproute2, lvm2, systemd, docker-buildx, docker-compose_2
-    , btrfs-progs, iptables, e2fsprogs, xz, util-linux, xfsprogs, git, procps
-    , libseccomp, rootlesskit, slirp4netns, fuse-overlayfs, nixosTests
-    , clientOnly ? !stdenv.isLinux, symlinkJoin }:
-    let
-      docker-runc = runc.overrideAttrs (oldAttrs: {
-        name = "docker-runc-${version}";
-        inherit version;
-        src = fetchFromGitHub {
-          owner = "opencontainers";
-          repo = "runc";
-          rev = runcRev;
-          sha256 = runcSha256;
-        };
-        # docker/runc already include these patches / are not applicable
-        patches = [ ];
-      });
+      , stdenv, fetchFromGitHub, fetchpatch, buildGoPackage
+      , makeWrapper, installShellFiles, pkg-config, glibc
+      , go-md2man, go, containerd, runc, docker-proxy, tini, libtool
+      , sqlite, iproute2, lvm2, systemd, docker-buildx, docker-compose_2
+      , btrfs-progs, iptables, e2fsprogs, xz, util-linux, xfsprogs, git
+      , procps, libseccomp, rootlesskit, slirp4netns, fuse-overlayfs
+      , nixosTests
+      , clientOnly ? !stdenv.isLinux, symlinkJoin
+    }:
+  let
+    docker-runc = runc.overrideAttrs (oldAttrs: {
+      name = "docker-runc-${version}";
+      inherit version;
+      src = fetchFromGitHub {
+        owner = "opencontainers";
+        repo = "runc";
+        rev = runcRev;
+        sha256 = runcSha256;
+      };
+      # docker/runc already include these patches / are not applicable
+      patches = [];
+    });
 
-      docker-containerd = containerd_1_4.overrideAttrs (oldAttrs: {
-        name = "docker-containerd-${version}";
-        inherit version;
-        src = fetchFromGitHub {
-          owner = "containerd";
-          repo = "containerd";
-          rev = containerdRev;
-          sha256 = containerdSha256;
-        };
-        buildInputs = oldAttrs.buildInputs ++ [ libseccomp ];
-      });
-
-      docker-tini = tini.overrideAttrs (oldAttrs: {
-        name = "docker-init-${version}";
-        inherit version;
-        src = fetchFromGitHub {
-          owner = "krallin";
-          repo = "tini";
-          rev = tiniRev;
-          sha256 = tiniSha256;
-        };
-
-        # Do not remove static from make files as we want a static binary
-        postPatch = "";
-
-        buildInputs = [ glibc glibc.static ];
-
-        NIX_CFLAGS_COMPILE = "-DMINIMAL=ON";
-      });
-
-      moby = buildGoPackage ((optionalAttrs (stdenv.isLinux)) rec {
-        name = "moby-${version}";
-        inherit version;
-        inherit docker-runc docker-containerd docker-proxy docker-tini;
-
-        src = moby-src;
-
-        goPackagePath = "github.com/docker/docker";
-
-        nativeBuildInputs =
-          [ makeWrapper pkg-config go-md2man go libtool installShellFiles ];
-        buildInputs = [ sqlite lvm2 btrfs-progs systemd libseccomp ];
-
-        extraPath = optionals (stdenv.isLinux) (makeBinPath [
-          iproute2
-          iptables
-          e2fsprogs
-          xz
-          xfsprogs
-          procps
-          util-linux
-          git
-        ]);
-
-        extraUserPath = optionals (stdenv.isLinux && !clientOnly)
-          (makeBinPath [ rootlesskit slirp4netns fuse-overlayfs ]);
-
-        postPatch = ''
-          patchShebangs hack/make.sh hack/make/
-        '';
-
-        buildPhase = ''
-          export GOCACHE="$TMPDIR/go-cache"
-          # build engine
-          cd ./go/src/${goPackagePath}
-          export AUTO_GOPATH=1
-          export DOCKER_GITCOMMIT="${rev}"
-          export VERSION="${version}"
-          ./hack/make.sh dynbinary
-          cd -
-        '';
-
-        installPhase = ''
-          cd ./go/src/${goPackagePath}
-          install -Dm755 ./bundles/dynbinary-daemon/dockerd $out/libexec/docker/dockerd
-
-          makeWrapper $out/libexec/docker/dockerd $out/bin/dockerd \
-            --prefix PATH : "$out/libexec/docker:$extraPath"
-
-          ln -s ${docker-containerd}/bin/containerd $out/libexec/docker/containerd
-          ln -s ${docker-containerd}/bin/containerd-shim $out/libexec/docker/containerd-shim
-          ln -s ${docker-runc}/bin/runc $out/libexec/docker/runc
-          ln -s ${docker-proxy}/bin/docker-proxy $out/libexec/docker/docker-proxy
-          ln -s ${docker-tini}/bin/tini-static $out/libexec/docker/docker-init
-
-          # systemd
-          install -Dm644 ./contrib/init/systemd/docker.service $out/etc/systemd/system/docker.service
-          substituteInPlace $out/etc/systemd/system/docker.service --replace /usr/bin/dockerd $out/bin/dockerd
-          install -Dm644 ./contrib/init/systemd/docker.socket $out/etc/systemd/system/docker.socket
-
-          # rootless Docker
-          install -Dm755 ./contrib/dockerd-rootless.sh $out/libexec/docker/dockerd-rootless.sh
-          makeWrapper $out/libexec/docker/dockerd-rootless.sh $out/bin/dockerd-rootless \
-            --prefix PATH : "$out/libexec/docker:$extraPath:$extraUserPath"
-        '';
-
-        DOCKER_BUILDTAGS = [ "include_gcs" ]
-          ++ optional (systemd != null) [ "journald" ]
-          ++ optional (btrfs-progs == null) "exclude_graphdriver_btrfs"
-          ++ optional (lvm2 == null) "exclude_graphdriver_devicemapper"
-          ++ optional (libseccomp != null) "seccomp";
-      });
-
-      plugins = optionals buildxSupport [ docker-buildx ]
-        ++ optionals composeSupport [ docker-compose_2 ];
-      pluginsRef = symlinkJoin {
-        name = "docker-plugins";
-        paths = plugins;
+    docker-containerd = containerd.overrideAttrs (oldAttrs: {
+      name = "docker-containerd-${version}";
+      inherit version;
+      src = fetchFromGitHub {
+        owner = "containerd";
+        repo = "containerd";
+        rev = containerdRev;
+        sha256 = containerdSha256;
       };
     in buildGoPackage ((optionalAttrs (!clientOnly) {
 
@@ -159,6 +62,16 @@ rec {
       buildInputs =
         optionals (!clientOnly) [ sqlite lvm2 btrfs-progs systemd libseccomp ]
         ++ plugins;
+
+      patches = [
+        # This patch incorporates code from a PR fixing using buildkit with the ZFS graph driver.
+        # It could be removed when a version incorporating this patch is released.
+        (fetchpatch {
+          name = "buildkit-zfs.patch";
+          url = "https://github.com/moby/moby/pull/43136.patch";
+          sha256 = "1WZfpVnnqFwLMYqaHLploOodls0gHF8OCp7MrM26iX8=";
+        })
+      ];
 
       postPatch = ''
         patchShebangs man scripts/build/
@@ -248,20 +161,20 @@ rec {
   # Get revisions from
   # https://github.com/moby/moby/tree/${version}/hack/dockerfile/install/*
   docker_20_10 = callPackage dockerGen rec {
-    version = "20.10.12";
+    version = "20.10.14";
     rev = "v${version}";
-    sha256 = "sha256-nU6grb2lSW7BY7w9aAXwVbGp9TyO2ZxnJaxAi0wbk/c=";
+    sha256 = "sha256-eDwgqFx4io++SMOjhxMxVzqzcOgOnv6Xe/qmmPCvZts=";
     moby-src = fetchFromGitHub {
       owner = "moby";
       repo = "moby";
       rev = "v${version}";
-      sha256 = "sha256-qizzK1qJNRGFisahE3iAzZTNW/HmledlMNxcJCMQSJ4=";
+      sha256 = "sha256-I5oxpFLH789I2Sb29OXDaM4fCbQT/KvPq0DYcAVp0aI=";
     };
-    runcRev = "v1.0.2";
-    runcSha256 = "1bpckghjah0rczciw1a1ab8z718lb2d3k4mjm4zb45lpm3njmrcp";
-    containerdRev = "v1.4.12";
-    containerdSha256 = "sha256-g30kshXyGVew5tVaXFAOQUOYvvo0JBqIj1YaC5nTiS8=";
-    tiniRev = "v0.19.0"; # v0.19.0
-    tiniSha256 = "1h20i3wwlbd8x4jr2gz68hgklh0lb0jj7y5xk1wvr8y58fip1rdn";
+    runcRev = "v1.0.3";
+    runcSha256 = "sha256-Tl/JKbIpao+FCjngPzaVkxse50zo3XQ9Mg/AdkblMcI=";
+    containerdRev = "v1.5.11";
+    containerdSha256 = "sha256-YzFtv6DIjImSK0SywxhZrEeEmCnHTceAi3pfwnPubKg=";
+    tiniRev = "v0.19.0";
+    tiniSha256 = "sha256-ZDKu/8yE5G0RYFJdhgmCdN3obJNyRWv6K/Gd17zc1sI=";
   };
 }

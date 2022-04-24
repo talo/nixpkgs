@@ -30,6 +30,7 @@ let
   defaultOverrides = [
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
     (mkOverride "python-slugify" "4.0.1" "sha256-aaUXdm4AwSaOW7/A0BCgqFCN4LGNMK1aH/NX+K5yQnA=")
+    (mkOverride "voluptuous" "0.12.2" "sha256-TbGsUHnbkkmCDUnIkctGYKb4yuNQSRIQq850H6v1ZRM=")
 
     # pytest-aiohttp>0.3.0 breaks home-assistant tests
     (self: super: {
@@ -37,13 +38,22 @@ let
         version = "0.3.0";
         src = oldAttrs.src.override {
           inherit version;
-          sha256 = "0kx4mbs9bflycd8x9af0idcjhdgnzri3nw1qb0vpfyb3751qaaf9";
+          hash = "sha256-ySmFQzljeXc3WDhwO2L+9jUoWYvAqdRRY566lfSqpE8=";
         };
+        propagatedBuildInputs = with python3.pkgs; [ aiohttp pytest ];
+        doCheck = false;
+        patches = [];
       });
       aiohomekit = super.aiohomekit.overridePythonAttrs (oldAttrs: {
         doCheck = false; # requires aiohttp>=1.0.0
       });
       hass-nabucasa = super.hass-nabucasa.overridePythonAttrs (oldAttrs: {
+        doCheck = false; # requires aiohttp>=1.0.0
+      });
+      rtsp-to-webrtc = super.rtsp-to-webrtc.overridePythonAttrs (oldAttrs: {
+        doCheck = false; # requires pytest-aiohttp>=1.0.0
+      });
+      snitun = super.snitun.overridePythonAttrs (oldAttrs: {
         doCheck = false; # requires aiohttp>=1.0.0
       });
       zwave-js-server-python = super.zwave-js-server-python.overridePythonAttrs (oldAttrs: {
@@ -158,7 +168,7 @@ let
   extraPackagesFile = writeText "home-assistant-packages" (lib.concatMapStringsSep "\n" (pkg: pkg.pname) extraBuildInputs);
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2022.3.3";
+  hassVersion = "2022.4.6";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -176,7 +186,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    hash = "sha256-qe9/VFcEBDfSa7AYrkmj1b6UGLHcm7CtLHiPwzZz8jg=";
+    hash = "sha256-f2cPkORh6DoNjqZFz7XjxQdZwej3k+8NtZTstYIbrc4=";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -196,8 +206,8 @@ in python.pkgs.buildPythonApplication rec {
       "bcrypt"
       "cryptography"
       "httpx"
+      "jinja2"
       "pip"
-      "PyJWT"
       "requests"
       "yarl"
     ];
@@ -273,8 +283,6 @@ in python.pkgs.buildPythonApplication rec {
   ];
 
   pytestFlagsArray = [
-    # parallelize test run
-    "--numprocesses $NIX_BUILD_CORES"
     # assign tests grouped by file to workers
     "--dist loadfile"
     # retry racy tests that end in "RuntimeError: Event loop is closed"
@@ -300,6 +308,8 @@ in python.pkgs.buildPythonApplication rec {
     "test_merge"
     # Tests are flaky
     "test_config_platform_valid"
+    # Test requires pylint>=2.13.0
+    "test_invalid_discovery_info"
   ];
 
   preCheck = ''

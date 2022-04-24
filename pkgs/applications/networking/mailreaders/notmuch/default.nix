@@ -6,7 +6,7 @@
 , pythonPackages
 , emacs
 , ruby
-, testVersion
+, testers
 , which, dtach, openssl, bash, gdb, man
 , withEmacs ? true
 , withRuby ? true
@@ -62,7 +62,12 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   makeFlags = [ "V=1" ];
 
-  outputs = [ "out" "man" "info" ]
+  postConfigure = ''
+    mkdir ${placeholder "bindingconfig"}
+    cp bindings/python-cffi/_notmuch_config.py ${placeholder "bindingconfig"}/
+  '';
+
+  outputs = [ "out" "man" "info" "bindingconfig" ]
     ++ lib.optional withEmacs "emacs"
     ++ lib.optional withRuby "ruby";
 
@@ -97,7 +102,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     pythonSourceRoot = "notmuch-${version}/bindings/python";
-    tests.version = testVersion { package = notmuch; };
+    tests.version = testers.testVersion { package = notmuch; };
     inherit version;
   };
 

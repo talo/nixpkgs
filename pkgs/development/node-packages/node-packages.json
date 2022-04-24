@@ -55,6 +55,7 @@
 , "coc-emmet"
 , "coc-eslint"
 , "coc-explorer"
+, "coc-flutter"
 , "coc-git"
 , "coc-go"
 , "coc-highlight"
@@ -114,6 +115,7 @@
 , "emoj"
 , "emojione"
 , {"epgstation": "../../applications/video/epgstation"}
+, {"epgstation-client": "../../applications/video/epgstation/client"}
 , "escape-string-regexp"
 , "eslint"
 , "eslint_d"
@@ -346,6 +348,7 @@
 , "titanium"
 , "triton"
 , "tsun"
+, "ts-node"
 , "ttf2eot"
 , "typescript"
 , "typescript-language-server"

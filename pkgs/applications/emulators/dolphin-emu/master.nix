@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, cmake
 , wrapQtAppsHook, qtbase, bluez, ffmpeg, libao, libGLU, libGL, pcre, gettext
-, libXrandr, libusb1, lzo, libpthreadstubs, libXext, libXxf86vm, libXinerama
+, libXrandr, libusb1, libpthreadstubs, libXext, libXxf86vm, libXinerama
 , libSM, libXdmcp, readline, openal, udev, libevdev, portaudio, curl, alsa-lib
-, miniupnpc, enet, mbedtls, soundtouch, sfml, writeScript
+, miniupnpc, enet, mbedtls, soundtouch, sfml, xz, writeScript
 , vulkan-loader ? null, libpulseaudio ? null
 
 # - Inputs used for Darwin
@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dolphin-emu";
-  version = "5.0-15993";
+  version = "5.0-16101";
 
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
-    rev = "5e595616379a694789fe749e40a27ef069f0090e";
-    sha256 = "1kid8qjn8r7dxh2yc1y6yal6qkfxij0ymi3zryxsnym3rjh1jds9";
+    rev = "8ecfa537a242de74d2e372e30d9d79b14584b2fb";
+    sha256 = "3jLGVzTDzEtHWvIb9DFTbJiA9dE9Pm14vYER998Zln0=";
     fetchSubmodules = true;
   };
 
@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     curl ffmpeg libao libGLU libGL pcre gettext libpthreadstubs libpulseaudio
-    libXrandr libXext libXxf86vm libXinerama libSM readline openal libXdmcp lzo
-    portaudio libusb1 libpng hidapi miniupnpc enet mbedtls soundtouch sfml
+    libXrandr libXext libXxf86vm libXinerama libSM readline openal libXdmcp
+    portaudio libusb1 libpng hidapi miniupnpc enet mbedtls soundtouch sfml xz
     qtbase
   ] ++ lib.optionals stdenv.isLinux [
     bluez udev libevdev alsa-lib vulkan-loader

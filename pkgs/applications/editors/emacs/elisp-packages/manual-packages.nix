@@ -178,6 +178,8 @@
 
   git-undo = callPackage ./git-undo { };
 
+  header-file-mode = callPackage ./header-file-mode { };
+
   helm-words = callPackage ./helm-words { };
 
   isearch-plus = callPackage ./isearch-plus { };
@@ -189,6 +191,8 @@
   nano-theme = callPackage ./nano-theme { };
 
   perl-completion = callPackage ./perl-completion { };
+
+  control-lock = callPackage ./control-lock { };
 
   plz = callPackage ./plz { };
 
@@ -232,7 +236,6 @@
   youtube-dl = callPackage ./youtube-dl { };
 
   # From old emacsPackages (pre emacsPackagesNg)
-  cedet = callPackage ./cedet { };
   cedille = callPackage ./cedille { cedille = pkgs.cedille; };
   color-theme-solarized = callPackage ./color-theme-solarized { };
   session-management-for-emacs = callPackage ./session-management-for-emacs { };

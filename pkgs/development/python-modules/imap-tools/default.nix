@@ -7,15 +7,17 @@
 
 buildPythonPackage rec {
   pname = "imap-tools";
-  version = "0.51.1";
+  version = "0.54.0";
 
   disabled = isPy27;
+
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ikvk";
     repo = "imap_tools";
     rev = "v${version}";
-    hash = "sha256-ppxQtFK7U006z7qonm3B5gN99CHB9mEX3l0XjrhZQo8=";
+    hash = "sha256-RiKGxyCPYlAJ5YbxvEKxCYgUg1D9s29YSCT4tY3FIEE=";
   };
 
   checkInputs = [
@@ -37,6 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Work with email and mailbox by IMAP";
     homepage = "https://github.com/ikvk/imap_tools";
+    changelog = "https://github.com/ikvk/imap_tools/blob/v${version}/docs/release_notes.rst";
     license = licenses.asl20;
     maintainers = with maintainers; [ dotlambda ];
   };

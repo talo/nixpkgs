@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, cryptography
 , netifaces
 , voluptuous
 , pyyaml
@@ -11,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "xknx";
-  version = "0.19.2";
+  version = "0.20.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -19,14 +20,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "XKNX";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-LJ7MmKCWx+n7caud0pN4+7f9H4XzwuAAn9u86X/FACo=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-uqFS/kveWLEmu+8L9dOprcQcO+Odq9lzfTI9lqIhaSw=";
   };
 
   propagatedBuildInputs = [
-    voluptuous
+    cryptography
     netifaces
-    pyyaml
   ];
 
   checkInputs = [

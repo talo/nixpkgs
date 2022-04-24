@@ -247,15 +247,13 @@ in
         WorkingDirectory = workingDir;
         RuntimeDirectory = "dendrite";
         RuntimeDirectoryMode = "0700";
+        LimitNOFILE = 65535;
         EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
-        ExecStartPre =
-          if (cfg.environmentFile != null) then ''
-            ${pkgs.envsubst}/bin/envsubst \
-              -i ${configurationYaml} \
-              -o /run/dendrite/dendrite.yaml
-          '' else ''
-            ${pkgs.coreutils}/bin/cp ${configurationYaml} /run/dendrite/dendrite.yaml
-          '';
+        ExecStartPre = ''
+          ${pkgs.envsubst}/bin/envsubst \
+            -i ${configurationYaml} \
+            -o /run/dendrite/dendrite.yaml
+        '';
         ExecStart = lib.strings.concatStringsSep " " ([
           "${pkgs.dendrite}/bin/dendrite-monolith-server"
           "--config /run/dendrite/dendrite.yaml"

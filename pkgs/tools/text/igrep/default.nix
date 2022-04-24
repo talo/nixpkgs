@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , stdenv
 , Security
-, testVersion
+, testers
 , igrep
 }:
 
@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
   passthru.tests = {
-    version = testVersion { package = igrep; command = "ig --version"; };
+    version = testers.testVersion { package = igrep; command = "ig --version"; };
   };
 
   meta = with lib; {
@@ -32,5 +32,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/konradsz/igrep/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ _0x4A6F ];
+    mainProgram = "ig";
   };
 }
