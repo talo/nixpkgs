@@ -3,11 +3,11 @@
 
 python.pkgs.buildPythonPackage rec {
   pname = "torch-sparse";
-  version = "0.6.12";
+  version = "0.6.13";
   src = fetchurl {
     url =
-      "https://files.pythonhosted.org/packages/00/40/208c5b8ae34c89403d9da648c9689465880539d95a4ad570ac9d6f301b72/torch_sparse-0.6.12.tar.gz";
-    sha256 = "1lnfif0f594ws6n7xbai26rj2awn7d0y5iwkw15xwp458nyqbnw5";
+      "https://files.pythonhosted.org/packages/ee/44/b4a1d6d7fa67309781005c0e36723dd0bd745fc1a20c9330796055953b10/torch_sparse-0.6.13.tar.gz";
+    sha256 = "b4896822559f9b47d8b0186d74c94b7449f91db155a57d617fbeae9b722fa1f3";
   };
   preConfigure = ''
     export TORCH_CUDA_ARCH_LIST="8.6 8.6+PTX"
