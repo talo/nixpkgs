@@ -15933,6 +15933,8 @@ with pkgs;
 
   redo-sh = callPackage ../development/tools/build-managers/redo-sh { };
 
+  reduce = callPackage ../applications/science/biology/reduce { };
+
   regclient = callPackage ../development/tools/regclient { };
   inherit (regclient) regbot regctl regsync;
 
