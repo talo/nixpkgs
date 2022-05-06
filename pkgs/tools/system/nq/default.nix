@@ -6,8 +6,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "chneukirchen";
     repo = "nq";
-    rev = "72da652ad6e7682bea6f54fbb27fbbba7d1f9f7d";
-    sha256 = "sha256-kXqgrxKucgY7VgNU/L0dtw1yO1ePCvxeLB6706MFnoo=";
+    rev = "v${version}";
+    sha256 = "sha256-g14t2Wy2GwiqnfEDiLAPGehzUgK6mLC+5PAZynez62s=";
   };
   makeFlags = [ "PREFIX=$(out)" ];
   postPatch = ''
