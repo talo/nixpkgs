@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , buildPythonPackage
 , fetchPypi
 }:
@@ -17,7 +16,6 @@ buildPythonPackage rec {
     description = "Library to simulate plate tectonics with Python bindings";
     homepage    = "https://github.com/Mindwerks/plate-tectonics";
     license     = licenses.lgpl3;
-    broken      = stdenv.isLinux;
   };
 
 }

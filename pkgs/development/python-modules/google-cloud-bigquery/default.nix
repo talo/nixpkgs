@@ -2,9 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
-, db-dtypes
 , freezegun
-, google-cloud-bigquery-storage
 , google-cloud-core
 , google-cloud-datacatalog
 , google-cloud-storage
@@ -29,15 +27,13 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    google-cloud-core
-    google-cloud-bigquery-storage
     google-resumable-media
+    google-cloud-core
     proto-plus
     pyarrow
   ];
 
   checkInputs = [
-    db-dtypes
     freezegun
     google-cloud-testutils
     ipython
@@ -58,8 +54,8 @@ buildPythonPackage rec {
     # requires credentials
     "test_bigquery_magic"
     "TestBigQuery"
-    "test_context_with_no_query_cache_from_context"
     "test_arrow_extension_types_same_for_storage_and_REST_APIs_894"
+    "test_query_retry_539"
     "test_list_rows_empty_table"
     "test_list_rows_page_size"
     "test_list_rows_scalars"
@@ -77,13 +73,6 @@ buildPythonPackage rec {
     "test__initiate_resumable_upload"
     "test__initiate_resumable_upload_mtls"
     "test__initiate_resumable_upload_with_retry"
-  ];
-
-  disabledTestPaths = [
-    # requires credentials
-    "tests/system/test_query.py"
-    "tests/system/test_job_retry.py"
-    "tests/system/test_pandas.py"
   ];
 
   pythonImportsCheck = [

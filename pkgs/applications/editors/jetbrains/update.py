@@ -1,5 +1,6 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -i python3 -p python3 python3.pkgs.packaging python3.pkgs.requests python3.pkgs.xmltodict
+import hashlib
 import json
 import pathlib
 import logging
@@ -32,8 +33,7 @@ def download_channels():
 
 
 def build_version(build):
-    build_number = build["@fullNumber"] if "@fullNumber" in build else build["@number"]
-    return version.parse(build_number)
+    return version.parse(build["@version"])
 
 
 def latest_build(channel):
@@ -43,10 +43,11 @@ def latest_build(channel):
 
 
 def download_sha256(url):
-    url = f"{url}.sha256"
     download_response = requests.get(url)
     download_response.raise_for_status()
-    return download_response.content.decode('UTF-8').split(' ')[0]
+    h = hashlib.sha256()
+    h.update(download_response.content)
+    return h.hexdigest()
 
 
 channels = download_channels()
@@ -62,22 +63,18 @@ def update_product(name, product):
     else:
         try:
             build = latest_build(channel)
-            new_version = build["@version"]
-            new_build_number = build["@fullNumber"]
-            if "EAP" not in channel["@name"]:
-                version_or_build_number = new_version
-            else:
-                version_or_build_number = new_build_number
-            version_number = new_version.split(' ')[0]
-            download_url = product["url-template"].format(version=version_or_build_number, versionMajorMinor=version_number)
+            version = build["@version"]
+            parsed_version = build_version(build)
+            version_major_minor = f"{parsed_version.major}.{parsed_version.minor}"
+            download_url = product["url-template"].format(version = version, versionMajorMinor = version_major_minor)
             product["url"] = download_url
-            if "sha256" not in product or product.get("build_number") != new_build_number:
-                logging.info("Found a newer version %s with build number %s.", new_version, new_build_number)
-                product["version"] = new_version
-                product["build_number"] = new_build_number
+            product["version-major-minor"] = version_major_minor
+            if "sha256" not in product or product.get("version") != version:
+                logging.info("Found a newer version %s.", version)
+                product["version"] = version
                 product["sha256"] = download_sha256(download_url)
             else:
-                logging.info("Already at the latest version %s with build number %s.", new_version, new_build_number)
+                logging.info("Already at the latest version %s.", version)
         except Exception as e:
             logging.exception("Update failed:", exc_info=e)
             logging.warning("Skipping %s due to the above error.", name)

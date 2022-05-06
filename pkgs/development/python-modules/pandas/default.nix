@@ -122,8 +122,6 @@ buildPythonPackage rec {
     export PATH=$(pwd):$PATH
   '';
 
-  enableParallelBuilding = true;
-
   pythonImportsCheck = [ "pandas" ];
 
   meta = with lib; {

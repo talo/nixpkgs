@@ -6,6 +6,7 @@
 , dbus
 , sqlite
 , file
+, gzip
 , makeWrapper
 , notmuch
   # Build with support for notmuch backend
@@ -24,7 +25,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-ZE653OtXyZ9454bKPApmuL2kVko/hGBWEAya1L1KIoc=";
 
-  nativeBuildInputs = [ pkg-config makeWrapper ];
+  nativeBuildInputs = [ pkg-config gzip makeWrapper ];
 
   buildInputs = [ openssl dbus sqlite ] ++ lib.optional withNotmuch notmuch;
 

@@ -16,23 +16,17 @@
 , SDL2
 , sqlite
 , wavpack
-, ffmpeg
-, x264
-, vulkan-headers
-, vulkan-loader
-, glslang
-, spirv-tools
 }:
 
 stdenv.mkDerivation rec {
   pname = "ddnet";
-  version = "16.0.3";
+  version = "15.9.1";
 
   src = fetchFromGitHub {
     owner = "ddnet";
     repo = pname;
     rev = version;
-    sha256 = "sha256-9hjVAtnn+dTBNCu6E90CtjGTAStmVTsQFm2UYq68xcM=";
+    sha256 = "sha256-QGtXI4Dbua5LBXSvB17tnSTGEvCCoopvg1XKBuDIEoQ=";
   };
 
   nativeBuildInputs = [ cmake ninja pkg-config ];
@@ -50,12 +44,6 @@ stdenv.mkDerivation rec {
     SDL2
     sqlite
     wavpack
-    ffmpeg
-    x264
-    vulkan-loader
-    vulkan-headers
-    glslang
-    spirv-tools
   ];
 
   cmakeFlags = [

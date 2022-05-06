@@ -10,6 +10,7 @@
 , writeScript
 , bash
 , tor
+, gnutar
 , zip
 , xz
 }:
@@ -41,7 +42,7 @@ stdenv.mkDerivation rec {
     sha256 = "09bpkmn22kal3cxg8sil02wy2f2gplsbdkp4viagn0jppma02jid";
   };
 
-  nativeBuildInputs = [ makeWrapper copyDesktopItems imagemagick dpkg zip xz ];
+  nativeBuildInputs = [ makeWrapper copyDesktopItems imagemagick dpkg gnutar zip xz ];
 
   desktopItems = [
     (makeDesktopItem {

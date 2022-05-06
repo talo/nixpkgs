@@ -17,8 +17,6 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  makeFlags = [ "AR:=$(AR)" ];
-
   nativeBuildInputs = [ gettext ];
 
   hardeningDisable = [ "format" ];

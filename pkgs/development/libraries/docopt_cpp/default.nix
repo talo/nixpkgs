@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, python3 }:
+{ lib, stdenv, fetchFromGitHub, cmake, python2 }:
 
 stdenv.mkDerivation rec {
   version = "0.6.3";
@@ -11,15 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0cz3vv7g5snfbsqcf3q8bmd6kv5qp84gj3avwkn4vl00krw13bl7";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "python3-for-tests";
-      url = "https://github.com/docopt/docopt.cpp/commit/b3d909dc952ab102a4ad5a1541a41736f35b92ba.patch";
-      hash = "sha256-JJR09pbn3QhYaZAIAjs+pe28+g1VfgHUKspWorHzr8o=";
-    })
-  ];
-
-  nativeBuildInputs = [ cmake python3 ];
+  nativeBuildInputs = [ cmake python2 ];
 
   cmakeFlags = ["-DWITH_TESTS=ON"];
 

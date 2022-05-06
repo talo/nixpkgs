@@ -6,8 +6,9 @@
 { lib
 , stdenvNoCC
 , bash
+, common-updater-scripts
 , fetchFromGitHub
-, gitUpdater
+, genericUpdater
 , jq
 , makeWrapper
 , mkYarnPackage
@@ -79,7 +80,8 @@ stdenvNoCC.mkDerivation rec {
     inherit
       pname
       version
-      gitUpdater
+      common-updater-scripts
+      genericUpdater
       writers
       jq
       yarn

@@ -15,7 +15,6 @@
 , xvfb-run
 , gdk-pixbuf
 , librsvg
-, libxml2
 , hicolor-icon-theme
 , at-spi2-atk
 , at-spi2-core
@@ -26,7 +25,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libhandy";
-  version = "1.6.2";
+  version = "1.6.1";
 
   outputs = [
     "out"
@@ -39,7 +38,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-f6iaqoeWa20PX0700+/a9lTisB6ix84r1wMB0fn0LKM=";
+    sha256 = "sha256-bqsDhEBNVr0bH6BZ2aCBF3d49q4ID/whIPKGVsp0YqQ=";
   };
 
   nativeBuildInputs = [
@@ -49,8 +48,6 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
-  ] ++ lib.optionals enableGlade [
-    libxml2 # for xmllint
   ];
 
   buildInputs = [

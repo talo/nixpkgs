@@ -304,29 +304,27 @@ let
       # Test some statically linked packages to catch regressions
       # and get some cache going for static compilation with GHC.
       # Use integer-simple to avoid GMP linking problems (LGPL)
-      pkgsStatic =
+      pkgsStatic.haskell.packages =
         removePlatforms
           [
             "aarch64-linux" # times out on Hydra
             "x86_64-darwin" # TODO: reenable when static libiconv works on darwin
           ] {
-            haskellPackages = {
-              inherit (packagePlatforms pkgs.pkgsStatic.haskellPackages)
+            integer-simple.ghc8107 = {
+              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.integer-simple.ghc8107)
                 hello
                 lens
                 random
                 QuickCheck
-                cabal2nix
               ;
             };
 
-            haskell.packages.native-bignum.ghc922 = {
-              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc922)
+            native-bignum.ghc902 = {
+              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc902)
                 hello
                 lens
                 random
                 QuickCheck
-                cabal2nix
               ;
             };
           };
@@ -363,9 +361,6 @@ let
       ghc-lib = released;
       ghc-lib-parser = released;
       ghc-lib-parser-ex = released;
-      spectacle = [
-        compilerNames.ghc8107
-      ];
     })
     {
       mergeable = pkgs.releaseTools.aggregate {
@@ -451,8 +446,12 @@ let
           ];
         };
         constituents = accumulateDerivations [
-          jobs.pkgsStatic.haskellPackages
-          jobs.pkgsStatic.haskell.packages.native-bignum.ghc922
+          jobs.pkgsStatic.haskell.packages.integer-simple.ghc8107.hello
+          jobs.pkgsStatic.haskell.packages.integer-simple.ghc8107.lens
+          jobs.pkgsStatic.haskell.packages.integer-simple.ghc8107.random
+          jobs.pkgsStatic.haskell.packages.native-bignum.ghc902.hello
+          jobs.pkgsStatic.haskell.packages.native-bignum.ghc902.lens
+          jobs.pkgsStatic.haskell.packages.native-bignum.ghc902.random
         ];
       };
     }

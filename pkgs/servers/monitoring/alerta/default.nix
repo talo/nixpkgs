@@ -4,11 +4,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "alerta-server";
-  version = "8.7.0";
+  version = "8.3.3";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "sha256-EM3owmj+6gFjU0ARaQP3FLYXliGaGCRSaLgkiPwhGdU=";
+    sha256 = "a2713a31c6e326c774a3ee0328f424f944b951935ff1b893a4a66598d61c5a97";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -21,7 +21,6 @@ python3.pkgs.buildPythonApplication rec {
     psycopg2
     pyjwt
     pymongo
-    pyparsing
     python-dateutil
     pytz
     pyyaml
@@ -30,17 +29,13 @@ python3.pkgs.buildPythonApplication rec {
     sentry-sdk
   ];
 
-   # We can't run the tests from Nix, because they rely on the presence of a working MongoDB server
-  doCheck = false;
+  doCheck = false; # We can't run the tests from Nix, because they rely on the presence of a working MongoDB server
 
-  pythonImportsCheck = [
-    "alerta"
-  ];
+  disabled = python3.pythonOlder "3.6";
 
   meta = with lib; {
     homepage = "https://alerta.io";
     description = "Alerta Monitoring System server";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
   };
 }

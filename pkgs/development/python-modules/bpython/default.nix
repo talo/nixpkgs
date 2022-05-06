@@ -3,12 +3,10 @@
 , fetchPypi
 , curtsies
 , cwcwidth
-, dataclasses
 , greenlet
 , jedi
 , pygments
 , pytestCheckHook
-, pythonOlder
 , pyperclip
 , pyxdg
 , requests
@@ -21,13 +19,10 @@
 buildPythonPackage rec {
   pname = "bpython";
   version = "0.22.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-H7HgpSMyV5/E49z3XiF5avZ6rivkYBeez8zpUwpJogA=";
+    sha256 = "1fb1e0a52332579fc4e3dcf75e21796af67aae2be460179ecfcce9530a49a200";
   };
 
   propagatedBuildInputs = [
@@ -42,8 +37,6 @@ buildPythonPackage rec {
     typing-extensions
     urwid
     watchdog
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    dataclasses
   ];
 
   postInstall = ''
@@ -55,14 +48,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "bpython"
-  ];
-
-  disabledTests = [
-    # Check for syntax error ends with an AssertionError
-    "test_syntaxerror"
-  ];
+  pythonImportsCheck = [ "bpython" ];
 
   meta = with lib; {
     description = "A fancy curses interface to the Python interactive interpreter";

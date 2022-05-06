@@ -13,10 +13,6 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ stdune ];
 
-  preBuild = ''
-    rm -r vendor/csexp
-  '';
-
   meta = with lib; {
     description = "Private libraries of Dune";
     maintainers = [ maintainers.marsam ];

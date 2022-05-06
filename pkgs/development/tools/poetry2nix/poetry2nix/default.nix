@@ -5,7 +5,7 @@
 }:
 let
   # Poetry2nix version
-  version = "1.28.0";
+  version = "1.27.1";
 
   inherit (poetryLib) isCompatible readTOML moduleName;
 
@@ -287,19 +287,11 @@ lib.makeScope pkgs.newScope (self: {
         (name: value: projectDir + "/${value.path}")
         (lib.filterAttrs (name: dep: dep.develop or false && hasAttr "path" dep) set);
 
-      excludedEditablePackageNames = builtins.filter
-        (pkg: editablePackageSources."${pkg}" == null)
-        (builtins.attrNames editablePackageSources);
-
-      allEditablePackageSources = (
+      editablePackageSources' = (
         (getEditableDeps (pyProject.tool.poetry."dependencies" or { }))
         // (getEditableDeps (pyProject.tool.poetry."dev-dependencies" or { }))
         // editablePackageSources
       );
-
-      editablePackageSources' = builtins.removeAttrs
-        allEditablePackageSources
-        excludedEditablePackageNames;
 
       poetryPython = self.mkPoetryPackages {
         inherit pyproject poetrylock overrides python pwd preferWheels pyProject;

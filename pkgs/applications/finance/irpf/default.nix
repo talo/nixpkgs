@@ -6,18 +6,17 @@
 , makeDesktopItem
 , makeWrapper
 , unzip
-, xdg-utils
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "irpf";
-  version = "2022-1.4";
+  version = "2022-1.3";
 
   src = let
     year = lib.head (lib.splitVersion version);
   in fetchzip {
     url = "https://downloadirpf.receita.fazenda.gov.br/irpf/${year}/irpf/arquivos/IRPF${version}.zip";
-    sha256 = "sha256-AKBcBkoPDBknUOyndf9hNigzDHjjgi2v0n1Rs+//j/8=";
+    sha256 = "sha256-nAmcVPSnMIWuq2zj1xq/657RmzaSmdtxlI9cp9v5P0A=";
   };
 
   nativeBuildInputs = [ unzip makeWrapper copyDesktopItems ];
@@ -48,7 +47,6 @@ stdenvNoCC.mkDerivation rec {
       --add-flags "-Dawt.useSystemAAFontSettings=on" \
       --add-flags "-Dswing.aatext=true" \
       --add-flags "-jar $BASEDIR/${pname}.jar" \
-      --prefix PATH : ${lib.makeBinPath [ xdg-utils ]} \
       --set _JAVA_AWT_WM_NONREPARENTING 1 \
       --set AWT_TOOLKIT MToolkit
 

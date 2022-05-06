@@ -26,8 +26,6 @@ mkDerivation rec {
     kcrash
   ];
 
-  outputs = [ "out" "dev" ];
-
   meta = with lib; {
     license = licenses.gpl2;
     description = "A hex editor";

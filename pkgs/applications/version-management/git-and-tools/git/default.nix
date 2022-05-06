@@ -13,7 +13,7 @@
 , pythonSupport ? true
 , withpcre2 ? true
 , sendEmailSupport ? false
-, Security, CoreServices
+, darwin
 , nixosTests
 , withLibsecret ? false
 , pkg-config, glib, libsecret
@@ -26,7 +26,7 @@ assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.36.0";
+  version = "2.35.3";
   svn = subversionClient.override { perlBindings = perlSupport; };
   gitwebPerlLibs = with perlPackages; [ CGI HTMLParser CGIFast FCGI FCGIProcManager HTMLTagCloud ];
 in
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "sha256-r16/wWWEZPXQ1For/YhMk1+2B6EMwCHZW8gHeIYcwdM=";
+    sha256 = "sha256-FenbT5vy7Z//MMtioAxcfAkBAV9asEjNtOiwTd7gD6I=";
   };
 
   outputs = [ "out" ] ++ lib.optional withManual "doc";
@@ -79,7 +79,7 @@ stdenv.mkDerivation {
     ++ lib.optionals perlSupport [ perlPackages.perl ]
     ++ lib.optionals guiSupport [tcl tk]
     ++ lib.optionals withpcre2 [ pcre2 ]
-    ++ lib.optionals stdenv.isDarwin [ Security CoreServices ]
+    ++ lib.optionals stdenv.isDarwin [ darwin.Security ]
     ++ lib.optionals withLibsecret [ pkg-config glib libsecret ];
 
   # required to support pthread_cancel()
@@ -354,8 +354,6 @@ stdenv.mkDerivation {
     disable_test t9902-completion
     # not ok 1 - populate workdir (with 2.33.1 on x86_64-darwin)
     disable_test t5003-archive-zip
-  '' + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
-    disable_test t7527-builtin-fsmonitor
   '' + lib.optionalString stdenv.hostPlatform.isMusl ''
     # Test fails (as of 2.17.0, musl 1.1.19)
     disable_test t3900-i18n-commit

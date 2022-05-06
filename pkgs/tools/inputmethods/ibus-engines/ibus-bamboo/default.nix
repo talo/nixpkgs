@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchFromGitHub
-, glib
 , gettext
 , xorg
 , pkg-config
@@ -12,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ibus-bamboo";
-  version = "0.7.7";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "BambooEngine";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1qdkimq4n9bxqjlnd00dggvx09cf4wqwk0kpgj01jd0i6ahggns1";
+    sha256 = "sha256-WKNDrm8PSU/F8MzpVsJ9oUkbolCxrwbjOZYYNiFr5Qs=";
   };
 
   nativeBuildInputs = [
@@ -29,8 +28,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    glib
-    gtk3
     xorg.libX11
     xorg.xorgproto
     xorg.libXtst

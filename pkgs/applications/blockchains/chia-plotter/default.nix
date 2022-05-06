@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation {
   pname = "chia-plotter";
-  version = "1.1.8";
+  version = "1.1.7";
 
   src = fetchFromGitHub {
     owner = "madMAx43v3r";
     repo = "chia-plotter";
-    rev = "9d7fd929919d1adde6404cb4718a665a81bcef6d";
-    sha256 = "sha256-TMAly+Qof2DHPRHqE1nZuHQaCeMo0jEd8MWy4OlXrcs=";
+    rev = "18cad340858f0dbcc8dafd0bda1ce1af0fe58c65";
+    sha256 = "sha256-lXjeqcjn3+LtnVYngdM1T3on7V7wez4oOAZ0RpKJXMM=";
     fetchSubmodules = true;
   };
 
@@ -25,17 +25,10 @@ stdenv.mkDerivation {
       src = ./dont_fetch_dependencies.patch;
       pybind11_src = python3Packages.pybind11.src;
       relic_src = fetchFromGitHub {
-        owner = "Chia-Network";
+        owner = "relic-toolkit";
         repo = "relic";
-        rev = "1d98e5abf3ca5b14fd729bd5bcced88ea70ecfd7";
-        hash = "sha256-IfTD8DvTEXeLUoKe4Ejafb+PEJW5DV/VXRYuutwGQHU=";
-      };
-      sodium_src = fetchFromGitHub {
-        owner = "AmineKhaldi";
-        repo = "libsodium-cmake";
-        rev = "f73a3fe1afdc4e37ac5fe0ddd401bf521f6bba65"; # pinned by upstream
-        sha256 = "sha256-lGz7o6DQVAuEc7yTp8bYS2kwjzHwGaNjugDi1ruRJOA=";
-        fetchSubmodules = true;
+        rev = "1885ae3b681c423c72b65ce1fe70910142cf941c";
+        hash = "sha256-tsSZTcssl8t7Nqdex4BesgQ+ACPgTdtHnJFvS9josN0=";
       };
     })
   ];

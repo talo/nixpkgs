@@ -34,6 +34,6 @@ mkDerivation rec {
     homepage = "https://github.com/pvanek/qlipper";
     license = licenses.gpl2Plus;
     platforms = with platforms; unix;
-    maintainers = teams.lxqt.members;
+    maintainers = with maintainers; [ romildo ];
   };
 }

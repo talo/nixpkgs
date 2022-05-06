@@ -149,11 +149,8 @@ in
         '');
 
         boot.initrd.systemd.contents = {
+          "/etc/kbd".source = "${consoleEnv config.boot.initrd.systemd.package.kbd}/share";
           "/etc/vconsole.conf".source = vconsoleConf;
-          # Add everything if we want full console setup...
-          "/etc/kbd" = lib.mkIf cfg.earlySetup { source = "${consoleEnv config.boot.initrd.systemd.package.kbd}/share"; };
-          # ...but only the keymaps if we don't
-          "/etc/kbd/keymaps" = lib.mkIf (!cfg.earlySetup) { source = "${consoleEnv config.boot.initrd.systemd.package.kbd}/share/keymaps"; };
         };
         boot.initrd.systemd.storePaths = [
           "${config.boot.initrd.systemd.package}/lib/systemd/systemd-vconsole-setup"
@@ -183,7 +180,7 @@ in
         ];
       })
 
-      (mkIf (cfg.earlySetup && !config.boot.initrd.systemd.enable) {
+      (mkIf cfg.earlySetup {
         boot.initrd.extraUtilsCommands = ''
           mkdir -p $out/share/consolefonts
           ${if substring 0 1 cfg.font == "/" then ''
@@ -197,6 +194,10 @@ in
             cp -L $font $out/share/consolefonts/font.psf
           fi
         '';
+        assertions = [{
+          assertion = !config.boot.initrd.systemd.enable;
+          message = "console.earlySetup is implied by systemd stage 1";
+        }];
       })
     ]))
   ];

@@ -1,9 +1,9 @@
-{ lib, stdenvNoCC, dtc }:
+{ lib, stdenvNoCC, dtc, findutils }:
 
 with lib; {
   applyOverlays = (base: overlays': stdenvNoCC.mkDerivation {
     name = "device-tree-overlays";
-    nativeBuildInputs = [ dtc ];
+    nativeBuildInputs = [ dtc findutils ];
     buildCommand = let
       overlays = toList overlays';
     in ''

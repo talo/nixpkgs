@@ -12,14 +12,14 @@
 
 stdenv.mkDerivation rec {
   pname = "xedit";
-  version = "1.2.3";
+  version = "1.2.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "xorg/app";
     repo = "xedit";
     rev = "${pname}-${version}";
-    sha256 = "sha256-WF+4avzRRL0+OA3KxzK7JwmArkPu9fEl+728R6ouXmg=";
+    sha256 = "0b5ic13aasv6zh20v2k7zyxsqbnsxfq5rs3w8nwzl1gklmgrjxa3";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config utilmacros ];

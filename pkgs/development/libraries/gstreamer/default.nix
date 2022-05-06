@@ -13,8 +13,6 @@
 
   gst-plugins-ugly = callPackage ./ugly { inherit CoreFoundation DiskArbitration IOKit; };
 
-  gst-plugins-viperfx = callPackage ./viperfx { };
-
   gst-rtsp-server = callPackage ./rtsp-server { };
 
   gst-libav = callPackage ./libav { };

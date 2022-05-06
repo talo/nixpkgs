@@ -121,8 +121,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   granite = callPackage ./granite { };
 
-  granite7 = callPackage ./granite/7 { };
-
   #### SERVICES
 
   contractor = callPackage ./services/contractor { };

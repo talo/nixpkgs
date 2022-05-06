@@ -1,4 +1,4 @@
-{ pkgs, config, buildPackages, lib, stdenv, libiconv, mkNugetDeps, mkNugetSource, gixy }:
+{ pkgs, config, buildPackages, lib, stdenv, libiconv, mkNugetDeps, mkNugetSource, gawk, gnused, gixy }:
 
 let
   aliases = if config.allowAliases then (import ./aliases.nix lib) else prev: {};
@@ -205,7 +205,7 @@ let
   writeNginxConfig = name: text: pkgs.runCommandLocal name {
     inherit text;
     passAsFile = [ "text" ];
-    nativeBuildInputs = [ gixy ];
+    nativeBuildInputs = [ gawk gnused gixy ];
   } /* sh */ ''
     # nginx-config-formatter has an error - https://github.com/1connect/nginx-config-formatter/issues/16
     awk -f ${awkFormatNginx} "$textPath" | sed '/^\s*$/d' > $out

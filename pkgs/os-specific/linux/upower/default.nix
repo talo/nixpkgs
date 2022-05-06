@@ -18,15 +18,13 @@
 , systemd
 , useIMobileDevice ? true
 , libimobiledevice
-, withDocs ? (stdenv.buildPlatform == stdenv.hostPlatform)
 }:
 
 stdenv.mkDerivation rec {
   pname = "upower";
   version = "0.99.17";
 
-  outputs = [ "out" "dev" ]
-    ++ lib.optionals withDocs [ "devdoc" ];
+  outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
@@ -35,12 +33,6 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "xvvqzGxgkuGcvnO12jnLURNJUoSlnMw2g/mnII+i6Bs=";
   };
-
-  strictDeps = true;
-
-  depsBuildBuild = [
-    pkg-config
-  ];
 
   nativeBuildInputs = [
     meson
@@ -74,8 +66,6 @@ stdenv.mkDerivation rec {
     "-Dos_backend=linux"
     "-Dsystemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
     "-Dudevrulesdir=${placeholder "out"}/lib/udev/rules.d"
-    "-Dintrospection=${if (stdenv.buildPlatform == stdenv.hostPlatform) then "auto" else "disabled"}"
-    "-Dgtk-doc=${lib.boolToString withDocs}"
   ];
 
   doCheck = false; # fails with "env: './linux/integration-test': No such file or directory"

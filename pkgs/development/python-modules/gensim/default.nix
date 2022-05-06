@@ -1,60 +1,43 @@
 { lib
 , buildPythonPackage
-, cython
 , fetchPypi
-, mock
 , numpy
+, six
 , scipy
 , smart-open
-, testfixtures
-, pyemd
-, pytestCheckHook
-, pythonOlder
+, scikit-learn, testfixtures, unittest2
+, isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "gensim";
-  version = "4.2.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "4.1.2";
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-mV69KXCjHUfBAKqsECEvR+K/EuKwZTbTiIPJUf807vE=";
+    sha256 = "1932c257de4eccbb64cc40d46e8577a25f5f47b94b96019a969fb36150f11d15";
   };
 
-  nativeBuildInputs = [
-    cython
-  ];
+  propagatedBuildInputs = [ smart-open numpy six scipy ];
 
-  propagatedBuildInputs = [
-    smart-open
-    numpy
-    scipy
-  ];
+  checkInputs = [ scikit-learn testfixtures unittest2 ];
 
-  checkInputs = [
-    mock
-    pyemd
-    pytestCheckHook
-  ];
-
-  pythonImportsCheck = [
-    "gensim"
-  ];
-
-  # Test setup takes several minutes
+  # Two tests fail.
+  #
+  # ERROR: testAddMorphemesToEmbeddings (gensim.test.test_varembed_wrapper.TestVarembed)
+  # ImportError: Could not import morfessor.
+  # This package is not in nix
+  #
+  # ERROR: testWmdistance (gensim.test.test_fasttext_wrapper.TestFastText)
+  # ImportError: Please install pyemd Python package to compute WMD.
+  # This package is not in nix
   doCheck = false;
 
-  pytestFlagsArray = [
-    "gensim/test"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Topic-modelling library";
     homepage = "https://radimrehurek.com/gensim/";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ jyp ];
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [ jyp ];
   };
 }

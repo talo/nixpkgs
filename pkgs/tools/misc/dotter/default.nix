@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "dotter";
-  version = "0.12.10";
+  version = "0.12.9";
 
   src = fetchFromGitHub {
     owner = "SuperCuber";
     repo = "dotter";
-    rev = "v${version}";
-    hash = "sha256-uSM7M//3LHzdLSOruTyu46sp1a6LeodT2cCEFsuoPW4=";
+    rev = version;
+    sha256 = "0rxinrm110i5cbkl7c7vgk7dl0x79cg6g23bdjixsg7h0572c2gi";
   };
 
-  cargoHash = "sha256-JpMEC2HjAQLQiXHSE6L0HBDc0vLhd465wDK2+35aBXA=";
+  cargoSha256 = "0fr2dvzbpwqvf98wwrxv76nwbrv4m9ppx7br4x78gm8dhf2nj4zx";
 
   checkInputs = [ which ];
 

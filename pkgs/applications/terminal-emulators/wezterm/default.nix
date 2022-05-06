@@ -23,12 +23,13 @@
 , Foundation
 , libiconv
 , nixosTests
-, runCommand
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wezterm";
   version = "20220408-101518-b908e2dd";
+
+  outputs = [ "out" "terminfo" ];
 
   src = fetchFromGitHub {
     owner = "wez";
@@ -74,8 +75,10 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postInstall = ''
-    mkdir -p $out/nix-support
-    echo "${passthru.terminfo}" >> $out/nix-support/propagated-user-env-packages
+    # terminfo
+    mkdir -p $terminfo/share/terminfo/w $out/nix-support
+    tic -x -o $terminfo/share/terminfo termwiz/data/wezterm.terminfo
+    echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
 
     # desktop icon
     install -Dm644 assets/icon/terminal.png $out/share/icons/hicolor/128x128/apps/org.wezfurlong.wezterm.png
@@ -97,20 +100,9 @@ rustPlatform.buildRustPackage rec {
     ln -s $out/bin/{wezterm,wezterm-mux-server,wezterm-gui,strip-ansi-escapes} "$OUT_APP"
   '';
 
-  passthru = {
-    tests = {
-      all-terminfo = nixosTests.allTerminfo;
-      terminal-emulators = nixosTests.terminal-emulators.wezterm;
-    };
-    terminfo = runCommand "wezterm-terminfo"
-      {
-        nativeBuildInputs = [
-          ncurses
-        ];
-      } ''
-      mkdir -p $out/share/terminfo $out/nix-support
-      tic -x -o $out/share/terminfo ${src}/termwiz/data/wezterm.terminfo
-    '';
+  passthru.tests = {
+    all-terminfo = nixosTests.allTerminfo;
+    test = nixosTests.terminal-emulators.wezterm;
   };
 
   meta = with lib; {

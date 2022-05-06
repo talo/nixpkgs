@@ -1,44 +1,43 @@
 { lib
-, blis
 , buildPythonPackage
 , callPackage
+, fetchPypi
+, pythonOlder
+, pytest
+, blis
 , catalogue
 , cymem
-, fetchPypi
 , jinja2
 , jsonschema
-, langcodes
 , murmurhash
 , numpy
-, packaging
-, pathy
 , preshed
-, pydantic
-, pytest
-, python
-, pythonOlder
 , requests
 , setuptools
-, spacy-legacy
-, spacy-loggers
 , srsly
+, spacy-legacy
 , thinc
-, tqdm
 , typer
-, typing-extensions
 , wasabi
+, packaging
+, pathy
+, pydantic
+, python
+, tqdm
+, typing-extensions
+, spacy-loggers
+, langcodes
 }:
 
 buildPythonPackage rec {
   pname = "spacy";
-  version = "3.3.0";
-  format = "setuptools";
+  version = "3.2.4";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-xJ1Q++NxWtxXQUGTZ7OaRo0lVmSEIvELb8Tt846uLLM=";
+    sha256 = "sha256-PkxvKY1UBEWC2soRQrCC7jiDG7PXu5MdLuYB6Ljc5k8=";
   };
 
   propagatedBuildInputs = [
@@ -47,7 +46,6 @@ buildPythonPackage rec {
     cymem
     jinja2
     jsonschema
-    langcodes
     murmurhash
     numpy
     packaging
@@ -56,16 +54,15 @@ buildPythonPackage rec {
     pydantic
     requests
     setuptools
-    spacy-legacy
-    spacy-loggers
     srsly
+    spacy-legacy
     thinc
     tqdm
     typer
     wasabi
-  ] ++ lib.optional (pythonOlder "3.8") [
-    typing-extensions
-  ];
+    spacy-loggers
+    langcodes
+  ] ++ lib.optional (pythonOlder "3.8") typing-extensions;
 
   postPatch = ''
     substituteInPlace setup.cfg \
@@ -81,14 +78,12 @@ buildPythonPackage rec {
     ${python.interpreter} -m pytest spacy/tests --vectors --models --slow
   '';
 
-  pythonImportsCheck = [
-    "spacy"
-  ];
+  pythonImportsCheck = [ "spacy" ];
 
   passthru.tests.annotation = callPackage ./annotation-test { };
 
   meta = with lib; {
-    description = "Industrial-strength Natural Language Processing (NLP)";
+    description = "Industrial-strength Natural Language Processing (NLP) with Python and Cython";
     homepage = "https://github.com/explosion/spaCy";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

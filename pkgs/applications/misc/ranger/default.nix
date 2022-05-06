@@ -1,9 +1,5 @@
-{ lib, fetchFromGitHub, python3Packages, file, less, highlight, w3m
-, imagePreviewSupport ? true
-, neoVimSupport ? true
-, improvedEncodingDetection ? true
-, rightToLeftTextSupport ? false
-}:
+{ lib, fetchFromGitHub, python3Packages, file, less, highlight
+, imagePreviewSupport ? true, w3m }:
 
 python3Packages.buildPythonApplication rec {
   pname = "ranger";
@@ -19,13 +15,8 @@ python3Packages.buildPythonApplication rec {
   LC_ALL = "en_US.UTF-8";
 
   checkInputs = with python3Packages; [ pytestCheckHook ];
-  propagatedBuildInputs = [
-    less
-    file
-  ] ++ lib.optionals imagePreviewSupport [ python3Packages.pillow ]
-    ++ lib.optionals neoVimSupport [ python3Packages.pynvim ]
-    ++ lib.optionals improvedEncodingDetection [ python3Packages.chardet ]
-    ++ lib.optionals rightToLeftTextSupport [ python3Packages.python-bidi ];
+  propagatedBuildInputs = [ file ]
+    ++ lib.optionals (imagePreviewSupport) [ python3Packages.pillow ];
 
   preConfigure = ''
     ${lib.optionalString (highlight != null) ''

@@ -41,8 +41,6 @@ stdenv.mkDerivation rec {
   # and xxx.yyy.zzz. Hrmpf... style keeps changing
   version = "4.1.0.5";
 
-  outputs = [ "out" "dev" ];
-
   src = fetchFromGitHub {
     owner = "EttusResearch";
     repo = "uhd";

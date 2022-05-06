@@ -1,19 +1,20 @@
 { angstrom
 , buildDunePackage
-, fetchurl
+, fetchzip
 , findlib
 , lib
+, menhir
 , ocaml
 , re
 }:
 
 buildDunePackage rec {
   pname = "uuuu";
-  version = "0.3.0";
+  version = "0.2.0";
 
-  src = fetchurl {
-    url = "https://github.com/mirage/uuuu/releases/download/v${version}/uuuu-${version}.tbz";
-    sha256 = "sha256:19n39yc7spgzpk9i70r0nhkwsb0bfbvbgpf8d863p0a3wgryhzkb";
+  src = fetchzip {
+    url = "https://github.com/mirage/uuuu/releases/download/v${version}/uuuu-v${version}.tbz";
+    sha256 = "0457qcxvakbbc56frsh8a5v4y4l0raj9p4zz7jx3brn9255j1mw3";
   };
 
   postPatch = ''
@@ -21,7 +22,9 @@ buildDunePackage rec {
       'ocaml} -I ${findlib}/lib/ocaml/${ocaml.version}/site-lib '
   '';
 
-  nativeBuildInputs = [ findlib ];
+  useDune2 = true;
+
+  nativeBuildInputs = [ menhir findlib ];
 
   buildInputs = [ angstrom ];
 

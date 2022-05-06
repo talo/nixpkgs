@@ -1,57 +1,40 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, dbus-python
-, fetchFromGitHub
-, flask
-, flask-cors
-, poetry-core
-, pythonOlder
-, requests
-}:
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, requests
+, pytestCheckHook, flask, flask-cors, dbus-python, mock, isPy27
+, poetry-core }:
 
 buildPythonPackage rec {
-  pname = "swspotify";
+  pname = "SwSpotify";
   version = "1.2.3";
+  disabled = isPy27;
   format = "pyproject";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "SwagLyrics";
     repo = "SwSpotify";
     rev = "v${version}";
-    hash = "sha256-xGLvc154xnje45Akf7H1qqQRUc03gGVt8AhGlkcP3kY=";
+    sha256 = "sha256-xGLvc154xnje45Akf7H1qqQRUc03gGVt8AhGlkcP3kY=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    dbus-python
-    flask
-    flask-cors
-    requests
-  ];
+  propagatedBuildInputs = [ requests flask flask-cors ]
+    ++ lib.optionals stdenv.isLinux [ dbus-python ];
 
-  postPatch = ''
-    # Detection of the  platform doesn't always works with 1.2.3
-    substituteInPlace pyproject.toml \
-      --replace 'dbus-python = {version = "^1.2.16", platform = "linux"}' ""
+  doCheck = !stdenv.isDarwin;
+
+  checkPhase = ''
+    pytest tests/test_spotify.py::${if stdenv.isDarwin then "DarwinTests" else "LinuxTests"}
   '';
 
-  # Tests want to use Dbus
-  doCheck = false;
+  checkInputs = [ pytestCheckHook mock ];
 
-  pythonImportsCheck = [
-    "SwSpotify"
-  ];
+  pythonImportsCheck = [ "SwSpotify" ];
 
   meta = with lib; {
-    description = "Library to get the currently playing song and artist from Spotify";
     homepage = "https://github.com/SwagLyrics/SwSpotify";
+    description = "Library to get the currently playing song and artist from Spotify";
     license = licenses.mit;
     maintainers = with maintainers; [ siraben ];
+    platforms = platforms.unix;
   };
 }

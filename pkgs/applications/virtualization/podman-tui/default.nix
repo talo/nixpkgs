@@ -11,13 +11,13 @@
 }:
 buildGoModule rec {
   pname = "podman-tui";
-  version = "0.3.1";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman-tui";
     rev = "v${version}";
-    sha256 = "sha256-Xc6F87evQiv4jRbxxRBzJBeI8653HvlQL+UwcVWY0wk=";
+    sha256 = "sha256-1WbDmnKyFosp4Kz9QINr3lOR/wD0UW2QZf7nAAaoClM=";
   };
 
   vendorSha256 = null;

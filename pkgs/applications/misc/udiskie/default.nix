@@ -1,46 +1,41 @@
 { lib
-, asciidoc
 , fetchFromGitHub
+, buildPythonApplication
+, asciidoc-full
+, docopt
+, gettext
 , gobject-introspection
 , gtk3
-, installShellFiles
+, keyutils
 , libappindicator-gtk3
 , libnotify
 , librsvg
-, python3
+, nose
+, pygobject3
+, pyyaml
 , udisks2
 , wrapGAppsHook
 }:
 
-python3.pkgs.buildPythonApplication rec {
+buildPythonApplication rec {
   pname = "udiskie";
-  version = "2.4.2";
-
-  format = "setuptools";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "coldfix";
     repo = "udiskie";
     rev = "v${version}";
-    hash = "sha256-lQMJVSY3JeZYYOFDyV29Ye2j8r+ngE/ta2wQYipy4hU=";
+    hash = "sha256-T4kMPMXfehZT7P+TOd1llR2TbHPA/quNL545xxlmJfE=";
   };
 
-  patches = [
-    ./locale-path.patch
-  ];
-
-  postPatch = ''
-    substituteInPlace udiskie/locale.py --subst-var out
-  '';
+  outputs = [ "out" "man" ];
 
   nativeBuildInputs = [
-    asciidoc # Man page
+    asciidoc-full # Man page
+    gettext
     gobject-introspection
-    installShellFiles
     wrapGAppsHook
   ];
-
-  dontWrapGApps = true;
 
   buildInputs = [
     gobject-introspection
@@ -51,9 +46,8 @@ python3.pkgs.buildPythonApplication rec {
     udisks2
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = [
     docopt
-    keyutils
     pygobject3
     pyyaml
   ];
@@ -63,20 +57,21 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   postInstall = ''
-    installManPage doc/udiskie.8
+    mkdir -p $man/share/man/man8
+    cp -v doc/udiskie.8 $man/share/man/man8/
   '';
 
-  preFixup = ''
-    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
-  '';
-
-  checkInputs = with python3.pkgs; [
-    pytestCheckHook
+  checkInputs = [
+    keyutils
+    nose
   ];
+
+  checkPhase = ''
+    nosetests
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/coldfix/udiskie";
-    changelog = "https://github.com/coldfix/udiskie/blob/${src.rev}/CHANGES.rst";
     description = "Removable disk automounter for udisks";
     longDescription = ''
       udiskie is a udisks2 front-end that allows to manage removeable media such
@@ -93,6 +88,6 @@ python3.pkgs.buildPythonApplication rec {
       - password caching (requires python keyutils 0.3)
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres dotlambda ];
+    maintainers = with maintainers; [ AndersonTorres ];
   };
 }

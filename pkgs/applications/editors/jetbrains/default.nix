@@ -1,6 +1,6 @@
 { lib, stdenv, callPackage, fetchurl
-, jdk, cmake, gdb, zlib, python3
-, dotnet-sdk_6
+, jdk, cmake, zlib, python3
+, dotnet-sdk_5
 , maven
 , autoPatchelfHook
 , libdbusmenu
@@ -53,9 +53,6 @@ let
           # bundled cmake does not find libc
           rm -rf bin/cmake/linux
           ln -s ${cmake} bin/cmake/linux
-          # bundled gdb does not find libcrypto 10
-          rm -rf bin/gdb/linux
-          ln -s ${gdb} bin/gdb/linux
 
           autoPatchelf $PWD/bin
 
@@ -127,7 +124,7 @@ let
           with JUnit, TestNG, popular SCMs, Ant & Maven. Also known
           as IntelliJ.
         '';
-        maintainers = with maintainers; [ edwtjo gytis-ivaskevicius steinybot AnatolyPopov ];
+        maintainers = with maintainers; [ edwtjo gytis-ivaskevicius steinybot ];
         platforms = ideaPlatforms;
       };
     });
@@ -210,7 +207,7 @@ let
       postPatch = lib.optionalString (!stdenv.isDarwin) (attrs.postPatch + ''
         rm -rf lib/ReSharperHost/linux-x64/dotnet
         mkdir -p lib/ReSharperHost/linux-x64/dotnet/
-        ln -s ${dotnet-sdk_6}/bin/dotnet lib/ReSharperHost/linux-x64/dotnet/dotnet
+        ln -s ${dotnet-sdk_5}/bin/dotnet lib/ReSharperHost/linux-x64/dotnet/dotnet
       '');
     });
 
@@ -263,7 +260,7 @@ in
       sha256 = products.clion.sha256;
     };
     wmClass = "jetbrains-clion";
-    update-channel = products.clion.update-channel;
+    update-channel = "CLion RELEASE"; # channel's id as in http://www.jetbrains.com/updates/updates.xml
   };
 
   datagrip = buildDataGrip rec {
@@ -276,7 +273,7 @@ in
       sha256 = products.datagrip.sha256;
     };
     wmClass = "jetbrains-datagrip";
-    update-channel = products.datagrip.update-channel;
+    update-channel = "DataGrip RELEASE";
   };
 
   goland = buildGoland rec {
@@ -289,7 +286,7 @@ in
       sha256 = products.goland.sha256;
     };
     wmClass = "jetbrains-goland";
-    update-channel = products.goland.update-channel;
+    update-channel = "GoLand RELEASE";
   };
 
   idea-community = buildIdea rec {
@@ -303,7 +300,7 @@ in
       sha256 = products.idea-community.sha256;
     };
     wmClass = "jetbrains-idea-ce";
-    update-channel = products.idea-community.update-channel;
+    update-channel = "IntelliJ IDEA RELEASE";
   };
 
   idea-ultimate = buildIdea rec {
@@ -317,12 +314,12 @@ in
       sha256 = products.idea-ultimate.sha256;
     };
     wmClass = "jetbrains-idea";
-    update-channel = products.idea-ultimate.update-channel;
+    update-channel = "IntelliJ IDEA RELEASE";
   };
 
   mps = buildMps rec {
     pname = "mps";
-    product = "MPS ${products.mps.version}";
+    product = "MPS ${products.mps.version-major-minor}";
     version = products.mps.version;
     description = "Create your own domain-specific language";
     license = lib.licenses.asl20;
@@ -331,7 +328,7 @@ in
       sha256 = products.mps.sha256;
     };
     wmClass = "jetbrains-mps";
-    update-channel = products.mps.update-channel;
+    update-channel = "MPS RELEASE";
   };
 
   phpstorm = buildPhpStorm rec {
@@ -344,7 +341,7 @@ in
       sha256 = products.phpstorm.sha256;
     };
     wmClass = "jetbrains-phpstorm";
-    update-channel = products.phpstorm.update-channel;
+    update-channel = "PhpStorm RELEASE";
   };
 
   pycharm-community = buildPycharm rec {
@@ -358,7 +355,7 @@ in
       sha256 = products.pycharm-community.sha256;
     };
     wmClass = "jetbrains-pycharm-ce";
-    update-channel = products.pycharm-community.update-channel;
+    update-channel = "PyCharm RELEASE";
   };
 
   pycharm-professional = buildPycharm rec {
@@ -372,7 +369,7 @@ in
       sha256 = products.pycharm-professional.sha256;
     };
     wmClass = "jetbrains-pycharm";
-    update-channel = products.pycharm-professional.update-channel;
+    update-channel = "PyCharm RELEASE";
   };
 
   rider = buildRider rec {
@@ -385,7 +382,7 @@ in
       sha256 = products.rider.sha256;
     };
     wmClass = "jetbrains-rider";
-    update-channel = products.rider.update-channel;
+    update-channel = "Rider RELEASE";
   };
 
   ruby-mine = buildRubyMine rec {
@@ -398,7 +395,7 @@ in
       sha256 = products.ruby-mine.sha256;
     };
     wmClass = "jetbrains-rubymine";
-    update-channel = products.ruby-mine.update-channel;
+    update-channel = "RubyMine RELEASE";
   };
 
   webstorm = buildWebStorm rec {
@@ -411,7 +408,7 @@ in
       sha256 = products.webstorm.sha256;
     };
     wmClass = "jetbrains-webstorm";
-    update-channel = products.webstorm.update-channel;
+    update-channel = "WebStorm RELEASE";
   };
 
 }

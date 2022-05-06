@@ -16,10 +16,6 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
-  configureFlags = [
-    "--disable-werror"
-  ];
-
   nativeBuildInputs = [ autoconf automake libtool pkg-config perl ];
 
   doCheck = true;

@@ -82,11 +82,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "${optionalString onlyLibVLC "lib"}vlc";
-  version = "3.0.17.3";
+  version = "3.0.17";
 
   src = fetchurl {
     url = "http://get.videolan.org/vlc/${version}/vlc-${version}.tar.xz";
-    sha256 = "sha256-b36Q74lz0x2W3mTbgXFz40UVCClxepQISxu4MhzeIBQ=";
+    sha256 = "sha256-SL2b8zeqEHoVJOulfFLcSpHin1qX+97pL2pNupA4PNA=";
   };
 
   # VLC uses a *ton* of libraries for various pieces of functionality, many of

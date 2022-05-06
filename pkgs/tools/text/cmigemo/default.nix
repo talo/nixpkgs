@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, fetchurl, buildPackages
-, libiconv, nkf, perl, which
+, gzip, libiconv, nkf, perl, which
 , skk-dicts
 }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     sha256 = "0xrblwhaf70m0knkd5584iahaq84rlk0926bhdsrzmakpw77hils";
   };
 
-  nativeBuildInputs = [ libiconv nkf perl which ];
+  nativeBuildInputs = [ gzip libiconv nkf perl which ];
 
   postUnpack = ''
     cp ${skk-dicts}/share/SKK-JISYO.L source/dict/

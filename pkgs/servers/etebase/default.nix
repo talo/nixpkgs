@@ -1,10 +1,18 @@
-{ lib, fetchFromGitHub, buildPythonPackage, aioredis, aiofiles, django_3
-, fastapi, msgpack, pynacl, typing-extensions }:
+{ lib, stdenv, python3, fetchFromGitHub }:
+
+let
+  py = python3.override {
+    packageOverrides = self: super: {
+      django = super.django_3;
+    };
+  };
+in
+  with py.pkgs;
 
 buildPythonPackage rec {
   pname = "etebase-server";
   version = "0.8.3";
-  format = "other";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "etesync";
@@ -15,14 +23,21 @@ buildPythonPackage rec {
 
   patches = [ ./secret.patch ];
 
-  propagatedBuildInputs = [
-    aioredis
-    aiofiles
-    django_3
+  propagatedBuildInputs = with pythonPackages; [
+    asgiref
+    cffi
+    django
+    django-cors-headers
+    djangorestframework
+    drf-nested-routers
     fastapi
     msgpack
+    psycopg2
+    pycparser
     pynacl
-    typing-extensions
+    pytz
+    six
+    sqlparse
   ];
 
   installPhase = ''

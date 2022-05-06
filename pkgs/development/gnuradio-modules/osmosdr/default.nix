@@ -39,8 +39,6 @@ in mkDerivation {
   inherit version src;
   disabledForGRafter = "3.9";
 
-  outputs = [ "out" "dev" ];
-
   buildInputs = [
     log4cpp
     mpir

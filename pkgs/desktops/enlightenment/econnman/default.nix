@@ -19,11 +19,11 @@ stdenv.mkDerivation rec {
     wrapPythonPrograms
   '';
 
-  meta = with lib; {
+  meta = {
     description = "A user interface for the connman network connection manager";
     homepage = "https://enlightenment.org/";
-    license = licenses.lgpl3;
-    platforms = platforms.linux;
-    maintainers = with lib.maintainers; [ matejc tstrobel ftrvxmtrx ] ++ teams.enlightenment.members;
+    license = lib.licenses.lgpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ matejc tstrobel ftrvxmtrx romildo ];
   };
 }

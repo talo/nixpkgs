@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "reorder-python-imports";
-  version = "3.1.0";
+  version = "3.0.1";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "asottile";
     repo = "reorder_python_imports";
     rev = "v${version}";
-    hash = "sha256-Ge+VQjK24TqWLMQS19DBX+FFHF3irogK21orlENJx50=";
+    sha256 = "1bdKM1sUhpZHy03DdoTzpt1iGm1t1nWnuPyTgl3KhCY=";
   };
 
   propagatedBuildInputs = [ aspy-refactor-imports ];

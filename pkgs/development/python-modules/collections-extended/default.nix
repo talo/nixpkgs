@@ -1,12 +1,10 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, hypothesis
+, pythonOlder
 , poetry-core
 , pytestCheckHook
-, pythonOlder
 }:
-
 buildPythonPackage rec {
   pname = "collections-extended";
   version = "2.0.2";
@@ -18,7 +16,7 @@ buildPythonPackage rec {
     owner = "mlenzen";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-cK13+CQUELKSiLpG747+C+RB5b6luu0mWLLXTT+uGH4=";
+    sha256 = "sha256-cK13+CQUELKSiLpG747+C+RB5b6luu0mWLLXTT+uGH4=";
   };
 
   nativeBuildInputs = [
@@ -26,17 +24,14 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    hypothesis
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "collections_extended"
-  ];
+  pythonImportsCheck = [ "collections_extended" ];
 
   meta = with lib; {
-    description = "Extra Python Collections - bags (multisets), setlists (unique list/indexed set), RangeMap and IndexedDict";
     homepage = "https://github.com/mlenzen/collections-extended";
+    description = "Extra Python Collections - bags (multisets), setlists (unique list / indexed set), RangeMap and IndexedDict";
     license = licenses.asl20;
     maintainers = with maintainers; [ exarkun ];
   };

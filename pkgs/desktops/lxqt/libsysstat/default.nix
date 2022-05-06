@@ -34,6 +34,6 @@ mkDerivation rec {
     homepage = "https://github.com/lxqt/libsysstat";
     license = licenses.lgpl21Plus;
     platforms = with platforms; unix;
-    maintainers = teams.lxqt.members;
+    maintainers = with maintainers; [ romildo ];
   };
 }

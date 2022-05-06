@@ -1,39 +1,25 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-}:
-
-buildPythonPackage rec {
+, setuptools
+, setuptools-scm
+, wheel
+, pytest
+}: buildPythonPackage rec {
   pname = "docstring-parser";
-  version = "0.14.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
-
+  version = "0.12";
   src = fetchFromGitHub {
     owner = "rr-";
     repo = "docstring_parser";
     rev = "${version}";
-    hash = "sha256-NIijq+QR0panVCGDEQrTlkAvHfIexwS0PxFikglxd74=";
+    sha256 = "sha256-hQuPJQrGvDs4dJrMLSR4sSnqy45xrF2ufinBG+azuCg=";
   };
-
-  nativeBuildInputs = [
-    poetry-core
-  ];
-
-  checkInputs = [
-    pytestCheckHook
-  ];
-
-  pythonImportsCheck = [
-    "docstring_parser"
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
+  propagatedBuildInputs = [ pytest setuptools wheel ];
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   meta = with lib; {
-    description = "Parse Python docstrings in various flavors";
+    description = "Parse Python docstrings in various flavors. ";
     homepage = "https://github.com/rr-/docstring_parser";
     license = licenses.mit;
     maintainers = with maintainers; [ SomeoneSerge ];

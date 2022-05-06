@@ -1,6 +1,6 @@
 # Binaries provided by Open Dylan to be used to bootstrap from source.
 # The binaries can also be used as is.
-{lib, stdenv, fetchurl, patchelf, boehmgc, gcc, makeWrapper}:
+{lib, stdenv, fetchurl, patchelf, boehmgc, gnused, gcc, makeWrapper}:
 
 stdenv.mkDerivation rec {
   pname = "opendylan";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     }
     else throw "platform ${stdenv.hostPlatform.system} not supported.";
 
-  nativeBuildInputs = [ patchelf boehmgc makeWrapper ];
+  nativeBuildInputs = [ patchelf boehmgc gnused makeWrapper ];
 
   buildCommand = ''
     mkdir -p "$out"

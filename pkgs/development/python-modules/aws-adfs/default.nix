@@ -1,41 +1,31 @@
 { lib
-, boto3
 , botocore
 , buildPythonPackage
 , click
 , configparser
-, fetchFromGitHub
+, fetchPypi
 , fido2
+, glibcLocales
+, isPy27
 , lxml
-, poetry-core
+, mock
 , pyopenssl
 , pytestCheckHook
-, pythonOlder
 , requests
 , requests-kerberos
-, toml
 }:
 
 buildPythonPackage rec {
   pname = "aws-adfs";
-  version = "2.0.2";
-  format = "pyproject";
+  version = "2.0.1";
+  disabled = isPy27;
 
-  disabled = pythonOlder "3.6";
-
-  src = fetchFromGitHub {
-    owner = "venth";
-    repo = pname;
-    rev = version;
-    hash = "sha256-T3AmPCOSeu7gvl57aHjnviy5iQAKlWy85fUOVecFRFc=";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "sha256-+WMv52JIbh51pqLhDnUCzrcbPD5eutzwFcPOhO+nR7s=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
-
   propagatedBuildInputs = [
-    boto3
     botocore
     click
     configparser
@@ -46,29 +36,31 @@ buildPythonPackage rec {
     requests-kerberos
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'boto3 = "^1.20.50"' 'boto3 = "*"' \
-      --replace 'botocore = ">=1.12.6"' 'botocore = "*"'
-  '';
-
   checkInputs = [
+    glibcLocales
+    mock
     pytestCheckHook
-    toml
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d);
+  # Relax version constraint
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace 'coverage < 4' 'coverage' \
+      --replace 'fido2>=0.8.1,<0.9.0' 'fido2>=0.8.1,<1.0.0'
   '';
 
-  pythonImportsCheck = [
-    "aws_adfs"
-  ];
+  # Test suite writes files to $HOME/.aws/, or /homeless-shelter if unset
+  HOME = ".";
+
+  # Required for python3 tests, along with glibcLocales
+  LC_ALL = "en_US.UTF-8";
+
+  pythonImportsCheck = [ "aws_adfs" ];
 
   meta = with lib; {
-    description = "Command line tool to ease AWS CLI authentication against ADFS";
+    description = "Command line tool to ease aws cli authentication against ADFS";
     homepage = "https://github.com/venth/aws-adfs";
     license = licenses.psfl;
-    maintainers = with maintainers; [ bhipple ];
+    maintainers = [ maintainers.bhipple ];
   };
 }

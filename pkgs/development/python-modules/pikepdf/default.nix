@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "pikepdf";
-  version = "5.1.2";
+  version = "5.1.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     extraPostFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-VR2/+XCQb62FdkGZBxP2XTqatdFYZO1ngb8gvoJEvzs=";
+    hash = "sha256-LgF46DGVWNuUN2KGdfOGSokf4reDx55ay3gP2LO+4dY=";
   };
 
   patches = [
@@ -79,6 +79,10 @@ buildPythonPackage rec {
     packaging
     pillow
     setuptools
+  ];
+
+  disabledTests = [
+    "test_image_palette" # https://github.com/pikepdf/pikepdf/issues/328
   ];
 
   pythonImportsCheck = [ "pikepdf" ];

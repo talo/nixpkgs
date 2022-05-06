@@ -2,22 +2,20 @@
 
 stdenv.mkDerivation rec {
   pname = "libstrangle";
-  version = "unstable-202202022";
+  version = "0.1.1";
 
   buildInputs = [ libGL libX11 ];
 
   src = fetchFromGitLab {
     owner = "torkel104";
     repo = pname;
-    rev = "0273e318e3b0cc759155db8729ad74266b74cb9b";
-    sha256 = "sha256-h10QA7m7hIQHq1g/vCYuZsFR2NVbtWBB46V6OWP5wgM=";
+    rev = version;
+    sha256 = "135icr544w5ynlxfnxqgjn794bsm9i703rh9jfnracjb7jgnha4w";
   };
 
   makeFlags = [ "prefix=" "DESTDIR=$(out)" ];
 
-  patches = [
-      ./nixos.patch
-  ];
+  patches = [ ./nixos.patch ];
 
   postPatch = ''
     substituteAllInPlace src/strangle.sh

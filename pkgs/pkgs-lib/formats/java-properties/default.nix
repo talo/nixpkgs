@@ -1,10 +1,6 @@
 { lib, pkgs }:
-let
-  inherit (lib) types;
-  inherit (types) attrsOf oneOf coercedTo str bool int float package;
-in
 {
-  javaProperties = { comment ? "Generated with Nix", boolToString ? lib.boolToString }: {
+  javaProperties = { comment ? "Generated with Nix" }: {
 
     # Design note:
     # A nested representation of inevitably leads to bad UX:
@@ -29,21 +25,7 @@ in
     # We _can_ choose to support hierarchical config files
     # via nested attrsets, but the module author should
     # make sure that problem (2) does not occur.
-    type = let
-      elemType =
-        oneOf ([
-          # `package` isn't generalized to `path` because path values
-          # are ambiguous. Are they host path strings (toString /foo/bar)
-          # or should they be added to the store? ("${/foo/bar}")
-          # The user must decide.
-          (coercedTo package toString str)
-
-          (coercedTo bool boolToString str)
-          (coercedTo int toString str)
-          (coercedTo float toString str)
-        ])
-        // { description = "string, package, bool, int or float"; };
-      in attrsOf elemType;
+    type = lib.types.attrsOf lib.types.str;
 
     generate = name: value:
       pkgs.runCommandLocal name

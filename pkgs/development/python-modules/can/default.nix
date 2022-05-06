@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , future
 , hypothesis
-, packaging
 , parameterized
 , msgpack
 , pyserial
@@ -30,7 +29,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     msgpack
-    packaging
     pyserial
     typing-extensions
     wrapt
@@ -73,7 +71,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "CAN support for Python";
-    homepage = "https://python-can.readthedocs.io";
+    homepage = "python-can.readthedocs.io";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ fab sorki ];
   };

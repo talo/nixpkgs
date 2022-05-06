@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, perl }:
+{ lib, stdenv, fetchurl, bash, perl }:
 
 stdenv.mkDerivation rec {
   pname = "gecode";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0k45jas6p3cyldgyir1314ja3174sayn2h2ly3z9b4dl3368pk77";
   };
 
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [ bash perl ];
 
   preConfigure = "patchShebangs configure";
 

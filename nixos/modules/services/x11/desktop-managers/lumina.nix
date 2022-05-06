@@ -10,10 +10,6 @@ let
 in
 
 {
-  meta = {
-    maintainers = teams.lumina.members;
-  };
-
   options = {
 
     services.xserver.desktopManager.lumina.enable = mkOption {

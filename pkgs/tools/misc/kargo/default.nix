@@ -12,7 +12,7 @@ buildPythonApplication rec {
   };
 
   propagatedBuildInputs = [
-    ansible-core
+    ansible
     boto
     cffi
     cryptography

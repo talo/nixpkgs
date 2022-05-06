@@ -3,23 +3,21 @@
 , fetchurl
 , fltk13
 , libjpeg
-, eudev
 , pkg-config
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.4.5";
+  version = "1.3.54";
   pname = "flrig";
 
   src = fetchurl {
     url = "mirror://sourceforge/fldigi/${pname}-${version}.tar.gz";
-    sha256 = "sha256-Zj/LkP1nSm1zLKLxuGfaKuVuP8jaVlvK/TzX504VKHk=";
+    sha256 = "sha256-zw0xi4AVnm8Vi/oWkh13C9BjabOKUtZaVmLN++zKGug=";
   };
 
   buildInputs = [
     fltk13
     libjpeg
-    eudev
   ];
 
   nativeBuildInputs = [

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, postgresql, python3 }:
+{ lib, stdenv, fetchFromGitHub, postgresql, python3, gnused }:
 
 stdenv.mkDerivation rec {
   pname = "libpqxx";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-O30czHwEDXz5xY4o3MWhmEK06OKTKMQCy0M6qwSEpy8=";
   };
 
-  nativeBuildInputs = [ python3 ];
+  nativeBuildInputs = [ gnused python3 ];
   buildInputs = [ postgresql ];
 
   preConfigure = ''

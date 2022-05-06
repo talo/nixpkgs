@@ -11,15 +11,21 @@
 
 buildPythonPackage rec {
   pname = "svdtools";
-  version = "0.1.23";
-  format = "setuptools";
+  version = "0.1.21";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit version pname;
-    hash = "sha256-LuursRuUZEDLbk9Wbnq/S0dsZHbzIJo1YCSVFMUoiog=";
+    sha256 = "0qc94haqkj4dbhify1l3x0ji1dx34m79nfnsk1c7l1kl2zjvz6bz";
   };
+
+  # remove upon next release
+  # see: https://github.com/stm32-rs/svdtools/pull/96
+  prePatch = ''
+    substituteInPlace setup.py \
+      --replace 'PyYAML ~= 5.3' 'PyYAML >= 5.3'
+  '';
 
   propagatedBuildInputs = [
     braceexpand
@@ -28,13 +34,9 @@ buildPythonPackage rec {
     lxml
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "svdtools"
-  ];
+  pythonImportsCheck = [ "svdtools" ];
 
   meta = with lib; {
     description = "Python package to handle vendor-supplied, often buggy SVD files";

@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "redis";
-  version = "7.0.0";
+  version = "6.2.6";
 
   src = fetchurl {
     url = "https://download.redis.io/releases/${pname}-${version}.tar.gz";
-    sha256 = "sha256-KE2L0f2F1qVaBe5OfDHDGXetVsvzRO2DeQvusUi6pyA=";
+    sha256 = "1ariw5x33hmmm3d5al0j3307l5kf3vhmn78wpyaz67hia1x8nasv";
   };
 
   # Cross-compiling fixes
@@ -55,12 +55,6 @@ stdenv.mkDerivation rec {
     # upstream find this test too timing-sensitive
     substituteInPlace tests/integration/replication.tcl \
       --replace 'foreach mdl {no yes}' 'foreach mdl {}'
-
-    substituteInPlace tests/support/server.tcl \
-      --replace 'exec /usr/bin/env' 'exec env'
-
-    sed -i '/^proc wait_load_handlers_disconnected/{n ; s/wait_for_condition 50 100/wait_for_condition 50 500/; }' \
-      tests/support/util.tcl
 
     ./runtest \
       --no-latency \

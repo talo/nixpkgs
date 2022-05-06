@@ -1,7 +1,8 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, gitUpdater
+, common-updater-scripts
+, genericUpdater
 , writers
 , makeWrapper
 , bash
@@ -129,7 +130,8 @@ let
       inherit
         pname
         version
-        gitUpdater
+        common-updater-scripts
+        genericUpdater
         writers
         jq
         yq;

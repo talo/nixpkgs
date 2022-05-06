@@ -31,10 +31,6 @@ python3Packages.buildPythonApplication rec {
     runHook postCheck
   '';
 
-  # Cannot find GSettings schemas when opening settings,
-  # probably https://github.com/NixOS/nixpkgs/issues/56943
-  strictDeps = false;
-
   nativeBuildInputs = [
     gettext
     wrapGAppsHook

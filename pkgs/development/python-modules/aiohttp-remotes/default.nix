@@ -41,12 +41,6 @@ buildPythonPackage rec {
     "aiohttp_remotes"
   ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
-    "--asyncio-mode=auto"
-  ];
-
   meta = with lib; {
     description = "Set of useful tools for aiohttp.web server";
     homepage = "https://github.com/wikibusiness/aiohttp-remotes";

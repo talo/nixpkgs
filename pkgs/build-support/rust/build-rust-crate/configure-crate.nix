@@ -2,7 +2,6 @@
 {
   build
 , buildDependencies
-, codegenUnits
 , colors
 , completeBuildDeps
 , completeDeps
@@ -25,7 +24,7 @@ let version_ = lib.splitString "-" crateVersion;
     version = lib.splitVersion (lib.head version_);
     rustcOpts = lib.foldl' (opts: opt: opts + " " + opt)
         (if release then "-C opt-level=3" else "-C debuginfo=2")
-        (["-C codegen-units=${toString codegenUnits}"] ++ extraRustcOptsForBuildRs);
+        (["-C codegen-units=$NIX_BUILD_CORES"] ++ extraRustcOptsForBuildRs);
     buildDeps = mkRustcDepArgs buildDependencies crateRenames;
     authors = lib.concatStringsSep ":" crateAuthors;
     optLevel = if release then 3 else 0;

@@ -182,7 +182,7 @@ in
       buildInputs = [ make ];
       mkdir = "/bin/mkdir";
       ln = "/bin/ln";
-    } // lib.optionalAttrs config.contentAddressedByDefault {
+    } // lib.optionalAttrs (config.contentAddressedByDefault or false) {
       __contentAddressed = true;
       outputHashAlgo = "sha256";
       outputHashMode = "recursive";

@@ -5,7 +5,7 @@ set -euo pipefail
 
 nixfile='default.nix'
 release_url='https://download.savannah.nongnu.org/releases/oath-toolkit/'
-attr='oath-toolkit'
+attr='oathToolkit'
 command='oathtool --version'
 
 color() {

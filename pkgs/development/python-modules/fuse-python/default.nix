@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "fuse-python";
-  version = "1.0.5";
+  version = "1.0.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-dOX/szaCu6mlrypaBI9Ht+e0ZOv4QpG/WiWL+60Do6o=";
+    sha256 = "b9a69c38b3909ffd35d77cb1a73ebfdc3a103a6d4cdd20c86c70ed1141771580";
   };
 
   buildInputs = [ fuse ];

@@ -17,7 +17,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DLOCALDIR=${placeholder "out"}/share/fortunes"
-    "-DNO_OFFENSIVE=true"
   ];
 
   patches = [ (builtins.toFile "not-a-game.patch" ''
@@ -36,10 +35,6 @@ stdenv.mkDerivation rec {
      my_exe(
     --
   '') ];
-
-  postFixup = ''
-    rm -f $out/share/fortunes/men-women*
-  '';
 
   meta = with lib; {
     mainProgram = "fortune";

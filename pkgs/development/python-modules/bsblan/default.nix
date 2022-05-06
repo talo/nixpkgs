@@ -1,16 +1,19 @@
 { lib
-, aiohttp
-, aresponses
 , buildPythonPackage
 , fetchFromGitHub
+, pytestCheckHook
+, aresponses
+, coverage
 , mypy
-, packaging
 , poetry-core
 , pydantic
 , pytest-asyncio
+, pytest-cov
 , pytest-mock
-, pytestCheckHook
 , pythonOlder
+, aiohttp
+, attrs
+, cattrs
 , yarl
 }:
 
@@ -19,13 +22,13 @@ buildPythonPackage rec {
   version = "0.5.5";
   format = "pyproject";
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "liudger";
     repo = "python-bsblan";
     rev = "v${version}";
-    hash = "sha256-kq4cML7D9XC/QRPjGfaWcs0H78OOc2IXGua7qJpWYOQ=";
+    sha256 = "sha256-kq4cML7D9XC/QRPjGfaWcs0H78OOc2IXGua7qJpWYOQ=";
   };
 
   nativeBuildInputs = [
@@ -34,25 +37,21 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
-    packaging
+    attrs
+    cattrs
     pydantic
     yarl
   ];
 
   checkInputs = [
     aresponses
+    coverage
     mypy
     pytest-asyncio
+    pytest-cov
     pytest-mock
     pytestCheckHook
   ];
-
-  postPatch = ''
-    # Upstream doesn't set a version for the pyproject.toml
-    substituteInPlace pyproject.toml \
-      --replace 'version = "0.0.0"' 'version = "${version}"' \
-      --replace "--cov" ""
-  '';
 
   pythonImportsCheck = [
     "bsblan"

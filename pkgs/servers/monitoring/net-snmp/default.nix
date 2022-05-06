@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchpatch, autoreconfHook, removeReferencesTo
-, file, openssl, perl, perlPackages, nettools
+, file, openssl, perl, perlPackages, nettools, gnused
 , withPerlTools ? false }: let
 
   perlWithPkgs = perl.withPackages (ps: with ps; [
@@ -44,7 +44,7 @@ in stdenv.mkDerivation rec {
     substituteInPlace testing/fulltests/support/simple_TESTCONF.sh --replace "/bin/netstat" "${nettools}/bin/netstat"
   '';
 
-  nativeBuildInputs = [ autoreconfHook nettools removeReferencesTo file ];
+  nativeBuildInputs = [ autoreconfHook nettools removeReferencesTo gnused file ];
   buildInputs = [ openssl ]
     ++ lib.optional withPerlTools perlWithPkgs;
 

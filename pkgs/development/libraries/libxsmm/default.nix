@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, gfortran
+{ lib, stdenv, fetchFromGitHub, coreutils, gfortran, gnused
 , python3, util-linux, which
 
 , enableStatic ? stdenv.hostPlatform.isStatic
@@ -16,7 +16,9 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    coreutils
     gfortran
+    gnused
     python3
     util-linux
     which

@@ -1,27 +1,24 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, mmark }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
-buildGoModule rec {
+buildGoPackage rec {
   pname = "mmark";
-  version = "2.2.25";
+  version = "1.3.6";
+  rev = "v${version}";
+
+  goPackagePath = "github.com/miekg/mmark";
 
   src = fetchFromGitHub {
-    owner = "mmarkdown";
+    inherit rev;
+    owner = "miekg";
     repo = "mmark";
-    rev = "v${version}";
-    sha256 = "sha256-9XjNTbsB4kh7YpjUnTzSXypw9r4ZyR7GALTrYebRKAg=";
+    sha256 = "0q2zrwa2vwk7a0zhmi000zpqrc01zssrj9c5n3573rg68fksg77m";
   };
 
-  vendorSha256 = "sha256-uHphMy9OVnLD6IBqfMTyRlDyyTabzZC4Vn0628P+0F4=";
-
-  ldflags = [ "-s" "-w" ];
-
-  passthru.tests.version = testers.testVersion {
-    package = mmark;
-  };
+  goDeps = ./deps.nix;
 
   meta = {
     description = "A powerful markdown processor in Go geared towards the IETF";
-    homepage = "https://github.com/mmarkdown/mmark";
+    homepage = "https://github.com/miekg/mmark";
     license = with lib.licenses; bsd2;
     maintainers = with lib.maintainers; [ yrashk ];
     platforms = lib.platforms.unix;

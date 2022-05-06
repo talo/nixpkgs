@@ -5,7 +5,7 @@
 , cmake
 , extra-cmake-modules
 , cairo
-, cldr-annotations
+, cldr-emoji-annotation
 , pango
 , fribidi
 , fmt
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     gdk-pixbuf
     wayland
     wayland-protocols
-    cldr-annotations
+    cldr-emoji-annotation
     json_c
     libGL
     libevent
@@ -89,8 +89,6 @@ stdenv.mkDerivation rec {
     xkeyboard_config
     libxkbfile
   ];
-
-  cmakeFlags = [ "-DCLDR_DIR=${cldr-annotations}/share/unicode/cldr" ];
 
   passthru.updateScript = ./update.py;
 

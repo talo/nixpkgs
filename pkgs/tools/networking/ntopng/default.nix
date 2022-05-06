@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, autoreconfHook
+{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, bash, autoreconfHook
 , zeromq, ndpi, json_c, openssl, libpcap, libcap, curl, libmaxminddb
 , rrdtool, sqlite, libmysqlclient, expat, net-snmp
 }:
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [ bash autoreconfHook pkg-config ];
 
   buildInputs = [
     zeromq ndpi json_c openssl libpcap curl libmaxminddb rrdtool sqlite

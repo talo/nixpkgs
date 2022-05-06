@@ -13,12 +13,12 @@
 
 stdenv.mkDerivation rec {
   pname = "IPMIView";
-  version = "2.20.0";
-  buildVersion = "220309";
+  version = "2.19.0";
+  buildVersion = "210401";
 
   src = fetchurl {
     url = "https://www.supermicro.com/wftp/utility/IPMIView/Linux/IPMIView_${version}_build.${buildVersion}_bundleJRE_Linux_x64.tar.gz";
-    hash = "sha256-qtklBMuK0jb9Ye0IkYM2WYFRMAfZg9tk08a1JQ64cjA=";
+    sha256 = "sha256-6hxOu/Wkcrp9MaMYlxOR2DZW21Wi3BIFZp3Vm8NRBWs=";
   };
 
   nativeBuildInputs = [ patchelf makeWrapper ];

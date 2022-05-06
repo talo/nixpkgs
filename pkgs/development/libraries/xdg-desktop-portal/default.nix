@@ -5,8 +5,7 @@
 , fetchFromGitHub
 , fetchpatch
 , flatpak
-, fuse3
-, systemdMinimal
+, fuse
 , geoclue2
 , glib
 , gsettings-desktop-schemas
@@ -15,9 +14,6 @@
 , libxml2
 , nixosTests
 , pipewire
-, gdk-pixbuf
-, librsvg
-, python3
 , pkg-config
 , stdenv
 , substituteAll
@@ -27,7 +23,7 @@
 
 stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal";
-  version = "1.14.3";
+  version = "1.12.1";
 
   outputs = [ "out" "installedTests" ];
 
@@ -35,8 +31,16 @@ stdenv.mkDerivation rec {
     owner = "flatpak";
     repo = pname;
     rev = version;
-    sha256 = "CDqTQQ8dOatOxDKR+HiVQgSJKxH6ZstskKdR84U/870=";
+    sha256 = "1fc3LXN6wp/zQw4HQ0Q99HUvBhynHrQi2p3s/08izuE=";
   };
+
+  patches = [
+    # Hardcode paths used by x-d-p itself.
+    (substituteAll {
+      src = ./fix-paths.patch;
+      inherit flatpak;
+    })
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -49,22 +53,12 @@ stdenv.mkDerivation rec {
     acl
     dbus
     flatpak
-    fuse3
-    systemdMinimal # libsystemd
+    fuse
     glib
     gsettings-desktop-schemas
     json-glib
     libportal
     pipewire
-
-    # For icon validator
-    gdk-pixbuf
-    librsvg
-
-    # For document-fuse installed test.
-    (python3.withPackages (pp: with pp; [
-      pygobject3
-    ]))
   ] ++ lib.optionals enableGeoLocation [
     geoclue2
   ];

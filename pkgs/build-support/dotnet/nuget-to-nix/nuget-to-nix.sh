@@ -1,8 +1,6 @@
-#!@runtimeShell@
+#!/usr/bin/env bash
 
 set -euo pipefail
-
-export PATH="@binPath@"
 
 if [ $# -eq 0 ]; then
   >&2 echo "Usage: $0 [packages directory] > deps.nix"

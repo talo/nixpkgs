@@ -1,13 +1,12 @@
 { bctoolbox
 , cmake
 , fetchFromGitLab
-, lib
-, stdenv
+, lib, stdenv
 }:
 
 stdenv.mkDerivation rec {
   pname = "belr";
-  version = "5.1.12";
+  version = "5.1.3";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -25,7 +24,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DENABLE_STATIC=NO" ];
 
   meta = with lib; {
-    description = "Belledonne Communications' language recognition library. Part of the Linphone project.";
+    description = "Belledonne Communications' language recognition library";
     homepage = "https://gitlab.linphone.org/BC/public/belr";
     license = licenses.gpl3Plus;
     platforms = platforms.all;

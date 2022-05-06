@@ -3,49 +3,40 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
-, buildPackages
 , sqlite
 , libtiff
 , curl
 , gtest
-, nlohmann_json
 }:
 
 stdenv.mkDerivation rec {
   pname = "proj";
-  version = "9.0.0";
+  version = "8.2.1";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "PROJ";
     rev = version;
-    sha256 = "sha256-zMP+WzC65BFz8g8mF5t7toqxmxCJePysd6WJuqpe8yg=";
+    hash = "sha256-tnaIqYKgYHY1Tg33jsKYn9QL8YUobgXKbQsodoCXNys=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev"];
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ sqlite libtiff curl nlohmann_json ];
+  buildInputs = [ sqlite libtiff curl ];
 
   checkInputs = [ gtest ];
 
   cmakeFlags = [
     "-DUSE_EXTERNAL_GTEST=ON"
     "-DRUN_NETWORK_DEPENDENT_TESTS=OFF"
-    "-DNLOHMANN_JSON_ORIGIN=external"
-    "-DEXE_SQLITE3=${buildPackages.sqlite}/bin/sqlite3"
   ];
 
-  preCheck =
-    let
-      libPathEnvVar = if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
-    in
-      ''
-        export HOME=$TMPDIR
-        export TMP=$TMPDIR
-        export ${libPathEnvVar}=$PWD/lib
-      '';
+  preCheck = ''
+    export HOME=$TMPDIR
+    export TMP=$TMPDIR
+  '';
 
   doCheck = true;
 

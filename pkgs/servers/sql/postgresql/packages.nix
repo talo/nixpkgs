@@ -2,8 +2,6 @@ self: super: {
 
     age = super.callPackage ./ext/age.nix { };
 
-    jsonb_deep_sum = super.callPackage ./ext/jsonb_deep_sum.nix { };
-
     periods = super.callPackage ./ext/periods.nix { };
 
     postgis = super.callPackage ./ext/postgis.nix { };

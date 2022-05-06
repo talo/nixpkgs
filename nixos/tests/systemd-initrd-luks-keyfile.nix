@@ -32,7 +32,7 @@ in {
         };
       };
       virtualisation.bootDevice = "/dev/mapper/cryptroot";
-      boot.initrd.secrets."/etc/cryptroot.key" = keyfile;
+      boot.initrd.systemd.contents."/etc/cryptroot.key".source = keyfile;
     };
   };
 

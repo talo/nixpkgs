@@ -1,7 +1,9 @@
 { lib, stdenv, fetchurl, fetchpatch, libpcap, pkg-config, openssl, lua5_3
 , pcre, libssh2
+, graphicalSupport ? false
 , libX11 ? null
 , gtk2 ? null
+, python2 ? null
 , makeWrapper ? null
 , withLua ? true
 }:
@@ -9,7 +11,7 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  pname = "nmap";
+  pname = "nmap${optionalString graphicalSupport "-graphical"}";
   version = "7.92";
 
   src = fetchurl {
@@ -39,9 +41,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     (if withLua then "--with-liblua=${lua5_3}" else "--without-liblua")
     "--with-liblinear=included"
-    "--without-ndiff"
-    "--without-zenmap"
-  ];
+  ] ++ optionals (!graphicalSupport) [ "--without-ndiff" "--without-zenmap" ];
 
   makeFlags = optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "AR=${stdenv.cc.bintools.targetPrefix}ar"
@@ -49,8 +49,20 @@ stdenv.mkDerivation rec {
     "CC=${stdenv.cc.targetPrefix}gcc"
   ];
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ pcre libssh2 libpcap openssl ];
+  pythonPath = with python2.pkgs; optionals graphicalSupport  [
+    pygtk pysqlite pygobject2 pycairo
+  ];
+
+  nativeBuildInputs = [ pkg-config ] ++ optionals graphicalSupport [ python2.pkgs.wrapPython ];
+  buildInputs = [ pcre libssh2 libpcap openssl ] ++ optionals graphicalSupport (with python2.pkgs; [
+    python2 libX11 gtk2
+  ]);
+
+  postInstall = optionalString graphicalSupport ''
+    buildPythonPath "$out $pythonPath"
+    patchPythonScript $out/bin/ndiff
+    patchPythonScript $out/bin/zenmap
+  '';
 
   enableParallelBuilding = true;
 

@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
     pkgsBuildBuild.guile_1_8;
   nativeBuildInputs = [
+    gawk
     makeWrapper
     pkg-config
   ];

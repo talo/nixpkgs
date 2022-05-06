@@ -15,20 +15,19 @@
 
 buildPythonApplication rec {
   pname = "apio";
-  version = "0.8.1";
+  version = "0.8.0";
   format = "flit";
 
   src = fetchFromGitHub {
     owner = "FPGAwars";
     repo = "apio";
     rev = "v${version}";
-    sha256 = "sha256-04qAGTzusMT3GsaRxDoXNJK1Mslzxu+ugQclBJx8xzE=";
+    sha256 = "sha256-nOZI+FHdZRnkJF/No8z0mZ4Q5aHFnF7c20ajTPI00N4=";
   };
 
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'scons==4.2.0' 'scons' \
-      --replace '==' '>='
+    substituteInPlace pyproject.toml --replace \
+      'scons==4.2.0' 'scons'
 
     substituteInPlace apio/managers/scons.py --replace \
       'return "tinyprog --libusb --program"' \

@@ -1,24 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, cmake, libspecbleach, lv2 }:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, fftwFloat, lv2 }:
 
 stdenv.mkDerivation rec {
   pname = "noise-repellent";
-  version = "0.2.1";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "lucianodato";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-hMNVzhJZFGFeu5aygLkfq495O0zpaIk41ddzejvDITE=";
+    rev = version;
+    sha256 = "0hb89x9i2knzan46q4nwscf5zmnb2nwf4w13xl2c0y1mx1ls1mwl";
+    fetchSubmodules = true;
   };
 
-  mesonFlags = [
-    "--prefix=${placeholder "out"}/lib/lv2"
-    "--buildtype=release"
-  ];
+  mesonFlags = ("--prefix=${placeholder "out"}/lib/lv2");
 
-  nativeBuildInputs = [ meson ninja pkg-config cmake ];
+  nativeBuildInputs = [ meson ninja pkg-config ];
   buildInputs = [
-    libspecbleach lv2
+    fftwFloat lv2
   ];
 
   meta = with lib; {
@@ -26,6 +24,6 @@ stdenv.mkDerivation rec {
     homepage    = "https://github.com/lucianodato/noise-repellent";
     license     = licenses.gpl3;
     maintainers = [ maintainers.magnetophon ];
-    platforms = platforms.unix;
+    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "i686-darwin"  ];
   };
 }

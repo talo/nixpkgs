@@ -95,6 +95,7 @@ in stdenv.mkDerivation (rec {
     clang
     makeWrapper
     nodePackages.esy
+    bash
     perl
     which
     nasm

@@ -1,6 +1,6 @@
 # Elm {#sec-elm}
 
-To start a development environment, run:
+To start a development environment do
 
 ```ShellSession
 nix-shell -p elmPackages.elm elmPackages.elm-format

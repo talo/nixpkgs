@@ -84,7 +84,6 @@
 , libxml2
 , srt
 , vo-aacenc
-, libfreeaptx
 , VideoToolbox
 , AudioToolbox
 , AVFoundation
@@ -97,13 +96,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-bad";
-  version = "1.20.1";
+  version = "1.20.0";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0j1q89dl8369djibc5p27lyj8y8p4maplmdzlryvrw0ib77w5lq9";
+    sha256 = "sha256-AVuNTZo5Xr9ETUCHaGeiA03TMEs61IvDoN0MHucdwR0=";
   };
 
   nativeBuildInputs = [
@@ -171,7 +170,6 @@ stdenv.mkDerivation rec {
     libintl
     srt
     vo-aacenc
-    libfreeaptx
   ] ++ lib.optionals enableZbar [
     zbar
   ] ++ lib.optionals faacSupport [
@@ -263,7 +261,7 @@ stdenv.mkDerivation rec {
     "-Disac=disabled" # depends on `webrtc-audio-coding-1` not compatible with 0.3
     "-Dgs=disabled" # depends on `google-cloud-cpp`
     "-Donnx=disabled" # depends on `libonnxruntime` not packaged in nixpkgs as of writing
-    "-Dopenaptx=enabled" # since gstreamer-1.20.1 `libfreeaptx` is supported for circumventing the dubious license conflict with `libopenaptx`
+    "-Dopenaptx=disabled" # depends on older version of `libopenaptx` due to licensing conflict https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/-/merge_requests/2235
   ]
   ++ lib.optionals (!stdenv.isLinux) [
     "-Dva=disabled" # see comment on `libva` in `buildInputs`

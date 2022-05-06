@@ -40,9 +40,6 @@ in
       # SD cards.
       "sdhci_pci"
 
-      # NVMe drives
-      "nvme"
-
       # Firewire support.  Not tested.
       "ohci1394" "sbp2"
 

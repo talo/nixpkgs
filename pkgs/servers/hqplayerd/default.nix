@@ -1,6 +1,6 @@
-{ stdenv, lib
-, addOpenGLRunpath
+{ stdenv
 , alsa-lib
+, addOpenGLRunpath
 , autoPatchelfHook
 , cairo
 , fetchurl
@@ -8,25 +8,26 @@
 , gcc11
 , gnome
 , gssdp
-, gupnp
-, gupnp-av
 , lame
+, lib
 , libgmpris
-, libusb-compat-0_1
 , llvmPackages_10
-, meson
 , mpg123
-, ninja
 , rpmextract
 , wavpack
+
+, gupnp
+, gupnp-av
+, meson
+, ninja
 }:
 stdenv.mkDerivation rec {
   pname = "hqplayerd";
-  version = "4.31.0-89";
+  version = "4.30.3-87";
 
   src = fetchurl {
     url = "https://www.signalyst.eu/bins/${pname}/fc35/${pname}-${version}.fc35.x86_64.rpm";
-    hash = "sha256-L9S3MIbvvBViKSxu0x/GkE/pa61NETtw4vA8xM4rJEg=";
+    hash = "sha256-fEze4aScWDwHDTXU0GatdopQf6FWcywWCGhR/7zXK7A=";
   };
 
   unpackPhase = ''
@@ -46,7 +47,6 @@ stdenv.mkDerivation rec {
     gupnp-av
     lame
     libgmpris
-    libusb-compat-0_1
     llvmPackages_10.openmp
     mpg123
     wavpack
@@ -58,37 +58,34 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    # executables
-    mkdir -p $out
-    cp -rv ./usr/bin $out/bin
+    # main executable
+    mkdir -p $out/bin
+    cp ./usr/bin/hqplayerd $out/bin
 
-    # libs
-    mkdir -p $out
-    cp -rv ./opt/hqplayerd/lib $out
-
-    # configuration
-    mkdir -p $out/etc
-    cp -rv ./etc/hqplayer $out/etc/
+    # main configuration
+    mkdir -p $out/etc/hqplayer
+    cp ./etc/hqplayer/hqplayerd.xml $out/etc/hqplayer/
 
     # udev rules
-    mkdir -p $out/etc/udev
-    cp -rv ./etc/udev/rules.d $out/etc/udev/
+    mkdir -p $out/etc/udev/rules.d
+    cp ./etc/udev/rules.d/50-taudio2.rules $out/etc/udev/rules.d/
 
     # kernel module cfgs
-    mkdir -p $out/etc
-    cp -rv ./etc/modules-load.d $out/etc/
+    mkdir -p $out/etc/modules-load.d
+    cp ./etc/modules-load.d/taudio2.conf $out/etc/modules-load.d/
 
     # systemd service file
-    mkdir -p $out/lib/systemd
-    cp -rv ./usr/lib/systemd/system $out/lib/systemd/
+    mkdir -p $out/lib/systemd/system
+    cp ./usr/lib/systemd/system/hqplayerd.service $out/lib/systemd/system/
 
     # documentation
-    mkdir -p $out/share/doc
-    cp -rv ./usr/share/doc/hqplayerd $out/share/doc/
+    mkdir -p $out/share/doc/hqplayerd
+    cp ./usr/share/doc/hqplayerd/* $out/share/doc/hqplayerd/
 
     # misc service support files
-    mkdir -p $out/var/lib
-    cp -rv ./var/lib/hqplayer $out/var/lib/
+    mkdir -p $out/var/lib/hqplayer
+    cp -r ./var/lib/hqplayer/web $out/var/lib/hqplayer
+
     runHook postInstall
   '';
 

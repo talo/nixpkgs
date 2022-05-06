@@ -40,10 +40,13 @@ callPackage ./common.nix { inherit stdenv; } {
       makeFlagsArray+=("bindir=$bin/bin" "sbindir=$bin/sbin" "rootsbindir=$bin/sbin")
     '';
 
-    # The pie, stackprotector and fortify hardening flags are autodetected by
-    # glibc and enabled by default if supported. Setting it for every gcc
-    # invocation does not work.
-    hardeningDisable = [ "fortify" "pie" "stackprotector" ];
+    # The stackprotector and fortify hardening flags are autodetected by glibc
+    # and enabled by default if supported. Setting it for every gcc invocation
+    # does not work.
+    hardeningDisable = [ "stackprotector" "fortify" ]
+    # XXX: Not actually musl-speciic but since only musl enables pie by default,
+    #      limit rebuilds by only disabling pie w/musl
+      ++ lib.optional stdenv.hostPlatform.isMusl "pie";
 
     NIX_CFLAGS_COMPILE = lib.concatStringsSep " "
       (builtins.concatLists [

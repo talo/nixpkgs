@@ -75,7 +75,7 @@ rec {
     inherit (bootstrapFiles) mkdir bzip2 cpio tarball;
 
     __impureHostDeps = commonImpureHostDeps;
-  } // lib.optionalAttrs config.contentAddressedByDefault {
+  } // lib.optionalAttrs (config.contentAddressedByDefault or false) {
     __contentAddressed = true;
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";

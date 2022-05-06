@@ -9,16 +9,13 @@
 , jarowinkler
 , numpy
 , hypothesis
-, jarowinkler-cpp
 , pandas
 , pytestCheckHook
-, rapidfuzz-cpp
-, taskflow
 }:
 
 buildPythonPackage rec {
   pname = "rapidfuzz";
-  version = "2.0.11";
+  version = "2.0.8";
 
   disabled = pythonOlder "3.6";
 
@@ -26,7 +23,8 @@ buildPythonPackage rec {
     owner = "maxbachmann";
     repo = "RapidFuzz";
     rev = "v${version}";
-    hash = "sha256-npmdnUMrmbHgUgqMxKBytgtL1weWw6BjVNmBkYSKNMw=";
+    fetchSubmodules = true;
+    hash = "sha256-LA4UpP3jFcVZTYKuq8aBvfGgEhyOLeCUsUXEgSnwb94=";
   };
 
   nativeBuildInputs = [
@@ -37,12 +35,6 @@ buildPythonPackage rec {
   ];
 
   dontUseCmakeConfigure = true;
-
-  buildInputs = [
-    jarowinkler-cpp
-    rapidfuzz-cpp
-    taskflow
-  ];
 
   propagatedBuildInputs = [
     jarowinkler

@@ -9,7 +9,6 @@ import ./make-test-python.nix ({ pkgs, ... }:
     '';
   in
   {
-    name = "step-ca";
     nodes =
       {
         caserver =

@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "mage";
-  version = "1.13.0";
+  version = "1.12.1";
 
   src = fetchFromGitHub {
     owner = "magefile";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-+OhmV5+XNhJVCVYNKc6M5bNB4gyb/SV6bEohaZJXtLk=";
+    sha256 = "sha256-hfLclI9bzsvITwdo8LTqNcr25yZN82B0pqwlk559tRU=";
   };
 
   vendorSha256 = null;

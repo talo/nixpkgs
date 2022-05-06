@@ -10,21 +10,7 @@
 }:
 
 let
-
-  python = python3.override {
-    packageOverrides = final: prev: {
-      sabyenc3 = prev.sabyenc3.overridePythonAttrs (oldAttrs: rec {
-        version = "4.0.0";
-        src = oldAttrs.src.override {
-          inherit version;
-          hash = "sha256-PwwQ2jChKIqh7jJ6E2hkqPquTDSN4MklghfJ+MkM0n0=";
-        };
-      });
-    };
-    self = python;
-  };
-
-  pythonEnv = python.withPackages(ps: with ps; [
+  pythonEnv = python3.withPackages(ps: with ps; [
     chardet
     cheetah3
     cherrypy

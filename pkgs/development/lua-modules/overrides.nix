@@ -206,6 +206,9 @@ with prev;
     externalDeps = [
       { name = "EXPAT"; dep = pkgs.expat; }
     ];
+    patches = [
+      ./luaexpat.patch
+    ];
   });
 
   # TODO Somehow automatically amend buildInputs for things that need luaffi
@@ -251,12 +254,6 @@ with prev;
   lua-yajl = prev.lib.overrideLuarocks prev.lua-yajl (drv: {
     buildInputs = [
       pkgs.yajl
-    ];
-  });
-
-  luaunbound = prev.lib.overrideLuarocks prev.luaunbound(drv: {
-    externalDeps = [
-      { name = "libunbound"; dep = pkgs.unbound; }
     ];
   });
 

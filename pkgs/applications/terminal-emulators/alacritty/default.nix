@@ -6,6 +6,7 @@
 , nixosTests
 
 , cmake
+, gzip
 , installShellFiles
 , makeWrapper
 , ncurses
@@ -67,6 +68,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     cmake
+    gzip
     installShellFiles
     makeWrapper
     ncurses

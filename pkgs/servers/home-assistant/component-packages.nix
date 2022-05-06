@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2022.4.7";
+  version = "2022.4.6";
   components = {
     "abode" = ps: with ps; [
       abodepy
@@ -162,8 +162,7 @@
       pyarlo
     ];
     "arris_tg2492lg" = ps: with ps; [
-      arris-tg2492lg
-    ];
+    ]; # missing inputs: arris-tg2492lg
     "aruba" = ps: with ps; [
       pexpect
     ];
@@ -823,8 +822,7 @@
       fitbit
     ];
     "fivem" = ps: with ps; [
-      fivem-api
-    ];
+    ]; # missing inputs: fivem-api
     "fixer" = ps: with ps; [
       fixerio
     ];
@@ -1055,8 +1053,7 @@
       hangups
     ];
     "harman_kardon_avr" = ps: with ps; [
-      hkavr
-    ];
+    ]; # missing inputs: hkavr
     "harmony" = ps: with ps; [
       aioharmony
     ];
@@ -1908,8 +1905,7 @@
       pyopnsense
     ];
     "opple" = ps: with ps; [
-      pyoppleio
-    ];
+    ]; # missing inputs: pyoppleio
     "oru" = ps: with ps; [
     ]; # missing inputs: oru
     "orvibo" = ps: with ps; [
@@ -1961,11 +1957,9 @@
       sqlalchemy
     ];
     "peco" = ps: with ps; [
-      peco
-    ];
+    ]; # missing inputs: peco
     "pencom" = ps: with ps; [
-      pencompy
-    ];
+    ]; # missing inputs: pencompy
     "persistent_notification" = ps: with ps; [
     ];
     "person" = ps: with ps; [
@@ -2146,8 +2140,7 @@
       praw
     ];
     "rejseplanen" = ps: with ps; [
-      rjpl
-    ];
+    ]; # missing inputs: rjpl
     "remember_the_milk" = ps: with ps; [
       httplib2
     ]; # missing inputs: RtmAPI
@@ -2248,8 +2241,7 @@
       sqlalchemy
     ];
     "saj" = ps: with ps; [
-      pysaj
-    ];
+    ]; # missing inputs: pysaj
     "samsungtv" = ps: with ps; [
       aiohttp-cors
       async-upnp-client
@@ -2299,8 +2291,7 @@
       aiosenseme
     ];
     "sensibo" = ps: with ps; [
-      pysensibo
-    ];
+    ]; # missing inputs: pysensibo
     "sensor" = ps: with ps; [
       fnvhash
       lru-dict
@@ -3131,8 +3122,7 @@
       ifaddr
       url-normalize
       zeroconf
-      zwave-me-ws
-    ];
+    ]; # missing inputs: zwave_me_ws
   };
   # components listed in tests/components for which all dependencies are packaged
   supportedComponentsWithTests = [
@@ -3291,7 +3281,6 @@
     "filter"
     "fireservicerota"
     "firmata"
-    "fivem"
     "fjaraskupan"
     "flic"
     "flick_electric"
@@ -3516,7 +3505,6 @@
     "p1_monitor"
     "panel_custom"
     "panel_iframe"
-    "peco"
     "persistent_notification"
     "person"
     "philips_js"
@@ -3579,7 +3567,6 @@
     "select"
     "sense"
     "senseme"
-    "sensibo"
     "sensor"
     "sentry"
     "seventeentrack"
@@ -3748,6 +3735,5 @@
     "zodiac"
     "zone"
     "zwave_js"
-    "zwave_me"
   ];
 }

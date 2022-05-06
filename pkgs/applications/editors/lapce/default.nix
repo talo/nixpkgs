@@ -17,13 +17,6 @@
 , vulkan-loader
 , copyDesktopItems
 , makeDesktopItem
-, openssl
-, libobjc
-, Security
-, CoreServices
-, ApplicationServices
-, Carbon
-, AppKit
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -47,12 +40,7 @@ rustPlatform.buildRustPackage rec {
     copyDesktopItems
   ];
 
-  # Get openssl-sys to use pkg-config
-  OPENSSL_NO_VENDOR = 1;
-
   buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.isLinux [
     freetype
     fontconfig
     libxkbcommon
@@ -62,17 +50,10 @@ rustPlatform.buildRustPackage rec {
     libXrandr
     libXi
     vulkan-loader
-  ] ++ lib.optionals stdenv.isDarwin [
-    libobjc
-    Security
-    CoreServices
-    ApplicationServices
-    Carbon
-    AppKit
   ];
 
   # Add missing vulkan dependency to rpath
-  preFixup = lib.optionalString stdenv.isLinux ''
+  preFixup = ''
     patchelf --add-needed ${vulkan-loader}/lib/libvulkan.so.1 $out/bin/lapce
   '';
 
@@ -95,5 +76,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/lapce/lapce";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ elliot ];
+    broken = stdenv.isDarwin;
   };
 }

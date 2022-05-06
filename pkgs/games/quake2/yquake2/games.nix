@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub }:
+{ stdenv, lib, fetchFromGitHub, cmake }:
 
 let
   games = {
@@ -37,9 +37,11 @@ let
       rev = "${lib.toUpper id}_${builtins.replaceStrings ["."] ["_"] version}";
     };
 
+    nativeBuildInputs = [ cmake ];
+
     installPhase = ''
       mkdir -p $out/lib/yquake2/${id}
-      cp release/* $out/lib/yquake2/${id}
+      cp Release/* $out/lib/yquake2/${id}
     '';
 
     meta = with lib; {

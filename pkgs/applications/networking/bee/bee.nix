@@ -1,4 +1,4 @@
-{ version ? "release", lib, fetchFromGitHub, buildGoModule }:
+{ version ? "release", lib, fetchFromGitHub, buildGoModule, coreutils }:
 
 let
 
@@ -38,6 +38,8 @@ buildGoModule {
     repo = "bee";
     inherit (versionSpec) rev sha256;
   };
+
+  nativeBuildInputs = [ coreutils ];
 
   subPackages = [ "cmd/bee" ];
 

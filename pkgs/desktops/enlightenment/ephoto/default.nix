@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.smhouston.us/ephoto/";
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = teams.enlightenment.members;
+    maintainers = with maintainers; [ romildo ];
   };
 }

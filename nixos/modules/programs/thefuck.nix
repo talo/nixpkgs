@@ -6,11 +6,8 @@ let
   prg = config.programs;
   cfg = prg.thefuck;
 
-  bashAndZshInitScript = ''
+  initScript = ''
     eval $(${pkgs.thefuck}/bin/thefuck --alias ${cfg.alias})
-  '';
-  fishInitScript = ''
-    ${pkgs.thefuck}/bin/thefuck --alias ${cfg.alias} | source
   '';
 in
   {
@@ -33,8 +30,10 @@ in
     config = mkIf cfg.enable {
       environment.systemPackages = with pkgs; [ thefuck ];
 
-      programs.bash.interactiveShellInit = bashAndZshInitScript;
-      programs.zsh.interactiveShellInit = mkIf prg.zsh.enable bashAndZshInitScript;
-      programs.fish.interactiveShellInit = mkIf prg.fish.enable fishInitScript;
+      programs.bash.interactiveShellInit = initScript;
+      programs.zsh.interactiveShellInit = mkIf prg.zsh.enable initScript;
+      programs.fish.interactiveShellInit = mkIf prg.fish.enable ''
+        ${pkgs.thefuck}/bin/thefuck --alias | source
+      '';
     };
   }

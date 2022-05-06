@@ -13,8 +13,7 @@ let
   vsBuildTarget = {
     x86_64-linux = "linux-x64";
     aarch64-linux = "linux-arm64";
-    x86_64-darwin = "darwin-x64";
-    aarch64-darwin = "darwin-arm64";
+    x86_64-darwin = "darwin";
   }.${system} or (throw "Unsupported system ${system}");
 
   # replaces esbuild's download script with a binary from nixpkgs
@@ -27,13 +26,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "openvscode-server";
-  version = "1.66.0";
+  version = "1.62.3";
 
   src = fetchFromGitHub {
     owner = "gitpod-io";
     repo = "openvscode-server";
     rev = "openvscode-server-v${version}";
-    sha256 = "g5QaxZDVXvE/vOe2BjBXlqYLGZ2EG4nTKdUlLdt8H8A=";
+    sha256 = "0822181gbd6y8bzn65liv7prqv7pg067sbl8nac02zg7268qwi6j";
   };
 
   yarnCache = stdenv.mkDerivation {
@@ -56,7 +55,7 @@ in stdenv.mkDerivation rec {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-BeVJsruiRLReGMwThfcEm/ez4UFcr0oI4wwevJwxt58=";
+    outputHash = "0rmcixcn7lmrndb2pq0x895qp34hc271h1j0n3xq9rv603v1ayvk";
   };
 
   # Extract the Node.js source code which is used to compile packages with
@@ -124,7 +123,7 @@ in stdenv.mkDerivation rec {
     patchShebangs ./remote/node_modules
 
     # put ripgrep binary into bin so postinstall does not try to download it
-    find -path "*@vscode/ripgrep" -type d \
+    find -name vscode-ripgrep -type d \
       -execdir mkdir -p {}/bin \; \
       -execdir ln -s ${ripgrep}/bin/rg {}/bin/rg \;
   '' + lib.optionalString stdenv.isDarwin ''
@@ -151,9 +150,13 @@ in stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -p $out
-    cp -R -T ../vscode-reh-web-${vsBuildTarget} $out
-    ln -s ${nodejs}/bin/node $out
+    mkdir -p $out/libexec
+
+    cp -R -T ../vscode-reh-web-${vsBuildTarget} "$out/libexec"
+
+    ln -s ${nodejs}/bin/node $out/libexec
+
+    makeWrapper "$out/libexec/server.sh" "$out/bin/openvscode-server"
   '';
 
   meta = with lib; {
@@ -164,7 +167,7 @@ in stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/gitpod-io/openvscode-server";
     license = licenses.mit;
-    maintainers = with maintainers; [ dguenther ghuntley emilytrau ];
-    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    maintainers = with maintainers; [ dguenther ghuntley ];
+    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
   };
 }

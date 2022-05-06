@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, ansible-core
+, ansible
 , flaky
 , pytest-mock
 , pytestCheckHook
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   '';
 
   checkInputs = [
-    ansible-core
+    ansible
     flaky
     pytest-mock
     pytestCheckHook

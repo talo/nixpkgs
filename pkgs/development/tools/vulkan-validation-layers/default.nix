@@ -1,15 +1,10 @@
 { lib
-, callPackage
 , stdenv
 , fetchFromGitHub
 , cmake
-, pkg-config
 , glslang
-, libffi
 , libX11
-, libXau
 , libxcb
-, libXdmcp
 , libXrandr
 , spirv-headers
 , spirv-tools
@@ -18,11 +13,16 @@
 }:
 
 let
-  robin-hood-hashing = callPackage ./robin-hood-hashing.nix {};
+  robin-hood-hashing = fetchFromGitHub {
+    owner = "martinus";
+    repo = "robin-hood-hashing";
+    rev = "3.11.3"; # pin
+    sha256 = "1gm3lwjkh6h8m7lfykzd0jzhfqjmjchindkmxc008rwvxafsd1pl";
+  };
 in
 stdenv.mkDerivation rec {
   pname = "vulkan-validation-layers";
-  version = "1.3.211.0";
+  version = "1.2.198.0";
 
   # If we were to use "dev" here instead of headers, the setupHook would be
   # placed in that output instead of "out".
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       owner = "KhronosGroup";
       repo = "Vulkan-ValidationLayers";
       rev = "sdk-${version}";
-      sha256 = "sha256-NGpFfekZtB0rvnGxYVDo808xzgBuo8ZC4bjXjQnTpxU=";
+      sha256 = "sha256-/pnXT55EQZcnjOzY2vBwp+gM6l2hktZHwB9yKP8vVTU=";
     });
 
   # Include absolute paths to layer libraries in their associated
@@ -45,17 +45,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    pkg-config
   ];
 
   buildInputs = [
     libX11
-    libXau
-    libXdmcp
-    libXrandr
-    libffi
     libxcb
-    spirv-tools
+    libXrandr
     vulkan-headers
     wayland
   ];
@@ -65,7 +60,6 @@ stdenv.mkDerivation rec {
     "-DSPIRV_HEADERS_INSTALL_DIR=${spirv-headers}"
     "-DROBIN_HOOD_HASHING_INSTALL_DIR=${robin-hood-hashing}"
     "-DBUILD_LAYER_SUPPORT_FILES=ON"
-    "-DPKG_CONFIG_EXECUTABLE=${pkg-config}/bin/pkg-config"
     # Hide dev warnings that are useless for packaging
     "-Wno-dev"
   ];

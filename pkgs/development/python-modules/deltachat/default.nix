@@ -1,14 +1,12 @@
 { lib
 , buildPythonPackage
 , isPy27
-, pkg-config
-, pkgconfig
 , setuptools-scm
 , libdeltachat
 , cffi
-, imap-tools
-, requests
+, imapclient
 , pluggy
+, requests
 , setuptools
 , pytestCheckHook
 }:
@@ -21,8 +19,6 @@ buildPythonPackage rec {
   disabled = isPy27;
 
   nativeBuildInputs = [
-    pkg-config
-    pkgconfig
     setuptools-scm
   ];
 
@@ -34,7 +30,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     cffi
-    imap-tools
+    imapclient
     pluggy
     requests
     setuptools

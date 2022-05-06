@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "skytemple";
-  version = "1.3.10";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = pname;
     rev = version;
-    sha256 = "sha256-CyYGTXdQsGpDR/gpqViEQO1xUPHaXTES592nRJixa1o=";
+    sha256 = "1sx2rib0la3mifvh84ia3jnnq4qw9jxc13vxyidsdkp6x82nbvcg";
   };
 
   buildInputs = [
@@ -26,10 +26,7 @@ python3Packages.buildPythonApplication rec {
     packaging
     pycairo
     pygal
-    psutil
-    gbulb
     pypresence
-    sentry-sdk
     setuptools
     skytemple-dtef
     skytemple-eventserver

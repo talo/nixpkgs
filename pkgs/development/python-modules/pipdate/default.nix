@@ -1,10 +1,9 @@
 { lib
-, appdirs
 , buildPythonPackage
 , fetchPypi
-, importlib-metadata
-, packaging
 , pythonOlder
+, appdirs
+, importlib-metadata
 , requests
 , rich
 , setuptools
@@ -13,22 +12,19 @@
 
 buildPythonPackage rec {
   pname = "pipdate";
-  version = "0.5.6";
+  version = "0.5.5";
   format = "pyproject";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-G2t+wsVGj7cDbsnWss7XqKU421WqygPzAZkhbTu9Jks=";
+    sha256 = "03hr9i691cpg9q2xc1xr4lpd90xs8rba0xjh6qmc1vg7lgcdgbaa";
   };
 
-  nativeBuildInputs = [
-    wheel
-  ];
+  nativeBuildInputs = [ wheel ];
 
   propagatedBuildInputs = [
     appdirs
-    packaging
     requests
     rich
     setuptools

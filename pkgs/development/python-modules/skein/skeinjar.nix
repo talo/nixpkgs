@@ -1,20 +1,21 @@
-{ fetchPypi, unzip, stdenv, pname, version, jarHash }:
+{ callPackage, stdenv, maven, src, version }:
 
+let
+  skeinRepo = callPackage ./skeinrepo.nix { inherit src version; };
+in
 stdenv.mkDerivation rec {
-  inherit pname version;
+  pname = "skein.jar";
 
-  src = fetchPypi {
-    inherit pname version;
-    format = "wheel";
-    hash = jarHash;
-  };
+  inherit version src;
 
-  dontUnpack = true;
+  nativeBuildInputs = [ maven ];
 
-  nativeBuildInputs = [ unzip ];
+  buildPhase = ''
+    mvn --offline -f java/pom.xml package -Dmaven.repo.local="${skeinRepo}" -Dskein.version=${version} -Dversion=${version}
+  '';
 
   installPhase = ''
-    unzip ${src}
-    mv ./skein/java/skein.jar $out
+    # Making sure skein.jar exists skips the maven build in setup.py
+    mv java/target/skein-*.jar $out
   '';
 }

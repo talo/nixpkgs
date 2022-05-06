@@ -18,7 +18,6 @@
 , sha256 ? null # when not specifying src
 , configureFlags ? []
 , buildInputs ? []
-, extraPatches ? []
 , fixPatch ? p: p
 , preConfigure ? ""
 , postInstall ? null
@@ -107,9 +106,6 @@ stdenv.mkDerivation {
   NIX_CFLAGS_COMPILE = toString ([
     "-I${libxml2.dev}/include/libxml2"
     "-Wno-error=implicit-fallthrough"
-  ] ++ optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "11") [
-    # fix build vts module on gcc11
-    "-Wno-error=stringop-overread"
   ] ++ optional stdenv.isDarwin "-Wno-error=deprecated-declarations");
 
   configurePlatforms = [];
@@ -138,8 +134,7 @@ stdenv.mkDerivation {
       url = "https://raw.githubusercontent.com/openwrt/packages/c057dfb09c7027287c7862afab965a4cd95293a3/net/nginx/patches/103-sys_nerr.patch";
       sha256 = "0s497x6mkz947aw29wdy073k8dyjq8j99lax1a1mzpikzr4rxlmd";
     })
-  ] ++ mapModules "patches")
-    ++ extraPatches;
+  ] ++ mapModules "patches");
 
   hardeningEnable = optional (!stdenv.isDarwin) "pie";
 

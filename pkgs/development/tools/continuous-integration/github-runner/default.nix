@@ -105,8 +105,6 @@ stdenv.mkDerivation rec {
   configurePhase = ''
     runHook preConfigure
 
-    export HOME=$(mktemp -d)
-
     # Never use nuget.org
     nuget sources Disable -Name "nuget.org"
 

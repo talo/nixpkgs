@@ -18,15 +18,13 @@
 buildPythonPackage rec {
   pname = "ismartgate";
   version = "4.0.4";
-  format = "setuptools";
-
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-yh7gPyy3VMdyINBCZo5K2wA0BY7yYgHrKGZRB/pm77U=";
+    sha256 = "sha256-yh7gPyy3VMdyINBCZo5K2wA0BY7yYgHrKGZRB/pm77U=";
   };
 
   propagatedBuildInputs = [
@@ -51,15 +49,7 @@ buildPythonPackage rec {
       --replace '"pytest-runner>=5.2",' ""
   '';
 
-  pythonImportsCheck = [
-    "ismartgate"
-  ];
-
-  disabledTestPaths = [
-    # Tests are out-dated
-    "ismartgate/tests/test_init.py"
-  ];
-
+  pythonImportsCheck = [ "ismartgate" ];
 
   meta = with lib; {
     description = "Python module to work with the ismartgate and gogogate2 API";

@@ -17,13 +17,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "Sharedown";
-  version = "4.0.2";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "kylon";
     repo = pname;
     rev = version;
-    sha256 = "sha256-hHYk7B0+wqmpOmU5wf44MBTuocLM//Oif5SOtNzO++c=";
+    sha256 = "sha256-wQEP3fdp+Mhgoz873cgF65WouWtbEdCdXfLiVSmrjyA=";
   };
 
   nativeBuildInputs = [

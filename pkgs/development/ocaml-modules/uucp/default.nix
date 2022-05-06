@@ -8,7 +8,7 @@ let
   doCheck = true;
 in
 
-if lib.versionOlder ocaml.version minimumOCamlVersion
+if !(lib.versionAtLeast ocaml.version minimumOCamlVersion)
 then builtins.throw "${pname} needs at least OCaml ${minimumOCamlVersion}"
 else
 

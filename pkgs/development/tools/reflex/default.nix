@@ -1,19 +1,18 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{ lib, fetchFromGitHub, buildGoPackage }:
 
-buildGoModule rec {
+
+buildGoPackage rec {
   pname = "reflex";
-  version = "0.3.1";
+  version = "0.2.0";
+
+  goPackagePath = "github.com/cespare/reflex";
 
   src = fetchFromGitHub {
     owner = "cespare";
     repo = "reflex";
     rev = "v${version}";
-    sha256 = "sha256-/2qVm2xpSFVspA16rkiIw/qckxzXQp/1EGOl0f9KljY=";
+    sha256 = "0ccwjmf8rjh03hpbmfiy70ai9dhgvb5vp7albffq0cmv2sl69dqr";
   };
-
-  vendorSha256 = "sha256-JCtVYDHbhH2i7tGNK1jvgHCjU6gMMkNhQ2ZnlTeqtmA=";
-
-  ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
     description = "A small tool to watch a directory and rerun a command when certain files change";

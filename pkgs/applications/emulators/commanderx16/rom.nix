@@ -2,24 +2,20 @@
 , lib
 , fetchFromGitHub
 , cc65
-, python3
 }:
 
 stdenv.mkDerivation rec {
   pname = "x16-rom";
-  version = "40";
+  version = "38";
 
   src = fetchFromGitHub {
     owner = "commanderx16";
     repo = pname;
     rev = "r${version}";
-    hash = "sha256-5oqttuTJiJOUENncOJipAar22OsI1uG3G69m+eYoSh0=";
+    sha256 = "xaqF0ppB7I7ST8Uh3jPbC14uRAb/WH21tHlNeTvYpoI=";
   };
 
-  nativeBuildInputs = [
-    cc65
-    python3
-  ];
+  nativeBuildInputs = [ cc65 ];
 
   postPatch = ''
     patchShebangs scripts/
@@ -29,10 +25,8 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-
-    install -Dm 444 -t $out/share/${pname} build/x16/rom.bin
-    install -Dm 444 -t $out/share/doc/${pname} README.md
-
+    install -D --mode 444 --target-directory $out/share/${pname} build/x16/rom.bin
+    install -D --mode 444 --target-directory $out/share/doc/${pname} README.md
     runHook postInstall
   '';
 
@@ -41,7 +35,7 @@ stdenv.mkDerivation rec {
     description = "ROM file for CommanderX16 8-bit computer";
     license = licenses.bsd2;
     maintainers = with maintainers; [ AndersonTorres ];
-    inherit (cc65.meta) platforms;
+    platforms = cc65.meta.platforms;
   };
 
   passthru = {

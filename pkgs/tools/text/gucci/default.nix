@@ -1,31 +1,29 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, gucci }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
-buildGoModule rec {
+buildGoPackage rec {
   pname = "gucci";
-  version = "1.5.4";
+  version = "0.1.0";
+
+  goPackagePath = "github.com/noqcks/gucci";
 
   src = fetchFromGitHub {
     owner = "noqcks";
     repo = "gucci";
-    rev = "refs/tags/${version}";
-    sha256 = "sha256-HJPNpLRJPnziSMvxLCiNDeCWO439ELSZs/4Cq1a7Amo=";
+    rev = version;
+    sha256 = "0ksrmzb3iggc7gm51fl0jbb15d0gmpclslpkq2sl2xjzk29pkllq";
   };
 
-  vendorSha256 = "sha256-rAZCj5xtwTgd9/KDYnQTU1jbabtWJF5MCFgcmixDN/Q=";
+  goDeps = ./deps.nix;
 
-  ldflags = [ "-s" "-w" "-X main.AppVersion=${version}" ];
-
-  passthru.tests.version = testers.testVersion {
-    package = gucci;
-  };
-
-  checkFlags = [ "-short" ];
+  ldflags = [
+    "-X main.AppVersion=${version}"
+  ];
 
   meta = with lib; {
     description = "A simple CLI templating tool written in golang";
     homepage = "https://github.com/noqcks/gucci";
     license = licenses.mit;
-    maintainers = with maintainers; [ braydenjw ];
+    maintainers = [ maintainers.braydenjw ];
     platforms = platforms.unix;
   };
 }

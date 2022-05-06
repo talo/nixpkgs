@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libvdpau";
-  version = "1.5";
+  version = "1.4";
 
   src = fetchurl {
     url = "https://gitlab.freedesktop.org/vdpau/libvdpau/-/archive/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-pdUKQrjCiP68BxUatkOsjeBqGERpZcckH4m06BCCGRM=";
+    sha256 = "0c1zsfr6ypzwv8g9z50kdahpb7pirarq4z8avqqyyma5b9684n22";
   };
   patches = [ ./installdir.patch ];
 

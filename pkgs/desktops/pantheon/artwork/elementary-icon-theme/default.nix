@@ -1,5 +1,5 @@
 { lib
-, stdenvNoCC
+, stdenv
 , fetchFromGitHub
 , nix-update-script
 , meson
@@ -7,19 +7,19 @@
 , ninja
 , hicolor-icon-theme
 , gtk3
-, xcursorgen
+, xorg
 , librsvg
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "elementary-icon-theme";
-  version = "7.0.0";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "icons";
     rev = version;
-    sha256 = "sha256-tyhKhZPoZ8xVy1KVUWd8BK2meTT3Z6qM787spjE+NL8=";
+    sha256 = "sha256-WR4HV0nJKj0WeSFHXLK64O0LhX8myAJE4w0aztyhPn4=";
   };
 
   nativeBuildInputs = [
@@ -28,7 +28,7 @@ stdenvNoCC.mkDerivation rec {
     meson
     ninja
     python3
-    xcursorgen
+    xorg.xcursorgen
   ];
 
   propagatedBuildInputs = [

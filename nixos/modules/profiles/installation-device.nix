@@ -99,10 +99,6 @@ with lib;
         stdenvNoCC # for runCommand
         busybox
         jq # for closureInfo
-        # For boot.initrd.systemd
-        makeInitrdNGTool
-        systemdStage1
-        systemdStage1Network
       ];
 
     # Show all debug messages from the kernel but don't log refused packets

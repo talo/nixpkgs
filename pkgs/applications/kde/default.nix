@@ -86,7 +86,6 @@ let
       dragon = callPackage ./dragon.nix {};
       elisa = callPackage ./elisa.nix {};
       eventviews = callPackage ./eventviews.nix {};
-      falkon = callPackage ./falkon.nix {};
       ffmpegthumbs = callPackage ./ffmpegthumbs.nix { };
       filelight = callPackage ./filelight.nix {};
       granatier = callPackage ./granatier.nix {};
@@ -98,7 +97,7 @@ let
       kaccounts-providers = callPackage ./kaccounts-providers.nix {};
       kaddressbook = callPackage ./kaddressbook.nix {};
       kalarm = callPackage ./kalarm.nix {};
-      kalendar = callPackage ./kalendar.nix {};
+      kalarmcal = callPackage ./kalarmcal.nix {};
       kalzium = callPackage ./kalzium.nix {};
       kamoso = callPackage ./kamoso.nix {};
       kapman = callPackage ./kapman.nix {};
@@ -154,7 +153,6 @@ let
       kmime = callPackage ./kmime.nix {};
       kmines = callPackage ./kmines.nix {};
       kmix = callPackage ./kmix.nix {};
-      kmousetool = callPackage ./kmousetool.nix {};
       kmplot = callPackage ./kmplot.nix {};
       knavalbattle = callPackage ./knavalbattle.nix {};
       knetwalk = callPackage ./knetwalk.nix {};
@@ -221,7 +219,6 @@ let
       print-manager = callPackage ./print-manager.nix {};
       rocs = callPackage ./rocs.nix {};
       skanlite = callPackage ./skanlite.nix {};
-      skanpage = callPackage ./skanpage.nix {};
       spectacle = callPackage ./spectacle.nix {};
       yakuake = callPackage ./yakuake.nix {};
       zanshin = callPackage ./zanshin.nix {};

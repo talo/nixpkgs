@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, pkg-config, wget, unzip
+{ stdenv, lib, fetchFromGitHub, gnumake, pkg-config, wget, unzip, gawk
 , sqlite, which, lua, installShellFiles, makeWrapper
 }:
 let
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkg-config wget unzip sqlite which installShellFiles makeWrapper
+    gnumake pkg-config wget unzip gawk sqlite which installShellFiles makeWrapper
   ];
 
   buildInputs = [ luaEnv ];

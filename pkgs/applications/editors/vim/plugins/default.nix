@@ -3,8 +3,7 @@
 
 let
 
-  inherit (vimUtils.override {inherit vim;})
-    buildVimPluginFrom2Nix vimGenDocHook vimCommandCheckHook;
+  inherit (vimUtils.override {inherit vim;}) buildVimPluginFrom2Nix vimGenDocHook;
 
   inherit (lib) extends;
 
@@ -13,10 +12,7 @@ let
     toVimPlugin = drv:
       drv.overrideAttrs(oldAttrs: {
 
-        nativeBuildInputs = oldAttrs.nativeBuildInputs or [] ++ [
-          vimGenDocHook
-          vimCommandCheckHook
-        ];
+        nativeBuildInputs = oldAttrs.nativeBuildInputs or [] ++ [ vimGenDocHook ];
         passthru = (oldAttrs.passthru or {}) // {
           vimPlugin = true;
         };
@@ -25,7 +21,6 @@ let
 
   plugins = callPackage ./generated.nix {
     inherit buildVimPluginFrom2Nix;
-    inherit (vimUtils) buildNeovimPluginFrom2Nix;
   };
 
   # TL;DR

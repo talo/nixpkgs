@@ -151,7 +151,6 @@ in
     users.users.${cfg.user} = {
       isSystemUser = true;
       group = cfg.group;
-      home = cfg.home;
     };
 
     users.groups.${cfg.group} = {};

@@ -132,6 +132,5 @@ in mkDerivationWith python3Packages.buildPythonApplication rec {
     description = "Keyboard-focused browser with a minimal GUI";
     license     = licenses.gpl3Plus;
     maintainers = with maintainers; [ jagajaga rnhmjoj ebzzry dotlambda ];
-    inherit (backendPackage.meta) platforms;
   };
 }

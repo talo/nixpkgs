@@ -2,7 +2,8 @@
 , version
 , homepage
 , lib
-, gitUpdater
+, common-updater-scripts
+, genericUpdater
 , writers
 , jq
 , yarn
@@ -10,12 +11,15 @@
 }:
 
 let
-  updater = gitUpdater {
+  updater = genericUpdater {
     inherit pname version;
     attrPath = lib.toLower pname;
 
     # exclude prerelease versions
-    ignoredVersions = "-";
+    versionLister = writers.writeBash "list-mirakurun-versions" ''
+      ${common-updater-scripts}/bin/list-git-tags --url=${homepage} \
+        | grep '^[0-9]\+\.[0-9]\+\.[0-9]\+$'
+    '';
   };
   updateScript = builtins.elemAt updater 0;
   updateArgs = map (lib.escapeShellArg) (builtins.tail updater);

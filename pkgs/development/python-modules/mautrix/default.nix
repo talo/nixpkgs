@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "mautrix";
-  version = "0.16.3";
+  version = "0.14.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-OpHLh5pCzGooQ5yxAa0+85m/szAafV+l+OfipQcfLtU=";
+    sha256 = "sha256-mO0bKUepIjb50UKEOvFIaepHAskehkBajevsTRST8e4=";
   };
 
   propagatedBuildInputs = [
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     lxml
   ];
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.7";
 
   # no tests available
   doCheck = false;

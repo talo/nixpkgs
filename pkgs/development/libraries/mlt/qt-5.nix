@@ -71,7 +71,6 @@ mkDerivation rec {
 
   passthru.updateScript = gitUpdater {
     inherit pname version;
-    attrPath = "libsForQt5.mlt";
     rev-prefix = "v";
   };
 

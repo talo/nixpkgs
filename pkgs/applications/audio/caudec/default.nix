@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper, bc, findutils, flac, lame, opusTools, procps, sox }:
+{ lib, stdenv, fetchurl, makeWrapper, bash, bc, findutils, flac, lame, opusTools, procps, sox }:
 
 stdenv.mkDerivation rec {
   pname = "caudec";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     patchShebangs ./install.sh
   '';
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ bash makeWrapper ];
 
   installPhase = ''
     ./install.sh --prefix=$out/bin

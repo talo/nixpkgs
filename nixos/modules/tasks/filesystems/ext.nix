@@ -1,20 +1,14 @@
-{ config, lib, pkgs, ... }:
-
-let
-
-  inInitrd = lib.any (fs: fs == "ext2" || fs == "ext3" || fs == "ext4") config.boot.initrd.supportedFilesystems;
-
-in
+{ pkgs, ... }:
 
 {
   config = {
 
-    system.fsPackages = lib.mkIf (config.boot.initrd.systemd.enable -> inInitrd) [ pkgs.e2fsprogs ];
+    system.fsPackages = [ pkgs.e2fsprogs ];
 
     # As of kernel 4.3, there is no separate ext3 driver (they're also handled by ext4.ko)
-    boot.initrd.availableKernelModules = lib.mkIf (config.boot.initrd.systemd.enable -> inInitrd) [ "ext2" "ext4" ];
+    boot.initrd.availableKernelModules = [ "ext2" "ext4" ];
 
-    boot.initrd.extraUtilsCommands = lib.mkIf (!config.boot.initrd.systemd.enable)
+    boot.initrd.extraUtilsCommands =
       ''
         # Copy e2fsck and friends.
         copy_bin_and_libs ${pkgs.e2fsprogs}/sbin/e2fsck

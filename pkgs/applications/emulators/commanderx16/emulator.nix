@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "x16-emulator";
-  version = "40";
+  version = "38";
 
   src = fetchFromGitHub {
     owner = "commanderx16";
     repo = pname;
     rev = "r${version}";
-    hash = "sha256-7ZzVd2NJCFNAFrS2cj6bxcq/AzO5VakoFX9o1Ac9egg=";
+    sha256 = "WNRq/m97NpOBWIk6mtxBAKmkxCGWacWjXeOvIhBrkYE=";
   };
 
   dontConfigure = true;
@@ -21,10 +21,8 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-
-    install -Dm 755 -t $out/bin/ x16emu
-    install -Dm 444 -t $out/share/doc/${pname} README.md
-
+    install -D --mode 755 --target-directory $out/bin/ x16emu
+    install -D --mode 444 --target-directory $out/share/doc/${pname} README.md
     runHook postInstall
   '';
 
@@ -33,7 +31,7 @@ stdenv.mkDerivation rec {
     description = "The official emulator of CommanderX16 8-bit computer";
     license = licenses.bsd2;
     maintainers = with maintainers; [ AndersonTorres ];
-    inherit (SDL2.meta) platforms;
+    platforms = SDL2.meta.platforms;
   };
 
   passthru = {

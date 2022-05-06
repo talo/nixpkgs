@@ -1,21 +1,21 @@
 { stdenv, lib, fetchgit, pkg-config, meson, ninja
-, enchant, gtkmm3, libchamplain, libgcrypt, shared-mime-info }:
+, enchant, gtkmm3, libchamplain, libgcrypt }:
 
 stdenv.mkDerivation rec {
   pname = "lifeograph";
-  version = "2.0.3";
+  version = "2.0.2";
 
   src = fetchgit {
     url = "https://git.launchpad.net/lifeograph";
-    rev = "v${version}";
-    sha256 = "sha256-RotbTdTtpwXmo+UKOyp93IAC6CCstv++KtnX2doN+nM=";
+    # Specific commit hash related to version
+    rev = "d635bbb30011c0d33c33643e6fa5c006f98ed7d6";
+    sha256 = "0j9wn5bj7cbfnmyyx7ikx961sksv50agnb53prymldbsq43rfgnq";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    shared-mime-info # for update-mime-database
   ];
 
   buildInputs = [

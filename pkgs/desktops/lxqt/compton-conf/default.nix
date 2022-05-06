@@ -44,6 +44,6 @@ mkDerivation rec {
     description = "GUI configuration tool for compton X composite manager";
     license = licenses.lgpl21Plus;
     platforms = with platforms; unix;
-    maintainers = teams.lxqt.members;
+    maintainers = with maintainers; [ romildo ];
   };
 }

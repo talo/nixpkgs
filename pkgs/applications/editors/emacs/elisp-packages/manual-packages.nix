@@ -233,9 +233,6 @@
 
   sv-kalender = callPackage ./sv-kalender { };
 
-  tree-sitter-langs = callPackage ./tree-sitter-langs { final = self; };
-  tsc = callPackage ./tsc { };
-
   youtube-dl = callPackage ./youtube-dl { };
 
   # From old emacsPackages (pre emacsPackagesNg)

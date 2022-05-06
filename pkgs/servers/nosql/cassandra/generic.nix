@@ -9,6 +9,7 @@
 , procps
 , which
 , jre
+, coreutils
 , nixosTests
   # generation is the attribute version suffix such as 3_11 in pkgs.cassandra_3_11
 , generation
@@ -40,7 +41,7 @@ stdenv.mkDerivation rec {
     url = "mirror://apache/cassandra/${version}/apache-cassandra-${version}-bin.tar.gz";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper coreutils ];
 
   installPhase = ''
     runHook preInstall

@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     owner = "tesseract-ocr";
     repo = "tesseract";
     rev = version;
-    hash = "sha256-lu/Y5mlCI8AajhiWaID0fGo5PghEQZdgt2X0K9c/QrE=";
+    sha256 = "1ca27zbjpx35nxh9fha410z3jskwyj06i5hqiqdc08s2d7kdivwn";
   };
 
   patches = [
@@ -26,20 +26,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [
-    pkg-config
-    autoreconfHook
-    autoconf-archive
-  ];
-
-  buildInputs = [
-    leptonica
-    libpng
-    libtiff
-    icu
-    pango
-    opencl-headers
-  ];
+  nativeBuildInputs = [ pkg-config autoreconfHook autoconf-archive ];
+  buildInputs = [ leptonica libpng libtiff icu pango opencl-headers ];
 
   meta = {
     description = "OCR engine";

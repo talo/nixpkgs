@@ -10,6 +10,7 @@
 , appstream-glib
 , pkg-config
 , txt2man
+, gzip
 , vala
 , wrapGAppsHook
 , gsettings-desktop-schemas
@@ -49,6 +50,7 @@ stdenv.mkDerivation rec {
     appstream-glib
     desktop-file-utils
     gettext
+    gzip
     meson
     ninja
     libxml2

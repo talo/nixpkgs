@@ -338,7 +338,12 @@ stdenv.mkDerivation rec {
       # fixed-output hashes of the fetch phase need to be spot-checked manually
       downstream = recurseIntoAttrs ({
         inherit bazel-watcher;
-      });
+      }
+          # dm-sonnet is only packaged for linux
+      // (lib.optionalAttrs stdenv.isLinux {
+          # TODO(timokau) dm-sonnet is broken currently
+          # dm-sonnet-linux = python3.pkgs.dm-sonnet;
+      }));
     };
 
   src_for_updater = stdenv.mkDerivation rec {
@@ -484,6 +489,7 @@ stdenv.mkDerivation rec {
       build --host_java_toolchain='${javaToolchain}'
       build --verbose_failures
       build --curses=no
+      build --sandbox_debug
       EOF
 
       # add the same environment vars to compile.sh
@@ -497,6 +503,7 @@ stdenv.mkDerivation rec {
           -e "/\$command \\\\$/a --host_java_toolchain='${javaToolchain}' \\\\" \
           -e "/\$command \\\\$/a --verbose_failures \\\\" \
           -e "/\$command \\\\$/a --curses=no \\\\" \
+          -e "/\$command \\\\$/a --sandbox_debug \\\\" \
           -i scripts/bootstrap/compile.sh
 
       # This is necessary to avoid:
@@ -523,6 +530,7 @@ stdenv.mkDerivation rec {
   # when a command can’t be found in a bazel build, you might also
   # need to add it to `defaultShellPath`.
   nativeBuildInputs = [
+    coreutils
     installShellFiles
     makeWrapper
     python3

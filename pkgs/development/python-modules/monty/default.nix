@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "monty";
-  version = "2022.4.26";
+  version = "2022.1.19";
   disabled = pythonOlder "3.5"; # uses type annotations
 
   src = fetchFromGitHub {
     owner = "materialsvirtuallab";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-SQku10nzTSuO5ISUDyDKAEoMhBBxPzyLNhoAyrlKH+E=";
+    rev = "v${version}";
+    sha256 = "sha256-CGYYPpXRBvqf6GJYYZUARpzt4XFc5uAw91n21UInYpU=";
   };
 
   postPatch = ''

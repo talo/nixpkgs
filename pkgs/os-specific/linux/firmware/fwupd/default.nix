@@ -3,6 +3,7 @@
 { stdenv
 , lib
 , fetchurl
+, fetchpatch
 , fetchFromGitHub
 , gtk-doc
 , pkg-config
@@ -53,8 +54,6 @@
 , modemmanager
 , libqmi
 , libmbim
-, libcbor
-, xz
 }:
 
 let
@@ -117,7 +116,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "fwupd";
-    version = "1.8.0";
+    version = "1.7.6";
 
     # libfwupd goes to lib
     # daemon, plug-ins and libfwupdplugin go to out
@@ -126,7 +125,7 @@ let
 
     src = fetchurl {
       url = "https://people.freedesktop.org/~hughsient/releases/fwupd-${version}.tar.xz";
-      sha256 = "LAliLnOSowtORQQ0M4z2cNQzKMLyE/RsX//xAWifrps=";
+      sha256 = "sha256-fr4VFKy2iNJknOzDktuSkJTaPwPPyYqcD6zKuwhJEvo=";
     };
 
     patches = [
@@ -141,12 +140,26 @@ let
       # they are not really part of the library.
       ./install-fwupdplugin-to-out.patch
 
+      # Fix detection of installed tests
+      # https://github.com/fwupd/fwupd/issues/3880
+      (fetchpatch {
+        url = "https://github.com/fwupd/fwupd/commit/5bc546221331feae9cedc1892219a25d8837955f.patch";
+        sha256 = "XcLhcDrB2/MFCXjKAyhftQgvJG4BBkp07geM9eK3q1g=";
+      })
+
       # Installed tests are installed to different output
       # we also cannot have fwupd-tests.conf in $out/etc since it would form a cycle.
       ./installed-tests-path.patch
 
       # EFI capsule is located in fwupd-efi now.
       ./efi-app-path.patch
+
+      # Drop hard-coded FHS path
+      # https://github.com/fwupd/fwupd/issues/4360
+      (fetchpatch {
+        url = "https://github.com/fwupd/fwupd/commit/14cc2e7ee471b66ee2ef54741f4bec1f92204620.patch";
+        sha256 = "47682oqE66Y6QKPtN2mYpnb2+TIJFqBgsgx60LmC3FM=";
+      })
     ];
 
     nativeBuildInputs = [
@@ -191,20 +204,16 @@ let
       protobufc
       modemmanager
       libmbim
-      libcbor
       libqmi
-      xz # for liblzma.
     ] ++ lib.optionals haveDell [
       libsmbios
-    ] ++ lib.optionals haveFlashrom [
-      flashrom
     ];
 
     mesonFlags = [
       "-Ddocs=gtkdoc"
       "-Dplugin_dummy=true"
       # We are building the official releases.
-      "-Dsupported_build=enabled"
+      "-Dsupported_build=true"
       # Would dlopen libsoup to preserve compatibility with clients linking against older fwupd.
       # https://github.com/fwupd/fwupd/commit/173d389fa59d8db152a5b9da7cc1171586639c97
       "-Dsoup_session_compat=false"
@@ -215,7 +224,7 @@ let
       "--sysconfdir=/etc"
       "-Dsysconfdir_install=${placeholder "out"}/etc"
       "-Defi_os_dir=nixos"
-      "-Dplugin_modem_manager=enabled"
+      "-Dplugin_modem_manager=true"
 
       # We do not want to place the daemon into lib (cyclic reference)
       "--libexecdir=${placeholder "out"}/libexec"
@@ -223,14 +232,14 @@ let
       # against libfwupdplugin which is in $out/lib.
       "-Dc_link_args=-Wl,-rpath,${placeholder "out"}/lib"
     ] ++ lib.optionals (!haveDell) [
-      "-Dplugin_dell=disabled"
-      "-Dplugin_synaptics_mst=disabled"
+      "-Dplugin_dell=false"
+      "-Dplugin_synaptics_mst=false"
     ] ++ lib.optionals (!haveRedfish) [
-      "-Dplugin_redfish=disabled"
-    ] ++ lib.optionals (!haveFlashrom) [
-      "-Dplugin_flashrom=disabled"
+      "-Dplugin_redfish=false"
+    ] ++ lib.optionals haveFlashrom [
+      "-Dplugin_flashrom=true"
     ] ++ lib.optionals (!haveMSR) [
-      "-Dplugin_msr=disabled"
+      "-Dplugin_msr=false"
     ];
 
     # TODO: wrapGAppsHook wraps efi capsule even though it is not ELF
@@ -289,7 +298,7 @@ let
         efibootmgr
         bubblewrap
         tpm2-tools
-      ];
+      ] ++ lib.optional haveFlashrom flashrom;
     in ''
       gappsWrapperArgs+=(
         --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
@@ -314,6 +323,7 @@ let
     passthru = {
       filesInstalledToEtc = [
         "fwupd/daemon.conf"
+        "fwupd/msr.conf"
         "fwupd/remotes.d/lvfs-testing.conf"
         "fwupd/remotes.d/lvfs.conf"
         "fwupd/remotes.d/vendor.conf"
@@ -331,8 +341,6 @@ let
         "fwupd/remotes.d/dell-esrt.conf"
       ] ++ lib.optionals haveRedfish [
         "fwupd/redfish.conf"
-      ] ++ lib.optionals haveMSR [
-        "fwupd/msr.conf"
       ];
 
       # DisabledPlugins key in fwupd/daemon.conf

@@ -1,7 +1,6 @@
 { lib, stdenv
 , rtpPath
 , vim
-, vimCommandCheckHook
 , vimGenDocHook
 }:
 
@@ -31,7 +30,6 @@ rec {
       forceShare= [ "man" "info" ];
 
       nativeBuildInputs = attrs.nativeBuildInputs or []
-      ++ [ vimCommandCheckHook ]
       ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) vimGenDocHook;
       inherit unpackPhase configurePhase buildPhase addonInfo preInstall postInstall;
 

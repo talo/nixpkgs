@@ -14,12 +14,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "sgx-ssl" + lib.optionalString debug "-debug";
-  version = "${sgxVersion}_${opensslVersion}";
+  version = "lin_${sgxVersion}_${opensslVersion}";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "intel-sgx-ssl";
-    rev = "lin_${sgxVersion}_${opensslVersion}";
+    rev = version;
     hash = "sha256-ibPXs90ni2fkxJ09fNO6wWVpfCFdko6MjBFkEsyIih8=";
   };
 

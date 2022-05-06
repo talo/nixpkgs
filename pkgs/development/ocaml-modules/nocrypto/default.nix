@@ -15,7 +15,7 @@ let
   '';
 in
 
-if versionOlder ocaml.version "4.08"
+if !versionAtLeast ocaml.version "4.08"
 then throw "nocrypto is not available for OCaml ${ocaml.version}"
 else
 

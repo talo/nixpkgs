@@ -1,13 +1,14 @@
-{ lib, buildDunePackage, lsp, xdg, re, fiber, makeWrapper, dot-merlin-reader, spawn }:
+{ lib, buildDunePackage, jsonrpc, lsp, re, makeWrapper, dot-merlin-reader, spawn }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "ocaml-lsp-server";
-  inherit (lsp) version src preBuild;
-  duneVersion = if lib.versionAtLeast version "1.10.0" then "3" else "2";
+  inherit (jsonrpc) version src;
+  useDune2 = true;
+
+  inherit (lsp) preBuild;
 
   buildInputs = lsp.buildInputs ++ [ lsp re ]
-  ++ lib.optional (lib.versionAtLeast version "1.9") spawn
-  ++ lib.optionals (lib.versionAtLeast version "1.10") [ fiber xdg ];
+  ++ lib.optional (lib.versionAtLeast jsonrpc.version "1.9") spawn;
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -15,7 +16,7 @@ buildDunePackage rec {
     wrapProgram $out/bin/ocamllsp --prefix PATH : ${dot-merlin-reader}/bin
   '';
 
-  meta = lsp.meta // {
+  meta = jsonrpc.meta // {
     description = "OCaml Language Server Protocol implementation";
   };
 }

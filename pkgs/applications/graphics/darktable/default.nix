@@ -14,7 +14,6 @@
 , desktop-file-utils
 , exiv2
 , glib
-, glib-networking
 , ilmbase
 , gtk3
 , intltool
@@ -72,7 +71,6 @@ stdenv.mkDerivation rec {
     curl
     exiv2
     glib
-    glib-networking
     gtk3
     ilmbase
     lcms2

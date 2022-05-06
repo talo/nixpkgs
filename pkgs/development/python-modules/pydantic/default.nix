@@ -43,8 +43,6 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  enableParallelBuilding = true;
-
   pythonImportsCheck = [ "pydantic" ];
 
   meta = with lib; {

@@ -38,7 +38,6 @@ buildPythonPackage rec {
   ];
   disabledTests = [
     "build"   # needs network connection
-    "test_all_estimators" # sklearn.exceptions.NotFittedError: Estimator fails to pass `check_is_fitted` even though it has been fit.
   ];
 
   # Check packages with cythonized modules

@@ -1,11 +1,6 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, poetry-core
-, shapely
-, pytestCheckHook
-}:
+{ lib, fetchFromGitHub, buildPythonPackage, pythonOlder, poetry-core
+, pytestCheckHook, pytest-cov
+, shapely }:
 
 buildPythonPackage rec {
   pname = "preprocess-cancellation";
@@ -21,36 +16,11 @@ buildPythonPackage rec {
     hash = "sha256-mn3/etXA5dkL+IsyxwD4/XjU/t4/roYFVyqQxlLOoOI=";
   };
 
-  patches = [
-    ./pep-621.patch
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  postPatch = ''
-    sed -i "/^addopts/d" pyproject.toml
+  propagatedBuildInputs = [ shapely ];
 
-    # setuptools 61 compatibility
-    # error: Multiple top-level packages discovered in a flat-layout: ['STLs', 'GCode'].
-    mkdir tests
-    mv GCode STLs test_* tests
-    substituteInPlace tests/test_preprocessor.py \
-      --replace "./GCode" "./tests/GCode"
-    substituteInPlace tests/test_preprocessor_with_shapely.py \
-      --replace "./GCode" "./tests/GCode"
-  '';
-
-  nativeBuildInputs = [
-    poetry-core
-  ];
-
-  propagatedBuildInputs = [
-    shapely
-  ];
-
-  checkInputs = [
-    pytestCheckHook
-  ];
-
-  pythonImportsCheck = [ "preprocess_cancellation" ];
+  checkInputs = [ pytestCheckHook pytest-cov ];
 
   meta = with lib; {
     description = "Klipper GCode Preprocessor for Object Cancellation";

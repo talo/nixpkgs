@@ -5,7 +5,7 @@
 , numba
 , opencv4
 , pandas
-, pkg-config
+, pkgconfig
 , pytorch-pfn-extras
 , terminaltables
 , tqdm
@@ -35,8 +35,7 @@ buildPythonPackage rec {
       --replace "'webdataset'," ""
   '';
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libjpeg ];
+  buildInputs = [ libjpeg pkgconfig ];
   propagatedBuildInputs = [ opencv4 numba pandas pytorch-pfn-extras terminaltables tqdm ];
 
   # `ffcv._libffcv*.so` cannot be loaded in the nix build environment for some

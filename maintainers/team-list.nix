@@ -198,18 +198,6 @@ with lib.maintainers; {
     enableFeatureFreezePing = true;
   };
 
-  enlightenment = {
-    members = [
-      romildo
-    ];
-    githubTeams = [
-      "enlightenment"
-    ];
-    scope = "Maintain Enlightenment desktop environment and related packages.";
-    shortName = "Enlightenment";
-    enableFeatureFreezePing = true;
-  };
-
   # Dummy group for the "everyone else" section
   feature-freeze-everyone-else = {
     members = [ ];
@@ -353,30 +341,6 @@ with lib.maintainers; {
     ];
     scope = "Maintain the Linux kernel.";
     shortName = "Linux Kernel";
-  };
-
-  lumina = {
-    members = [
-      romildo
-    ];
-    githubTeams = [
-      "lumina"
-    ];
-    scope = "Maintain lumina desktop environment and related packages.";
-    shortName = "Lumina";
-    enableFeatureFreezePing = true;
-  };
-
-  lxqt = {
-    members = [
-      romildo
-    ];
-    githubTeams = [
-      "lxqt"
-    ];
-    scope = "Maintain LXQt desktop environment and related packages.";
-    shortName = "LXQt";
-    enableFeatureFreezePing = true;
   };
 
   marketing = {

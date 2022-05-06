@@ -22,15 +22,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib ncurses htslib ];
 
-  preConfigure = lib.optional stdenv.hostPlatform.isStatic ''
-    export LIBS="-lz -lbz2 -llzma"
-  '';
-  makeFlags = lib.optional stdenv.hostPlatform.isStatic "AR=${stdenv.cc.targetPrefix}ar";
-
   configureFlags = [ "--with-htslib=${htslib}" ]
-    ++ lib.optional (ncurses == null) "--without-curses"
-    ++ lib.optional stdenv.hostPlatform.isStatic ["--without-curses" ]
-    ;
+    ++ lib.optional (ncurses == null) "--without-curses";
 
   preCheck = ''
     patchShebangs test/

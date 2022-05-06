@@ -6,7 +6,7 @@ use std::hash::Hash;
 use std::io::{BufReader, BufRead, Error, ErrorKind};
 use std::os::unix;
 use std::path::{Component, Path, PathBuf};
-use std::process::Command;
+use std::process::{Command, Stdio};
 
 struct NonRepeatingQueue<T> {
     queue: VecDeque<T>,
@@ -42,6 +42,7 @@ fn patch_elf<S: AsRef<OsStr>, P: AsRef<OsStr>>(mode: S, path: P) -> Result<Strin
     let output = Command::new("patchelf")
         .arg(&mode)
         .arg(&path)
+        .stderr(Stdio::inherit())
         .output()?;
     if output.status.success() {
         Ok(String::from_utf8(output.stdout).expect("Failed to parse output"))
@@ -50,15 +51,16 @@ fn patch_elf<S: AsRef<OsStr>, P: AsRef<OsStr>>(mode: S, path: P) -> Result<Strin
     }
 }
 
-fn copy_file<P: AsRef<Path> + AsRef<OsStr>, S: AsRef<Path> + AsRef<OsStr>>(
+fn copy_file<P: AsRef<Path> + AsRef<OsStr>, S: AsRef<Path>>(
     source: P,
     target: S,
     queue: &mut NonRepeatingQueue<Box<Path>>,
 ) -> Result<(), Error> {
-    fs::copy(&source, &target)?;
+    fs::copy(&source, target)?;
 
     if !Command::new("ldd").arg(&source).output()?.status.success() {
-        // Not dynamically linked - no need to recurse
+        //stdout(Stdio::inherit()).stderr(Stdio::inherit()).
+        println!("{:?} is not dynamically linked. Not recursing.", OsStr::new(&source));
         return Ok(());
     }
 
@@ -88,17 +90,6 @@ fn copy_file<P: AsRef<Path> + AsRef<OsStr>, S: AsRef<Path> + AsRef<OsStr>>(
             println!("Warning: Couldn't satisfy dependency {} for {:?}", line, OsStr::new(&source));
         }
     }
-
-    // Make file writable to strip it
-    let mut permissions = fs::metadata(&target)?.permissions();
-    permissions.set_readonly(false);
-    fs::set_permissions(&target, permissions)?;
-
-    // Strip further than normal
-    if !Command::new("strip").arg("--strip-all").arg(OsStr::new(&target)).output()?.status.success() {
-        println!("{:?} was not successfully stripped.", OsStr::new(&target));
-    }
-
 
     Ok(())
 }
@@ -209,6 +200,7 @@ fn main() -> Result<(), Error> {
         }
     }
     while let Some(obj) = queue.pop_front() {
+        println!("{:?}", obj);
         handle_path(out_path, &*obj, &mut queue)?;
     }
 

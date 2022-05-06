@@ -49,8 +49,7 @@ function fetchgit(fileName, url, rev, branch, builtinFetchGit) {
           url = "${url}";
           ref = "${branch}";
           rev = "${rev}";
-        } // (if builtins.compareVersions "2.4pre" builtins.nixVersion < 0 then {
-          # workaround for https://github.com/NixOS/nix/issues/5128
+        } // (if builtins.substring 0 3 builtins.nixVersion == "2.4" then {
           allRefs = true;
         } else {}));
       ` : `

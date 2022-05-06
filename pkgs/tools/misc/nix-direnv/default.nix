@@ -7,13 +7,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "nix-direnv";
-  version = "2.0.1";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nix-direnv";
     rev = version;
-    sha256 = "sha256-edRdnMNYB5N9v9QlfSFNqJl93X0rSCllmzSZO9+sCOg=";
+    sha256 = "sha256-0gBb/U7tNNSjazJE/Z2qAxHPX53wRSPMJ8rHc7HtCNg=";
   };
 
   # Substitute instead of wrapping because the resulting file is

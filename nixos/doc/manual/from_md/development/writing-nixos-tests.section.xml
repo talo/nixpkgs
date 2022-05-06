@@ -274,9 +274,35 @@ start_all()
         <listitem>
           <para>
             Execute a shell command, returning a list
-            <literal>(status, stdout)</literal>.
+            <literal>(status, stdout)</literal>. If the command
+            detaches, it must close stdout, as
+            <literal>execute</literal> will wait for this to consume all
+            output reliably. This can be achieved by redirecting stdout
+            to stderr <literal>&gt;&amp;2</literal>, to
+            <literal>/dev/console</literal>,
+            <literal>/dev/null</literal> or a file. Examples of
+            detaching commands are <literal>sleep 365d &amp;</literal>,
+            where the shell forks a new process that can write to stdout
+            and <literal>xclip -i</literal>, where the
+            <literal>xclip</literal> command itself forks without
+            closing stdout. Takes an optional parameter
+            <literal>check_return</literal> that defaults to
+            <literal>True</literal>. Setting this parameter to
+            <literal>False</literal> will not check for the return code
+            and return -1 instead. This can be used for commands that
+            shut down the VM and would therefore break the pipe that
+            would be used for retrieving the return code.
           </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <literal>succeed</literal>
+        </term>
+        <listitem>
           <para>
+            Execute a shell command, raising an exception if the exit
+            status is not zero, otherwise returning the standard output.
             Commands are run with <literal>set -euo pipefail</literal>
             set:
           </para>
@@ -291,63 +317,22 @@ start_all()
             <listitem>
               <para>
                 For pipelines, the last non-zero exit status will be
-                returned (if there is one; otherwise zero will be
-                returned).
+                returned (if there is one, zero will be returned
+                otherwise).
               </para>
             </listitem>
             <listitem>
               <para>
-                Dereferencing unset variables fails the command.
+                Dereferencing unset variables fail the command.
               </para>
             </listitem>
             <listitem>
               <para>
-                It will wait for stdout to be closed.
+                It will wait for stdout to be closed. See
+                <literal>execute</literal> for the implications.
               </para>
             </listitem>
           </itemizedlist>
-          <para>
-            If the command detaches, it must close stdout, as
-            <literal>execute</literal> will wait for this to consume all
-            output reliably. This can be achieved by redirecting stdout
-            to stderr <literal>&gt;&amp;2</literal>, to
-            <literal>/dev/console</literal>,
-            <literal>/dev/null</literal> or a file. Examples of
-            detaching commands are <literal>sleep 365d &amp;</literal>,
-            where the shell forks a new process that can write to stdout
-            and <literal>xclip -i</literal>, where the
-            <literal>xclip</literal> command itself forks without
-            closing stdout.
-          </para>
-          <para>
-            Takes an optional parameter <literal>check_return</literal>
-            that defaults to <literal>True</literal>. Setting this
-            parameter to <literal>False</literal> will not check for the
-            return code and return -1 instead. This can be used for
-            commands that shut down the VM and would therefore break the
-            pipe that would be used for retrieving the return code.
-          </para>
-          <para>
-            A timeout for the command can be specified (in seconds)
-            using the optional <literal>timeout</literal> parameter,
-            e.g., <literal>execute(cmd, timeout=10)</literal> or
-            <literal>execute(cmd, timeout=None)</literal>. The default
-            is 900 seconds.
-          </para>
-        </listitem>
-      </varlistentry>
-      <varlistentry>
-        <term>
-          <literal>succeed</literal>
-        </term>
-        <listitem>
-          <para>
-            Execute a shell command, raising an exception if the exit
-            status is not zero, otherwise returning the standard output.
-            Similar to <literal>execute</literal>, except that the
-            timeout is <literal>None</literal> by default. See
-            <literal>execute</literal> for details on command execution.
-          </para>
         </listitem>
       </varlistentry>
       <varlistentry>
@@ -368,10 +353,7 @@ start_all()
         <listitem>
           <para>
             Repeat a shell command with 1-second intervals until it
-            succeeds. Has a default timeout of 900 seconds which can be
-            modified, e.g.
-            <literal>wait_until_succeeds(cmd, timeout=10)</literal>. See
-            <literal>execute</literal> for details on command execution.
+            succeeds.
           </para>
         </listitem>
       </varlistentry>
@@ -381,8 +363,8 @@ start_all()
         </term>
         <listitem>
           <para>
-            Like <literal>wait_until_succeeds</literal>, but repeating
-            the command until it fails.
+            Repeat a shell command with 1-second intervals until it
+            fails.
           </para>
         </listitem>
       </varlistentry>

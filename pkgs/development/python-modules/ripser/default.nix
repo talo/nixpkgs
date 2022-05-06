@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, fetchpatch
 , fetchPypi
 , pythonOlder
 , cython
@@ -8,7 +7,7 @@
 , scipy
 , scikit-learn
 , persim
-, pytestCheckHook
+, pytest
 }:
 
 buildPythonPackage rec {
@@ -21,11 +20,8 @@ buildPythonPackage rec {
     sha256 = "335112a0f94532ccbe686db7826ee8d0714b32f65891abf92c0a02f3cb0fc5fd";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/scikit-tda/ripser.py/commit/4baa248994cee9a65d710fac91809bad8ed4e5f1.patch";
-      sha256 = "sha256-J/nxMOGOUiBueojJrUlAaXwktHDploYG/XL8/siF2kY=";
-    })
+  checkInputs = [
+    pytest
   ];
 
   propagatedBuildInputs = [
@@ -36,15 +32,13 @@ buildPythonPackage rec {
     persim
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
-
-  preCheck = ''
+  checkPhase = ''
     # specifically needed for darwin
     export HOME=$(mktemp -d)
     mkdir -p $HOME/.matplotlib
     echo "backend: ps" > $HOME/.matplotlib/matplotlibrc
+
+    pytest
   '';
 
   meta = with lib; {

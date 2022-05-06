@@ -2,15 +2,13 @@
 , cohttp-lwt-unix, eliom
 , resource-pooling
 , ocamlnet
-, ocsigen-ppx-rpc
 }:
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-ocsigen-start";
-  version = "6.0.1";
+  version = "4.5.0";
 
   nativeBuildInputs = [ ocaml findlib eliom ];
-  buildInputs = [ ocsigen-ppx-rpc ];
   propagatedBuildInputs = [ pgocaml_ppx safepass ocsigen-toolkit yojson resource-pooling cohttp-lwt-unix ocamlnet ];
 
   strictDeps = true;
@@ -21,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "ocsigen";
     repo = "ocsigen-start";
     rev = version;
-    sha256 = "sha256:097bjaxvb1canilmqr8ay3ihig2msq7z8mi0g0rnbciikj1jsrym";
+    sha256 = "sha256:1n94r8rbkzxbgcz5w135n6f2cwpc91bdvf7yslcdq4cn713rncmq";
   };
 
   preInstall = ''

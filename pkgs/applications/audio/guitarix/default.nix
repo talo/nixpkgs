@@ -108,8 +108,6 @@ stdenv.mkDerivation rec {
     "--install-roboto-font"
   ] ++ optional optimizationSupport "--optimization";
 
-  NIX_CFLAGS_COMPILE = [ "-fpermissive" ];
-
   meta = with lib; {
     description = "A virtual guitar amplifier for Linux running with JACK";
     longDescription = ''

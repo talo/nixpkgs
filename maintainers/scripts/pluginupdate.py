@@ -87,8 +87,7 @@ def make_request(url: str, token=None) -> urllib.request.Request:
     return urllib.request.Request(url, headers=headers)
 
 
-# a dictionary of plugins and their new repositories
-Redirects = Dict['PluginDesc', 'Repo']
+Redirects = Dict['Repo', 'Repo']
 
 class Repo:
     def __init__(
@@ -97,8 +96,8 @@ class Repo:
         self.uri = uri
         '''Url to the repo'''
         self._branch = branch
-        # Redirect is the new Repo to use
-        self.redirect: Optional['Repo'] = None
+        # {old_uri: new_uri}
+        self.redirect: Redirects = {}
         self.token = "dummy_token"
 
     @property
@@ -208,7 +207,7 @@ class RepoGitHub(Repo):
             )
 
             new_repo = RepoGitHub(owner=new_owner, repo=new_name, branch=self.branch)
-            self.redirect = new_repo
+            self.redirect[self] = new_repo
 
 
     def prefetch(self, commit: str) -> str:
@@ -238,7 +237,7 @@ class RepoGitHub(Repo):
     }}'''
 
 
-@dataclass(frozen=True)
+@dataclass
 class PluginDesc:
     repo: Repo
     branch: str
@@ -311,16 +310,6 @@ def load_plugins_from_csv(config: FetchConfig, input_file: Path,) -> List[Plugin
 
     return plugins
 
-def run_nix_expr(expr):
-    with CleanEnvironment():
-        cmd = ["nix", "eval", "--extra-experimental-features",
-                "nix-command", "--impure", "--json", "--expr", expr]
-        log.debug("Running command %s", cmd)
-        out = subprocess.check_output(cmd)
-    data = json.loads(out)
-    return data
-
-
 class Editor:
     """The configuration of the update script."""
 
@@ -343,15 +332,9 @@ class Editor:
         self.deprecated = deprecated or root.joinpath("deprecated.json")
         self.cache_file = cache_file or f"{name}-plugin-cache.json"
 
-    def get_current_plugins(self) -> List[Plugin]:
+    def get_current_plugins(self):
         """To fill the cache"""
-        data = run_nix_expr(self.get_plugins)
-        plugins = []
-        for name, attr in data.items():
-            print("get_current_plugins: name %s" % name)
-            p = Plugin(name, attr["rev"], attr["submodules"], attr["sha256"])
-            plugins.append(p)
-        return plugins
+        return get_current_plugins(self)
 
     def load_plugin_spec(self, config: FetchConfig, plugin_file) -> List[PluginDesc]:
         '''CSV spec'''
@@ -465,10 +448,24 @@ class CleanEnvironment(object):
         self.empty_config.close()
 
 
+def get_current_plugins(editor: Editor) -> List[Plugin]:
+    with CleanEnvironment():
+        cmd = ["nix", "eval", "--extra-experimental-features", "nix-command", "--impure", "--json", "--expr", editor.get_plugins]
+        log.debug("Running command %s", cmd)
+        out = subprocess.check_output(cmd)
+    data = json.loads(out)
+    plugins = []
+    for name, attr in data.items():
+        print("get_current_plugins: name %s" % name)
+        p = Plugin(name, attr["rev"], attr["submodules"], attr["sha256"])
+        plugins.append(p)
+    return plugins
+
+
 def prefetch_plugin(
     p: PluginDesc,
     cache: "Optional[Cache]" = None,
-) -> Tuple[Plugin, Optional[Repo]]:
+) -> Tuple[Plugin, Redirects]:
     repo, branch, alias = p.repo, p.branch, p.alias
     name = alias or p.repo.name
     commit = None
@@ -482,7 +479,7 @@ def prefetch_plugin(
         return cached_plugin, repo.redirect
 
     has_submodules = repo.has_submodules()
-    log.debug(f"prefetch {name}")
+    print(f"prefetch {name}")
     sha256 = repo.prefetch(commit)
 
     return (
@@ -491,7 +488,7 @@ def prefetch_plugin(
     )
 
 
-def print_download_error(plugin: PluginDesc, ex: Exception):
+def print_download_error(plugin: str, ex: Exception):
     print(f"{plugin}: {ex}", file=sys.stderr)
     ex_traceback = ex.__traceback__
     tb_lines = [
@@ -501,21 +498,19 @@ def print_download_error(plugin: PluginDesc, ex: Exception):
     print("\n".join(tb_lines))
 
 def check_results(
-    results: List[Tuple[PluginDesc, Union[Exception, Plugin], Optional[Repo]]]
+    results: List[Tuple[PluginDesc, Union[Exception, Plugin], Redirects]]
 ) -> Tuple[List[Tuple[PluginDesc, Plugin]], Redirects]:
     ''' '''
-    failures: List[Tuple[PluginDesc, Exception]] = []
+    failures: List[Tuple[str, Exception]] = []
     plugins = []
-    redirects: Redirects = {}
+    # {old: new} plugindesc
+    redirects: Dict[Repo, Repo] = {}
     for (pdesc, result, redirect) in results:
         if isinstance(result, Exception):
-            failures.append((pdesc, result))
+            failures.append((pdesc.name, result))
         else:
-            new_pdesc = pdesc
-            if redirect is not None:
-                redirects.update({pdesc: redirect})
-                new_pdesc = PluginDesc(redirect, pdesc.branch, pdesc.alias)
-            plugins.append((new_pdesc, result))
+            plugins.append((pdesc, result))
+            redirects.update(redirect)
 
     print(f"{len(results) - len(failures)} plugins were checked", end="")
     if len(failures) == 0:
@@ -596,13 +591,13 @@ class Cache:
 
 def prefetch(
     pluginDesc: PluginDesc, cache: Cache
-) -> Tuple[PluginDesc, Union[Exception, Plugin], Optional[Repo]]:
+) -> Tuple[PluginDesc, Union[Exception, Plugin], dict]:
     try:
         plugin, redirect = prefetch_plugin(pluginDesc, cache)
         cache[plugin.commit] = plugin
         return (pluginDesc, plugin, redirect)
     except Exception as e:
-        return (pluginDesc, e, None)
+        return (pluginDesc, e, {})
 
 
 
@@ -611,7 +606,7 @@ def rewrite_input(
     input_file: Path,
     deprecated: Path,
     # old pluginDesc and the new
-    redirects: Redirects = {},
+    redirects: Dict[PluginDesc, PluginDesc] = {},
     append: List[PluginDesc] = [],
 ):
     plugins = load_plugins_from_csv(config, input_file,)
@@ -623,10 +618,9 @@ def rewrite_input(
         cur_date_iso = datetime.now().strftime("%Y-%m-%d")
         with open(deprecated, "r") as f:
             deprecations = json.load(f)
-        for pdesc, new_repo in redirects.items():
-            new_pdesc = PluginDesc(new_repo, pdesc.branch, pdesc.alias)
-            old_plugin, _ = prefetch_plugin(pdesc)
-            new_plugin, _ = prefetch_plugin(new_pdesc)
+        for old, new in redirects.items():
+            old_plugin, _ = prefetch_plugin(old)
+            new_plugin, _ = prefetch_plugin(new)
             if old_plugin.normalized_name != new_plugin.normalized_name:
                 deprecations[old_plugin.normalized_name] = {
                     "new": new_plugin.normalized_name,

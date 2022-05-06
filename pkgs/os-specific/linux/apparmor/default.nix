@@ -192,6 +192,7 @@ let
     nativeBuildInputs = [
       pkg-config
       libapparmor
+      gawk
       which
     ];
 

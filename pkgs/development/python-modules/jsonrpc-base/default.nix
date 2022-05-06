@@ -3,21 +3,17 @@
 , fetchFromGitHub
 , pytest-asyncio
 , pytestCheckHook
-, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "jsonrpc-base";
   version = "2.1.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "emlove";
     repo = pname;
     rev = version;
-    hash = "sha256-fliyJmVmG1DgoePE92LKm/wknlgXgYq2mOzZMFAdqLE=";
+    sha256 = "1cd83m831ngck2v8m08pb2g29z4vr9iggi73l7h506v6clkb4n3y";
   };
 
   checkInputs = [
@@ -27,10 +23,6 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     "tests.py"
-  ];
-
-  pythonImportsCheck = [
-    "jsonrpc_base"
   ];
 
   meta = with lib; {

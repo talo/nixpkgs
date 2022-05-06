@@ -1,17 +1,26 @@
-{ buildDunePackage, alcotest, atd, atdgen-codec-runtime, atdgen-runtime, biniou, re, yojson }:
+{ buildDunePackage, atd, biniou, yojson }:
+
+let runtime =
+  buildDunePackage {
+    pname = "atdgen-runtime";
+    inherit (atd) version useDune2 src;
+
+    propagatedBuildInputs = [ biniou yojson ];
+
+    meta = { inherit (atd.meta) license; };
+  }
+; in
 
 buildDunePackage {
   pname = "atdgen";
-  inherit (atdgen-codec-runtime) version src;
+  inherit (atd) version useDune2 src;
 
-  buildInputs = [ atd re ];
+  buildInputs = [ atd ];
 
-  propagatedBuildInputs = [ atdgen-runtime ];
+  propagatedBuildInputs = [ runtime ];
 
-  doCheck = true;
-  checkInputs = [ alcotest atdgen-codec-runtime ];
-
-  meta = atd.meta // {
+  meta = {
     description = "Generates efficient JSON serializers, deserializers and validators";
+    inherit (atd.meta) license;
   };
 }

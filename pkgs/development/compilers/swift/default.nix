@@ -10,6 +10,7 @@
 , pkg-config
 , sqlite
 , swig
+, bash
 , libxml2
 , clang_10
 , python3
@@ -28,6 +29,7 @@
 , libgit2
 , fetchFromGitHub
 , fetchpatch
+, findutils
 , makeWrapper
 , gnumake
 , file
@@ -186,8 +188,12 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     autoconf
     automake
+    bash
     cmake
+    coreutils
+    findutils
     git
+    gnumake
     libtool
     makeWrapper
     ninja

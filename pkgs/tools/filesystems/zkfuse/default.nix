@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , autoreconfHook
+, gnused
 , boost
 , fuse
 , log4cxx
@@ -14,7 +15,7 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "apache-${zookeeper.pname}-${version}/zookeeper-contrib/zookeeper-contrib-zkfuse";
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook gnused ];
   buildInputs = [ zookeeper_mt log4cxx boost fuse ];
 
   postPatch = ''

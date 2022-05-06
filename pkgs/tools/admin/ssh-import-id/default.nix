@@ -4,7 +4,6 @@
 , requests
 , distro
 , makeWrapper
-, installShellFiles
 , extraHandlers ? []
 }:
 
@@ -25,12 +24,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     makeWrapper
-    installShellFiles
   ];
-
-  postInstall = ''
-    installManPage $src/usr/share/man/man1/ssh-import-id.1
-  '';
 
   # handlers require main bin, main bin requires handlers
   makeWrapperArgs = [ "--prefix" ":" "$out/bin" ];
@@ -38,7 +32,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Retrieves an SSH public key and installs it locally";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ mkg20001 viraptor ];
+    maintainers = with maintainers; [ mkg20001 ];
     platforms = platforms.unix;
   };
 }

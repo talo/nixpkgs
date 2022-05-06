@@ -9,71 +9,7 @@ let
     # to build it. This is a bit confusing for cross compilation.
     inherit (stdenv) hostPlatform;
   };
-
-  makeOverlayable = mkDerivationSimple:
-    fnOrAttrs:
-      if builtins.isFunction fnOrAttrs
-      then makeDerivationExtensible mkDerivationSimple fnOrAttrs
-      else makeDerivationExtensibleConst mkDerivationSimple fnOrAttrs;
-
-  # Based off lib.makeExtensible, with modifications:
-  makeDerivationExtensible = mkDerivationSimple: rattrs:
-    let
-      # NOTE: The following is a hint that will be printed by the Nix cli when
-      # encountering an infinite recursion. It must not be formatted into
-      # separate lines, because Nix would only show the last line of the comment.
-
-      # An infinite recursion here can be caused by having the attribute names of expression `e` in `.overrideAttrs(finalAttrs: previousAttrs: e)` depend on `finalAttrs`. Only the attribute values of `e` can depend on `finalAttrs`.
-      args = rattrs (args // { inherit finalPackage; });
-      #              ^^^^
-
-      finalPackage =
-        mkDerivationSimple
-          (f0:
-            let
-              f = self: super:
-                # Convert f0 to an overlay. Legacy is:
-                #   overrideAttrs (super: {})
-                # We want to introduce self. We follow the convention of overlays:
-                #   overrideAttrs (self: super: {})
-                # Which means the first parameter can be either self or super.
-                # This is surprising, but far better than the confusion that would
-                # arise from flipping an overlay's parameters in some cases.
-                let x = f0 super;
-                in
-                  if builtins.isFunction x
-                  then
-                    # Can't reuse `x`, because `self` comes first.
-                    # Looks inefficient, but `f0 super` was a cheap thunk.
-                    f0 self super
-                  else x;
-            in
-              makeDerivationExtensible mkDerivationSimple
-                (self: let super = rattrs self; in super // f self super))
-          args;
-    in finalPackage;
-
-  # makeDerivationExtensibleConst == makeDerivationExtensible (_: attrs),
-  # but pre-evaluated for a slight improvement in performance.
-  makeDerivationExtensibleConst = mkDerivationSimple: attrs:
-    mkDerivationSimple
-      (f0:
-        let
-          f = self: super:
-            let x = f0 super;
-            in
-              if builtins.isFunction x
-              then
-                f0 self super
-              else x;
-        in
-          makeDerivationExtensible mkDerivationSimple (self: attrs // f self attrs))
-      attrs;
-
 in
-
-makeOverlayable (overrideAttrs:
-
 
 # `mkDerivation` wraps the builtin `derivation` function to
 # produce derivations that use this stdenv and its shell.
@@ -133,8 +69,7 @@ makeOverlayable (overrideAttrs:
 , doInstallCheck ? config.doCheckByDefault or false
 
 , # TODO(@Ericson2314): Make always true and remove
-  strictDeps ? if config.strictDepsByDefault then true else stdenv.hostPlatform != stdenv.buildPlatform
-
+  strictDeps ? stdenv.hostPlatform != stdenv.buildPlatform
 , meta ? {}
 , passthru ? {}
 , pos ? # position used in error messages and for meta.position
@@ -158,7 +93,7 @@ makeOverlayable (overrideAttrs:
 
 , __contentAddressed ?
   (! attrs ? outputHash) # Fixed-output drvs can't be content addressed too
-  && config.contentAddressedByDefault
+  && (config.contentAddressedByDefault or false)
 
 , ... } @ attrs:
 
@@ -435,7 +370,7 @@ else let
     } // {
       # Expose the result of the checks for everyone to see.
       inherit (validity) unfree broken unsupported insecure;
-      available = validity.valid != "no"
+      available = validity.valid
                && (if config.checkMetaRecursively or false
                    then lib.all (d: d.meta.available or true) references
                    else true);
@@ -446,6 +381,8 @@ in
 lib.extendDerivation
   validity.handled
   ({
+     overrideAttrs = f: stdenv.mkDerivation (attrs // (f attrs));
+
      # A derivation that always builds successfully and whose runtime
      # dependencies are the original derivations build time dependencies
      # This allows easy building and distributing of all derivations
@@ -471,12 +408,10 @@ lib.extendDerivation
        args = [ "-c" "export > $out" ];
      });
 
-     inherit meta passthru overrideAttrs;
+     inherit meta passthru;
    } //
    # Pass through extra attributes that are not inputs, but
    # should be made available to Nix expressions using the
    # derivation (e.g., in assertions).
    passthru)
   (derivation derivationArg)
-
-)

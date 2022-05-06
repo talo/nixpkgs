@@ -4,7 +4,7 @@
 , fetchFromGitHub
 , sqlite
 , isPyPy
-, python
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -25,12 +25,36 @@ buildPythonPackage rec {
     sqlite
   ];
 
-  # Project uses custom test setup to exclude some tests by default, so using pytest
-  # requires more maintenance
-  # https://github.com/rogerbinns/apsw/issues/335
-  checkPhase = ''
-    ${python.interpreter} setup.py test
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  # Works around the following error by dropping the call to that function
+  #     def print_version_info(write=write):
+  # >       write("                Python " + sys.executable + " " + str(sys.version_info) + "\n")
+  # E       TypeError: 'module' object is not callable
+  preCheck = ''
+    sed -i '/print_version_info(write)/d' tests.py
   '';
+
+  pytestFlagsArray = [
+    "tests.py"
+  ];
+
+  disabledTests = [
+    "testCursor"
+    "testdb"
+    "testLargeObjects"
+    "testLoadExtension"
+    "testShell"
+    "testVFS"
+    "testVFSWithWAL"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # This is https://github.com/rogerbinns/apsw/issues/277 but
+    # because we use pytestCheckHook we need to blacklist the test
+    # manually
+    "testzzForkChecker"
+  ];
 
   pythonImportsCheck = [
     "apsw"
@@ -40,6 +64,6 @@ buildPythonPackage rec {
     description = "A Python wrapper for the SQLite embedded relational database engine";
     homepage = "https://github.com/rogerbinns/apsw";
     license = licenses.zlib;
-    maintainers = with maintainers; [ gador ];
+    maintainers = with maintainers; [ ];
   };
 }

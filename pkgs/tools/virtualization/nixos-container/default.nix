@@ -1,11 +1,4 @@
-{ substituteAll
-, perl
-, shadow
-, util-linux
-, configurationDirectory ? "/etc/nixos-containers"
-, stateDirectory ? "/var/lib/nixos-containers"
-, nixosTests
-}:
+{ substituteAll, perl, shadow, util-linux }:
 
 substituteAll {
     name = "nixos-container";
@@ -15,19 +8,6 @@ substituteAll {
     perl = perl.withPackages (p: [ p.FileSlurp ]);
     su = "${shadow.su}/bin/su";
     utillinux = util-linux;
-
-    inherit configurationDirectory stateDirectory;
-
-    passthru = {
-      tests = {
-        inherit (nixosTests)
-          containers-imperative
-          containers-ip
-          containers-tmpfs
-          containers-ephemeral
-          ;
-      };
-    };
 
     postInstall = ''
       t=$out/share/bash-completion/completions

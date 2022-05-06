@@ -1,62 +1,34 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, cudatoolkit
-, libdrm
-, ncurses
-, addOpenGLRunpath
-, amd ? true
-, nvidia ? true
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, cudatoolkit, ncurses, addOpenGLRunpath }:
 
-let
-  pname-suffix = if amd && nvidia then "" else if amd then "-amd" else "-nvidia";
-  nvidia-postFixup = "addOpenGLRunpath $out/bin/nvtop";
-  libPath = lib.makeLibraryPath [ libdrm ncurses ];
-  amd-postFixup = ''
-    patchelf \
-      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "${libPath}" \
-      $out/bin/nvtop
-  '';
-in
 stdenv.mkDerivation rec {
-  pname = "nvtop" + pname-suffix;
-  version = "2.0.1";
+  pname = "nvtop";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "Syllo";
     repo = "nvtop";
     rev = version;
-    sha256 = "sha256-4Alc5pBXb38PUhTRhdKZMiW+P3daDB0q3jiVL8qqEe4=";
+    sha256 = "sha256-B/SRTOMp3VYShjSGxnF1ll58ijddJG7w/7nPK1fMltk=";
   };
 
-  cmakeFlags = with lib; [
+  cmakeFlags = [
+    "-DNVML_INCLUDE_DIRS=${cudatoolkit}/include"
+    "-DNVML_LIBRARIES=${cudatoolkit}/targets/x86_64-linux/lib/stubs/libnvidia-ml.so"
     "-DCMAKE_BUILD_TYPE=Release"
-  ] ++ optional nvidia "-DNVML_INCLUDE_DIRS=${cudatoolkit}/include"
-  ++ optional nvidia "-DNVML_LIBRARIES=${cudatoolkit}/targets/x86_64-linux/lib/stubs/libnvidia-ml.so"
-  ++ optional (!amd) "-DAMDGPU_SUPPORT=OFF"
-  ++ optional (!nvidia) "-DNVIDIA_SUPPORT=OFF"
-  ++ optional amd "-DLibdrm_INCLUDE_DIRS=${libdrm}/lib/stubs/libdrm.so.2"
-  ;
-  nativeBuildInputs = [ cmake] ++ lib.optional nvidia addOpenGLRunpath;
-  buildInputs = with lib; [ ncurses ]
-    ++ optional nvidia cudatoolkit
-    ++ optional amd libdrm
-  ;
+  ];
 
-  # ordering of fixups is important
-  postFixup = (lib.optionalString amd amd-postFixup) + (lib.optionalString nvidia nvidia-postFixup);
+  nativeBuildInputs = [ cmake addOpenGLRunpath ];
+  buildInputs = [ ncurses cudatoolkit ];
+
+  postFixup = ''
+    addOpenGLRunpath $out/bin/nvtop
+  '';
 
   meta = with lib; {
-    description = "A (h)top like task monitor for AMD and NVIDIA GPUs";
-    longDescription = ''
-      Nvtop stands for Neat Videocard TOP, a (h)top like task monitor for AMD and NVIDIA GPUs. It can handle multiple GPUs and print information about them in a htop familiar way.
-  '';
+    description = "A (h)top like task monitor for NVIDIA GPUs";
     homepage = "https://github.com/Syllo/nvtop";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ willibutz gbtb ];
+    maintainers = with maintainers; [ willibutz ];
   };
 }

@@ -17,9 +17,6 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ makeWrapper ];
 
   postInstall = ''
-    # not needed at runtime
-    rm -r runtime/grammars/sources
-
     mkdir -p $out/lib
     cp -r runtime $out/lib
   '';

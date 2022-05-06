@@ -66,19 +66,19 @@ in
         ]
       );
 
-      boot.initrd.extraUtilsCommands = mkIf (inInitrd && !config.boot.initrd.systemd.enable)
+      boot.initrd.extraUtilsCommands = mkIf inInitrd
       ''
         copy_bin_and_libs ${pkgs.btrfs-progs}/bin/btrfs
         ln -sv btrfs $out/bin/btrfsck
         ln -sv btrfsck $out/bin/fsck.btrfs
       '';
 
-      boot.initrd.extraUtilsCommandsTest = mkIf (inInitrd && !config.boot.initrd.systemd.enable)
+      boot.initrd.extraUtilsCommandsTest = mkIf inInitrd
       ''
         $out/bin/btrfs --version
       '';
 
-      boot.initrd.postDeviceCommands = mkIf (inInitrd && !config.boot.initrd.systemd.enable)
+      boot.initrd.postDeviceCommands = mkIf inInitrd
       ''
         btrfs device scan
       '';

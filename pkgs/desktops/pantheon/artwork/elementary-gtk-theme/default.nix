@@ -1,37 +1,30 @@
 { lib
-, stdenvNoCC
+, stdenv
 , fetchFromGitHub
 , nix-update-script
-, gettext
 , meson
 , ninja
-, python3
+, gettext
 , sassc
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "elementary-gtk-theme";
-  version = "7.0.0";
+  version = "6.1.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "stylesheet";
     rev = version;
-    sha256 = "sha256-ZnQ54ktH0/ZyFH6c180YzbkK/TyIDziiwAXi/zqHpe4=";
+    sha256 = "sha256-gciBn5MQ5Cu+dROL5kCt2GCbNA7W4HOWXyjMBd4OP+8=";
   };
 
   nativeBuildInputs = [
     gettext
     meson
     ninja
-    python3
     sassc
   ];
-
-  postPatch = ''
-    chmod +x meson/install-to-dir.py
-    patchShebangs meson/install-to-dir.py
-  '';
 
   passthru = {
     updateScript = nix-update-script {

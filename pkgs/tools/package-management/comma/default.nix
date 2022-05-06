@@ -6,7 +6,7 @@
 , nix
 , nix-index
 , rustPlatform
-, testers
+, testVersion
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   passthru.tests = {
-    version = testers.testVersion { package = comma; };
+    version = testVersion { package = comma; };
   };
 
   meta = with lib; {

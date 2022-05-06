@@ -90,7 +90,7 @@ let
       allowedRequisites = allowedRequisites
         ++ defaultNativeBuildInputs ++ defaultBuildInputs;
     }
-    // lib.optionalAttrs config.contentAddressedByDefault {
+    // lib.optionalAttrs (config.contentAddressedByDefault or false) {
       __contentAddressed = true;
       outputHashAlgo = "sha256";
       outputHashMode = "recursive";

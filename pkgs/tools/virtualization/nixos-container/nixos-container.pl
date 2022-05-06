@@ -12,9 +12,6 @@ use Time::HiRes;
 my $nsenter = "@utillinux@/bin/nsenter";
 my $su = "@su@";
 
-my $configurationDirectory = "@configurationDirectory@";
-my $stateDirectory = "@stateDirectory@";
-
 # Ensure a consistent umask.
 umask 0022;
 
@@ -135,17 +132,11 @@ if (defined $flake && $flake =~ /^(.*)#([^#"]+)$/) {
 
 # Execute the selected action.
 
-mkpath("$configurationDirectory", 0, 0755);
-mkpath("$stateDirectory", 0, 0700);
-
+mkpath("/etc/containers", 0, 0755);
+mkpath("/var/lib/containers", 0, 0700);
 
 if ($action eq "list") {
-    foreach my $confFile (glob "$configurationDirectory/*.conf") {
-        # Filter libpod configuration files
-        # From 22.05 and onwards this is not an issue any more as directories dont clash
-        if($confFile eq "/etc/containers/libpod.conf" || $confFile eq "/etc/containers/containers.conf" || $confFile eq "/etc/containers/registries.conf") {
-            next
-        }
+    foreach my $confFile (glob "/etc/containers/*.conf") {
         $confFile =~ /\/([^\/]+).conf$/ or next;
         print "$1\n";
     }
@@ -207,15 +198,15 @@ if ($action eq "create") {
     open(my $lock, '>>', $lockFN) or die "$0: opening $lockFN: $!";
     flock($lock, LOCK_EX) or die "$0: could not lock $lockFN: $!";
 
-    my $confFile = "$configurationDirectory/$containerName.conf";
-    my $root = "$stateDirectory/$containerName";
+    my $confFile = "/etc/containers/$containerName.conf";
+    my $root = "/var/lib/containers/$containerName";
 
     # Maybe generate a unique name.
     if ($ensureUniqueName) {
         my $base = $containerName;
         for (my $nr = 0; ; $nr++) {
-            $confFile = "$configurationDirectory/$containerName.conf";
-            $root = "$stateDirectory/$containerName";
+            $confFile = "/etc/containers/$containerName.conf";
+            $root = "/var/lib/containers/$containerName";
             last unless -e $confFile || -e $root;
             $containerName = "$base-$nr";
         }
@@ -229,12 +220,7 @@ if ($action eq "create") {
 
     # Get an unused IP address.
     my %usedIPs;
-    foreach my $confFile2 (glob "$configurationDirectory/*.conf") {
-        # Filter libpod configuration files
-        # From 22.05 and onwards this is not an issue any more as directories dont clash
-        if($confFile2 eq "/etc/containers/libpod.conf" || $confFile2 eq "/etc/containers/containers.conf" || $confFile2 eq "/etc/containers/registries.conf") {
-            next
-        }
+    foreach my $confFile2 (glob "/etc/containers/*.conf") {
         my $s = read_file($confFile2) or die;
         $usedIPs{$1} = 1 if $s =~ /^HOST_ADDRESS=([0-9\.]+)$/m;
         $usedIPs{$1} = 1 if $s =~ /^LOCAL_ADDRESS=([0-9\.]+)$/m;
@@ -306,10 +292,10 @@ if ($action eq "create") {
     exit 0;
 }
 
-my $root = "$stateDirectory/$containerName";
+my $root = "/var/lib/containers/$containerName";
 my $profileDir = "/nix/var/nix/profiles/per-container/$containerName";
 my $gcRootsDir = "/nix/var/nix/gcroots/per-container/$containerName";
-my $confFile = "$configurationDirectory/$containerName.conf";
+my $confFile = "/etc/containers/$containerName.conf";
 if (!-e $confFile) {
     if ($action eq "destroy") {
         exit 0;

@@ -1,37 +1,25 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, http-message-signatures
-, http-sfv
+, cryptography
 , requests
 , pytestCheckHook
-, pythonOlder
-, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "requests-http-signature";
-  version = "0.7.1";
+  version = "0.2.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pyauth";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-sW2vYqT/nY27DvEKHdptc3dUpuqKmD7PLMs+Xp+cpeU=";
+    hash = "sha256-B45P/loXcRKOChSDeHOnlz+67mtmTeAMYlo21TOmV8s=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
-
   propagatedBuildInputs = [
-    http-message-signatures
-    http-sfv
+    cryptography
     requests
   ];
 

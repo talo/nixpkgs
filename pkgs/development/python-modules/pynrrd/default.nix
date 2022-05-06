@@ -2,30 +2,20 @@
 , buildPythonPackage
 , fetchFromGitHub
 , numpy
-, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pynrrd";
-  version = "0.4.3";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "mhe";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-4UM2NAKWfsjxAoLQCFSPVKG5GukxqppywqvLM0V/dIs=";
+    rev = "v${version}";
+    sha256 = "1wn3ara3i19fi1y9a5j4imyczpa6dkkzd5djggxg4kkl1ff9awrj";
   };
 
-  propagatedBuildInputs = [
-    numpy
-  ];
-
-  pythonImportsCheck = [
-    "nrrd"
-  ];
+  propagatedBuildInputs = [ numpy ];
 
   meta = with lib; {
     homepage = "https://github.com/mhe/pynrrd";

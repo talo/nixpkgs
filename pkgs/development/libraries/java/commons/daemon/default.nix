@@ -1,12 +1,12 @@
 { lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  version = "1.3.0";
+  version = "1.2.4";
   pname = "commons-daemon";
 
   src = fetchurl {
     url    = "mirror://apache/commons/daemon/binaries/commons-daemon-${version}-bin.tar.gz";
-    sha256 = "sha256-Fihsar8HR2adN2f9deo7bk8tRgeiD6BljVZ/mfkLUUA=";
+    sha256 = "0bsy4xn3gncgrxj3vkpplvyhx06c1470kycj0j5gwq46ylgady9s";
   };
 
   installPhase = ''

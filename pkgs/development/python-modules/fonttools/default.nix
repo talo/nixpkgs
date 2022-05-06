@@ -13,12 +13,11 @@
 , sphinx
 , pytestCheckHook
 , glibcLocales
-, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "fonttools";
-  version = "4.33.3";
+  version = "4.30.0";
 
   disabled = pythonOlder "3.7";
 
@@ -26,10 +25,8 @@ buildPythonPackage rec {
     owner  = pname;
     repo   = pname;
     rev    = version;
-    sha256 = "MUIZGnYwlfTat9655AOYgK5r6AvHj/xXghUvOZR8HIM=";
+    sha256 = "1y9f071bdl66rsx42j16j5v53h85xra5qlg860rz3m054s2rmin9";
   };
-
-  nativeBuildInputs = [ setuptools-scm ];
 
   # all dependencies are optional, but
   # we run the checks with them
@@ -54,8 +51,6 @@ buildPythonPackage rec {
     unicodedata2
   ];
 
-  pythonImportsCheck = [ "fontTools" ];
-
   preCheck = ''
     # tests want to execute the "fonttools" executable from $PATH
     export PATH="$out/bin:$PATH"
@@ -76,6 +71,7 @@ buildPythonPackage rec {
     "Tests/pens"
     "Tests/ufoLib"
   ];
+
 
   meta = with lib; {
     homepage = "https://github.com/fonttools/fonttools";

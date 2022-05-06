@@ -38,7 +38,7 @@ in
         default = if pkgs.stdenv.hostPlatform.libc == "glibc"
           then pkgs.stdenv.cc.libc.bin
           else pkgs.glibc.bin;
-        defaultText = lib.literalExpression ''
+        defaultText = literalExample ''
           if pkgs.stdenv.hostPlatform.libc == "glibc"
             then pkgs.stdenv.cc.libc.bin
             else pkgs.glibc.bin;
