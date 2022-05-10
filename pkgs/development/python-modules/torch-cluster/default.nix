@@ -15,7 +15,7 @@ in buildPythonPackage {
   doCheck = false;
   enableParallelBuilding = true;
   preConfigure = ''
-    export TORCH_CUDA_ARCH_LIST="8.6 8.6+PTX"
+    export TORCH_CUDA_ARCH_LIST="8.0 8.0+PTX 8.6 8.6+PTX"
     export CPATH=${cudatoolkit}/include
     export LD_LIBRARY_PATH=$${cudatoolkit}/lib
     export CUDA_HOME=${cudatoolkit}

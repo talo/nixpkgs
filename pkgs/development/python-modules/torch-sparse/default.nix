@@ -10,7 +10,7 @@ python.pkgs.buildPythonPackage rec {
     sha256 = "b4896822559f9b47d8b0186d74c94b7449f91db155a57d617fbeae9b722fa1f3";
   };
   preConfigure = ''
-    export TORCH_CUDA_ARCH_LIST="8.6 8.6+PTX"
+    export TORCH_CUDA_ARCH_LIST="8.0 8.0+PTX 8.6 8.6+PTX"
     export CPATH=${cudatoolkit_11}/bin
     export CUDA_HOME=${cudatoolkit_11}
     export FORCE_CUDA="1"

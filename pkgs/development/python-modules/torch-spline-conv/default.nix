@@ -10,7 +10,7 @@ buildPythonPackage {
     sha256 = "0f5lk8bcz1pr3dd3sqqsq52gq8p0acardhi8lxim4k6b1s76akrn";
   };
   preConfigure = ''
-    export TORCH_CUDA_ARCH_LIST="8.6 8.6+PTX"
+    export TORCH_CUDA_ARCH_LIST="8.0 8.0+PTX 8.6 8.6+PTX"
     export CPATH=${cudatoolkit_11}/include
     export LD_LIBRARY_PATH=$${cudatoolkit_11}/lib
     export CUDA_HOME=${cudatoolkit_11}

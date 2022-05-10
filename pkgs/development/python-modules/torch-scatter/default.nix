@@ -5,7 +5,7 @@ buildPythonPackage {
   pname = "torch-scatter";
   version = "2.0.9";
   preConfigure = ''
-    export TORCH_CUDA_ARCH_LIST="8.6 8.6+PTX"
+    export TORCH_CUDA_ARCH_LIST="8.0 8.0+PTX 8.6 8.6+PTX"
     export CPATH=${cudatoolkit_11}/bin
     export CUDA_HOME=${cudatoolkit_11}
     export FORCE_CUDA="1"
