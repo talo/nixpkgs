@@ -26,9 +26,7 @@ in buildPythonPackage rec {
   PYARROW_WITH_S3 = zero_or_one _arrow-cpp.enableS3;
   PYARROW_WITH_PARQUET = zero_or_one true;
   PYARROW_WITH_HDFS = zero_or_one true;
-  PYARROW_WITH_PARQUET = zero_or_one true;
   PYARROW_WITH_PLASMA = zero_or_one (!stdenv.isDarwin);
-  PYARROW_WITH_S3 = zero_or_one _arrow-cpp.enableS3;
 
   PYARROW_CMAKE_OPTIONS = [ "-DCMAKE_INSTALL_RPATH=${ARROW_HOME}/lib" ];
 
