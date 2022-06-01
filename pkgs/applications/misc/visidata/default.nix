@@ -1,7 +1,7 @@
 { stdenv, lib, buildPythonApplication, fetchFromGitHub, python-dateutil, pandas
-, requests, lxml, openpyxl, xlrd, h5py, odfpy, psycopg2, pyshp, fonttools
-, pyyaml, pdfminer, vobject, tabulate, wcwidth, zstandard, setuptools, git
-, fastparquet, withPcap ? true, dpkt, dnslib }:
+, requests, lxml, openpyxl, xlrd, h5py, odfpy, psycopg2, pyshp, fastparquet
+, fonttools, pyyaml, pdfminer-six, vobject, tabulate, wcwidth, zstandard
+, setuptools, git, withPcap ? true, dpkt, dnslib }:
 buildPythonApplication rec {
   pname = "visidata";
   version = "2.8";
@@ -35,7 +35,7 @@ buildPythonApplication rec {
     pyyaml
     #namestand
     #datapackage
-    pdfminer
+    pdfminer-six
     #tabula
     vobject
     tabulate
