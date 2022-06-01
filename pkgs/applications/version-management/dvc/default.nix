@@ -57,7 +57,7 @@ python3.pkgs.buildPythonApplication rec {
       typing-extensions
       voluptuous
       zc_lockfile
-    ] ++ lib.optional enableGoogle [ google-cloud-storage ]
+    ] ++ lib.optional enableGoogle [ google-cloud-storage gcsfs ]
     ++ lib.optional enableAWS [ boto3 ]
     ++ lib.optional enableAzure [ azure-storage-blob ]
     ++ lib.optional enableSSH [ paramiko ]
