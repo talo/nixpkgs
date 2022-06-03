@@ -1,6 +1,7 @@
-{ buildPythonPackage, fetchurl, cudatoolkit_11, pytest-runner, pytorch-bin
+{ buildPythonPackage, fetchurl, cudaPackages_11_5, pytest-runner, pytorch-bin
 , which, ninja }:
 
+with cudaPackages_11_5;
 buildPythonPackage {
   pname = "torch-spline-conv";
   version = "1.2.1";
@@ -11,16 +12,16 @@ buildPythonPackage {
   };
   preConfigure = ''
     export TORCH_CUDA_ARCH_LIST="8.0 8.0+PTX 8.6 8.6+PTX"
-    export CPATH=${cudatoolkit_11}/include
-    export LD_LIBRARY_PATH=$${cudatoolkit_11}/lib
-    export CUDA_HOME=${cudatoolkit_11}
+    export CPATH=${cudatoolkit}/include
+    export LD_LIBRARY_PATH=$''${cudatoolkit_11_5}/lib
+    export CUDA_HOME=${cudatoolkit}
     export FORCE_CUDA="1"
     export MAX_JOBS=$NIX_BUILD_CORES
   '';
   format = "setuptools";
   doCheck = false;
   enableParallelBuilding = true;
-  buildInputs = [ cudatoolkit_11 ];
+  buildInputs = [ cudatoolkit ];
   #cudatoolkit_11_joined ];
   checkInputs = [ ];
   nativeBuildInputs = [ pytest-runner which ninja ];
