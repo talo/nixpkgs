@@ -1,7 +1,7 @@
-{ buildPythonPackage, fetchurl, cudatoolkit_11, which, pytorch-bin
+{ buildPythonPackage, fetchurl, cudaPackages_11_5, which, pytorch-bin
 , pytest-runner, ninja }:
 
-let cudatoolkit = cudatoolkit_11;
+let cudatoolkit = cudaPackages_11_5.cudatoolkit;
 in buildPythonPackage {
   pname = "torch-cluster";
   version = "1.5.9";
@@ -16,8 +16,6 @@ in buildPythonPackage {
   enableParallelBuilding = true;
   preConfigure = ''
     export TORCH_CUDA_ARCH_LIST="8.0 8.0+PTX 8.6 8.6+PTX"
-    export CPATH=${cudatoolkit}/include
-    export LD_LIBRARY_PATH=$${cudatoolkit}/lib
     export CUDA_HOME=${cudatoolkit}
     export FORCE_CUDA="1"
     export MAX_JOBS=$NIX_BUILD_CORES
