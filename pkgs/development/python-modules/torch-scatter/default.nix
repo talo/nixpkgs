@@ -1,7 +1,7 @@
-{ buildPythonPackage, cudaPackages_11_5, fetchurl, torch-spline-conv, which
+{ buildPythonPackage, cudaPackages_11_3, fetchurl, torch-spline-conv, which
 , pytest-runner, pytorch-bin, ninja }:
 
-with cudaPackages_11_5;
+with cudaPackages_11_3;
 buildPythonPackage {
   pname = "torch-scatter";
   version = "2.0.9";
@@ -13,10 +13,13 @@ buildPythonPackage {
   '';
   src = fetchurl {
     url =
-      "https://files.pythonhosted.org/packages/1b/a0/6e44e887eb7fff78a9642035fe9662fc22c850a377369a52f308dd553104/torch_scatter-2.0.9.tar.gz";
-    sha256 = "1wd7fz291d1mp5rx6z0ay31bj29bvhv6n58xlzqasfs7chfm3x88";
+      "https://data.pyg.org/whl/torch-1.11.0%2Bcu115/torch_scatter-2.0.9-cp39-cp39-linux_x86_64.whl";
+    sha256 = "sha256-RrJ67McUpKGa07Xqhd1c0/1WZh7SD9aUapfq6Ec8tss=";
+    # url =
+    #   "https://files.pythonhosted.org/packages/1b/a0/6e44e887eb7fff78a9642035fe9662fc22c850a377369a52f308dd553104/torch_scatter-2.0.9.tar.gz";
+    # sha256 = "1wd7fz291d1mp5rx6z0ay31bj29bvhv6n58xlzqasfs7chfm3x88";
   };
-  format = "setuptools";
+  format = "wheel";
   doCheck = false;
 
   enableParallelBuilding = true;
@@ -26,7 +29,7 @@ buildPythonPackage {
 
     torch-spline-conv
   ];
-  nativeBuildInputs = [ which cudatoolkit ninja ];
+  nativeBuildInputs = [ which cudatoolkit ];
   checkInputs = [ ];
   #     buildHooks = "
   # LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${stdenv.cc.cc.lib}/lib/
