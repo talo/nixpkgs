@@ -1,10 +1,8 @@
-{ buildPythonPackage, fetchurl, cudaPackages_11_3, which, pytorch-bin
-, pytest-runner, ninja }:
+{ buildPythonPackage, fetchurl, which, pytest-runner, ninja }:
 
-let cudatoolkit = cudaPackages_11_3.cudatoolkit;
-in buildPythonPackage {
+buildPythonPackage {
   pname = "torch-cluster";
-  version = "1.5.9";
+  version = "1.6.0";
   src = fetchurl {
     url =
       "https://data.pyg.org/whl/torch-1.11.0%2Bcu115/torch_cluster-1.6.0-cp39-cp39-linux_x86_64.whl";
@@ -17,14 +15,8 @@ in buildPythonPackage {
   format = "wheel";
   doCheck = false;
   enableParallelBuilding = true;
-  preConfigure = ''
-    export TORCH_CUDA_ARCH_LIST="8.0 8.0+PTX 8.6 8.6+PTX"
-    export CUDA_HOME=${cudatoolkit}
-    export FORCE_CUDA="1"
-    export MAX_JOBS=$NIX_BUILD_CORES
-  '';
-  buildInputs = [ cudatoolkit pytorch-bin ];
+  buildInputs = [ ];
   checkInputs = [ ];
-  nativeBuildInputs = [ which pytorch-bin ];
-  propagatedBuildInputs = [ pytest-runner pytorch-bin ];
+  nativeBuildInputs = [ which ];
+  propagatedBuildInputs = [ pytest-runner ];
 }

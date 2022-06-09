@@ -1,7 +1,5 @@
-{ python, cudaPackages_11_3, which, fetchurl, scipy, torch-spline-conv
-, pytorch-bin, pytest-runner, ninja }:
+{ python, which, fetchurl, scipy, torch-spline-conv, pytest-runner, ninja }:
 
-with cudaPackages_11_3;
 python.pkgs.buildPythonPackage rec {
   pname = "torch-sparse";
   version = "0.6.13";
@@ -19,17 +17,8 @@ python.pkgs.buildPythonPackage rec {
   #   "CUDA_HOME=${cudatoolkit}"
   #   #"PREFIX=$(out)"
   # ];
-  preConfigure = ''
-    export TORCH_CUDA_ARCH_LIST="8.0 8.0+PTX 8.6 8.6+PTX"
-    export CUDA_HOME=${cudatoolkit}
-    export FORCE_CUDA="1"
-    #export MAX_JOBS=$NIX_BUILD_CORES
-  '';
   format = "wheel";
   doCheck = false;
   enableParallelBuilding = true;
-  buildInputs = [ which pytest-runner cudatoolkit pytorch-bin ];
-  checkInputs = [ ];
-  nativeBuildInputs = [ which cudatoolkit ];
   propagatedBuildInputs = [ scipy torch-spline-conv ];
 }
