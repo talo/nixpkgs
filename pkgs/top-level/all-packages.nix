@@ -250,6 +250,8 @@ with pkgs;
 
   authz0 = callPackage ../tools/security/authz0 { };
 
+  autodock-vina = callPackage ../applications/science/autodock-vina { };
+
   avro-tools = callPackage ../development/tools/avro-tools { };
 
   bacnet-stack = callPackage ../tools/networking/bacnet-stack { };
