@@ -36483,6 +36483,8 @@ with pkgs;
 
   check-uptime = callPackage ../servers/monitoring/plugins/uptime.nix { };
 
+  chimerax = callPackage ../applications/science/biology/chimerax { };
+
   ghc-standalone-archive =
     callPackage ../os-specific/darwin/ghc-standalone-archive {
       inherit (darwin) cctools;
