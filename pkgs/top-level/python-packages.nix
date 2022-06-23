@@ -9358,6 +9358,8 @@ in {
 
   pyinfra = callPackage ../development/python-modules/pyinfra { };
 
+  pykeops = callPackage ../development/python-modules/pykeops { };
+
   pytibber = callPackage ../development/python-modules/pytibber { };
 
   pytile = callPackage ../development/python-modules/pytile { };
