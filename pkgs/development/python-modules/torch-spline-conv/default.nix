@@ -8,7 +8,7 @@ buildPythonPackage {
   src = fetchurl {
     url =
       "https://data.pyg.org/whl/torch-1.11.0%2Bcu113/torch_spline_conv-1.2.1-cp39-cp39-linux_x86_64.whl";
-    sha256 = "sha256-muH3slNLr2p2F6kJ5cHLNAWGT/LgeX5QmY2zVbcJmcI=";
+    sha256 = "sha256-azbAx96DYSKgAclRrssIlJHdrtpisKXT0YDPcIN+lnw=";
     # url =
     #  "https://data.pyg.org/whl/torch-1.11.0%2Bcu115/torch_spline_conv-1.2.1-cp39-cp39-linux_x86_64.whl";
     #sha256 = "sha256-vsOreU1ryWVTZ++NNG4/UjHOyWxwhwkqwFZbwR7XkLA=";
