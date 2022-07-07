@@ -6939,12 +6939,14 @@ in {
 
   openapi-core = callPackage ../development/python-modules/openapi-core { };
 
-  openmm = callPackage ../development/python-modules/openmm { };
+  OpenMM = callPackage ../development/python-modules/openmm { };
 
   pandas-stubs = callPackage ../development/python-modules/pandas-stubs { };
 
   parameterizedtestcase =
     callPackage ../development/python-modules/parameterizedtestcase { };
+
+  pdbfixer = callPackage ../development/python-modules/pdbfixer { };
 
   pdunehd = callPackage ../development/python-modules/pdunehd { };
 

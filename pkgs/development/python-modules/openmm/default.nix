@@ -52,7 +52,6 @@ buildPythonPackage {
     doxygen
     swig
     which
-    #openmm
     cython
     numpy
     setuptools
