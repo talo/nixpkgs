@@ -6939,6 +6939,8 @@ in {
 
   openapi-core = callPackage ../development/python-modules/openapi-core { };
 
+  openmm = callPackage ../development/python-modules/openmm { };
+
   pandas-stubs = callPackage ../development/python-modules/pandas-stubs { };
 
   parameterizedtestcase =
