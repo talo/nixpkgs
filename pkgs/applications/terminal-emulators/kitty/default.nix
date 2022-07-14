@@ -21,21 +21,20 @@
 , bashInteractive
 , zsh
 , fish
-, fetchpatch
 , nixosTests
 }:
 
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.25.0";
+  version = "0.25.2";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "v${version}";
-    sha256 = "sha256-RYQVcbyKIv/FlrtROoQywWR+iF+4KYiYrrzErUrOCWM=";
+    sha256 = "sha256-o/vVz1lPfsgkzbYjYhIrScCAROmVdiPsNwjW/m5n7Us=";
   };
 
   buildInputs = [
@@ -78,23 +77,12 @@ buildPythonApplication rec {
   outputs = [ "out" "terminfo" "shell_integration" ];
 
   patches = [
-    # Required to get `test_ssh_env_vars` to pass.
-    (fetchpatch {
-      name = "increase-pty-lines.patch";
-      url = "https://github.com/kovidgoyal/kitty/commit/eb84990f5a8edc458e04d24cc1cda05316d74ceb.patch";
-      sha256 = "sha256-eOANfhGPMoN4FqxtIGDBu5X0O3RPLABDnL+LKqSLROI=";
-    })
-    # Fix to ensure that files in tar files used by SSH kitten have write permissions.
-    ./tarball-restore-write-permissions.patch
-
     # Needed on darwin
 
     # Gets `test_ssh_shell_integration` to pass for `zsh` when `compinit` complains about
     # permissions.
     ./zsh-compinit.patch
-    # Skip `test_ssh_login_shell_detection` in some cases, build users have their shell set to
-    # `/sbin/nologin` which causes issues.
-    ./disable-test_ssh_login_shell_detection.patch
+
     # Skip `test_ssh_bootstrap_with_different_launchers` when launcher is `zsh` since it causes:
     # OSError: master_fd is in error condition
     ./disable-test_ssh_bootstrap_with_different_launchers.patch
@@ -122,6 +110,7 @@ buildPythonApplication rec {
       --egl-library='${lib.getLib libGL}/lib/libEGL.so.1' \
       --startup-notification-library='${libstartup_notification}/lib/libstartup-notification-1.so' \
       --canberra-library='${libcanberra}/lib/libcanberra.so' \
+      --fontconfig-library='${fontconfig.lib}/lib/libfontconfig.so' \
       ${commonOptions}
     ''}
     runHook postBuild
@@ -203,7 +192,6 @@ buildPythonApplication rec {
   passthru.tests.test = nixosTests.terminal-emulators.kitty;
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     homepage = "https://github.com/kovidgoyal/kitty";
     description = "A modern, hackable, featureful, OpenGL based terminal emulator";
     license = licenses.gpl3Only;

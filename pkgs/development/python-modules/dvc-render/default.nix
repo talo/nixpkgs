@@ -6,12 +6,13 @@
 , pytest-mock
 , pytest-test-utils
 , pythonOlder
+, setuptools-scm
 , tabulate
 }:
 
 buildPythonPackage rec {
   pname = "dvc-render";
-  version = "0.0.5";
+  version = "0.0.7";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,9 +20,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "iterative";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-dL+ampYgcC77G89rnh7t6lVp7WoIR85gjP0eg89ci3g=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-QUrXUfvxQ2XZPTWXXuYBJpzFGNb8KeqpMh47WdCQu04=";
   };
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     funcy

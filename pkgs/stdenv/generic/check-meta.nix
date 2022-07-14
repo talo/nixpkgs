@@ -21,7 +21,7 @@ let
     || builtins.getEnv "NIXPKGS_ALLOW_UNFREE" == "1";
 
   allowNonSource = config.allowNonSource or true
-    || builtins.getEnv "NIXPKGS_ALLOW_NONSOURCE" == "1";
+    && builtins.getEnv "NIXPKGS_ALLOW_NONSOURCE" != "0";
 
   allowlist = config.allowlistedLicenses or config.whitelistedLicenses or [];
   blocklist = config.blocklistedLicenses or config.blacklistedLicenses or [];
@@ -98,10 +98,10 @@ let
 
   # Allow granular checks to allow only some non-source-built packages
   # Example:
-  # {pkgs, ...}:
+  # { pkgs, ... }:
   # {
   #   allowNonSource = false;
-  #   allowNonSourcePredicate = with lib.lists; pkg: !(any (p: !p.isSource && p!=lib.sourceTypes.binaryFirmware) (toList pkg.meta.sourceProvenance));
+  #   allowNonSourcePredicate = with pkgs.lib.lists; pkg: !(any (p: !p.isSource && p != lib.sourceTypes.binaryFirmware) (toList pkg.meta.sourceProvenance));
   # }
   allowNonSourcePredicate = config.allowNonSourcePredicate or (x: false);
 

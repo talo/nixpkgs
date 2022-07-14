@@ -1,6 +1,24 @@
-{ lib, stdenv, buildPythonPackage, python, isPy3k, arrow-cpp, cffi, cloudpickle
-, cmake, cython, fsspec, hypothesis, numpy, pandas, pytestCheckHook
-, pytest-lazy-fixture, pkg-config, scipy, setuptools-scm, six }:
+{ lib
+, stdenv
+, buildPythonPackage
+, python
+, pythonOlder
+, arrow-cpp
+, cffi
+, cloudpickle
+, cmake
+, cython
+, fsspec
+, hypothesis
+, numpy
+, pandas
+, pytestCheckHook
+, pytest-lazy-fixture
+, pkg-config
+, scipy
+, setuptools-scm
+, six
+}:
 
 let
   zero_or_one = cond: if cond then 1 else 0;
@@ -9,15 +27,34 @@ let
 
 in buildPythonPackage rec {
   pname = "pyarrow";
-  disabled = !isPy3k;
-
   inherit (_arrow-cpp) version src;
+
+  disabled = pythonOlder "3.7";
 
   sourceRoot = "apache-arrow-${version}/python";
 
-  nativeBuildInputs = [ cmake cython pkg-config setuptools-scm ];
-  propagatedBuildInputs = [ numpy six cloudpickle scipy fsspec cffi ];
-  checkInputs = [ hypothesis pandas pytestCheckHook pytest-lazy-fixture ];
+  nativeBuildInputs = [
+    cmake
+    cython
+    pkg-config
+    setuptools-scm
+  ];
+
+  propagatedBuildInputs = [
+    cffi
+    cloudpickle
+    fsspec
+    numpy
+    scipy
+    six
+  ];
+
+  checkInputs = [
+    hypothesis
+    pandas
+    pytestCheckHook
+    pytest-lazy-fixture
+  ];
 
   PYARROW_BUILD_TYPE = "release";
 
@@ -35,7 +72,8 @@ in buildPythonPackage rec {
 
   ARROW_TEST_DATA = lib.optionalString doCheck _arrow-cpp.ARROW_TEST_DATA;
 
-  doCheck = false;
+  doCheck = true;
+
   dontUseCmakeConfigure = true;
 
   preBuild = ''
@@ -54,18 +92,31 @@ in buildPythonPackage rec {
     "--deselect=pyarrow/tests/test_fs.py::test_s3_real_aws"
     "--deselect=pyarrow/tests/test_fs.py::test_s3_real_aws_region_selection"
     "--deselect=pyarrow/tests/test_fs.py::test_s3_options"
+    # Flaky test
+    "--deselect=pyarrow/tests/test_flight.py::test_roundtrip_errors"
+    "--deselect=pyarrow/tests/test_pandas.py::test_threaded_pandas_import"
   ] ++ lib.optionals stdenv.isDarwin [
     # Requires loopback networking
     "--deselect=pyarrow/tests/test_ipc.py::test_socket_"
+    "--deselect=pyarrow/tests/test_flight.py::test_never_sends_data"
+    "--deselect=pyarrow/tests/test_flight.py::test_large_descriptor"
+    "--deselect=pyarrow/tests/test_flight.py::test_large_metadata_client"
+    "--deselect=pyarrow/tests/test_flight.py::test_none_action_side_effect"
   ];
 
   dontUseSetuptoolsCheck = true;
+
   preCheck = ''
     shopt -s extglob
     rm -r pyarrow/!(tests)
+  '' + lib.optionalString stdenv.isDarwin  ''
+    # OSError: [Errno 24] Too many open files
+    ulimit -n 1024
   '';
 
-  pythonImportsCheck = [ "pyarrow" ] ++ map (module: "pyarrow.${module}") ([
+  pythonImportsCheck = [
+    "pyarrow"
+  ] ++ map (module: "pyarrow.${module}") ([
     "compute"
     "csv"
     "dataset"
@@ -75,10 +126,11 @@ in buildPythonPackage rec {
     "hdfs"
     "json"
     "parquet"
-  ] ++ lib.optionals (!stdenv.isDarwin) [ "plasma" ]);
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    "plasma"
+  ]);
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "A cross-language development platform for in-memory data";
     homepage = "https://arrow.apache.org/";
     license = licenses.asl20;
