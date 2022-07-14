@@ -7,6 +7,14 @@
 
 version:
 builtins.getAttr version {
+  "1.12.0" = {
+    x86_64-linux-310 = {
+      name = "torch-1.12.0-cp310-cp310-linux_x86_64.whl";
+      url =
+        "https://download.pytorch.org/whl/cu116/torch-1.12.0%2Bcu116-cp310-cp310-linux_x86_64.whl";
+      hash = "sha256-powzZXpUYTHrm8ROKpjS+nBKr66GFGCwUbgoE4Usy1Q=";
+    };
+  };
   "1.11.0" = {
     x86_64-linux-37 = {
       name = "torch-1.11.0-cp37-cp37m-linux_x86_64.whl";
