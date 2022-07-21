@@ -7067,6 +7067,8 @@ in {
 
   psrpcore = callPackage ../development/python-modules/psrpcore { };
 
+  py-spy = callPackage ../development/python-modules/py-spy {};
+
   pyprecice = callPackage ../development/python-modules/pyprecice { };
 
   pypsrp = callPackage ../development/python-modules/pypsrp { };
