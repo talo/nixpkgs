@@ -9657,6 +9657,8 @@ with pkgs;
 
   p2pvc = callPackage ../applications/video/p2pvc { };
 
+  p2rank = callPackage ../applications/science/biology/p2rank { };
+
   p3x-onenote = callPackage ../applications/office/p3x-onenote { };
 
   p7zip = callPackage ../tools/archivers/p7zip { };
