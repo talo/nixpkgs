@@ -271,6 +271,7 @@ with pkgs;
   authz0 = callPackage ../tools/security/authz0 { };
 
   autodock-vina = callPackage ../applications/science/autodock-vina { };
+  autodock-vina-gpu = callPackage ../applications/science/autodock-vina-gpu { };
 
   atomic-operator = callPackage ../tools/security/atomic-operator { };
 
