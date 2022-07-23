@@ -1,13 +1,13 @@
 { stdenv, boost, fetchFromGitHub, git, gcc }:
 
 stdenv.mkDerivation rec {
-  pname = "autodock-vina";
-  version = "develop";
+  pname = "vina";
+  version = "1fa41e6c906b9da12ab7a209e91fb7e90c7c4d8b";
   src = fetchFromGitHub {
     owner = "ccsb-scripps";
     repo = "AutoDock-Vina";
     rev = version;
-    sha256 = "sha256-+hzFrAmc7z0KnhgxGQSqegYxbOEF4c04BVMcvPuyWxs=";
+    sha256 = "sha256-z5ODD7qdrkhVa+YjGUjzkAKC/QfarxGiuOdB6ALnJOI=";
   };
   #setSourceRoot = "build/linux/release";
   buildPhase = ''
