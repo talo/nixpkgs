@@ -13,7 +13,7 @@
 buildPythonPackage {
   #pkgs.stdenv.mkDerivation { #
   pname = "OpenMM";
-  version = "develop";
+  version = "93016d5c549419d3ebc41a1b68aa2004059956cb";
   src = fetchFromGitHub {
     owner = "tristanic";
     repo = "openmm";
@@ -35,7 +35,7 @@ buildPythonPackage {
         -DOPENMM_BUILD_UNVERSIONED=ON
 
     export OPENMM_MAKE_WHEEL=1
-    make -j24
+    make -j $(nproc)
     make install
 
     cd python

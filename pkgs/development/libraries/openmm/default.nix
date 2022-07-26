@@ -10,7 +10,7 @@
 }:
 stdenv.mkDerivation rec {
   pname = "openmm";
-  version = "develop";
+  version = "1dac981a63300a2a53a7925f570995914f7163ed";
   src = fetchFromGitHub {
     owner = "openmm";
     repo = "openmm";
