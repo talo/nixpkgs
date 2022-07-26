@@ -16,7 +16,7 @@ buildPythonPackage {
   pname = "oddt";
   version = "0.7";
   doCheck = false;
-  propagatedBuildInputs = [
+  buildInputs = [
     numpy
     joblib
     numpydoc
