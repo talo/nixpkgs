@@ -22,7 +22,6 @@ buildPythonPackage {
     numpydoc
     pandas
     scikit-learn
-    scipy
     six
   ];
 }
