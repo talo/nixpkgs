@@ -6576,6 +6576,8 @@ in {
 
   od = callPackage ../development/python-modules/od { };
 
+  oddt = callPackage ../development/python-modules/oddt { };
+
   odfpy = callPackage ../development/python-modules/odfpy { };
 
   offtrac = callPackage ../development/python-modules/offtrac { };
