@@ -4,7 +4,6 @@
   joblib,
   numpydoc,
   pandas,
-  rdkit,
   scikit-learn,
   scipy,
   six,
@@ -22,21 +21,8 @@ buildPythonPackage {
     joblib
     numpydoc
     pandas
-    rdkit
     scikit-learn
     scipy
     six
   ];
-  # requirements = ''
-  #   flit-core
-  #   typing-extensions >= 4.1.0
-  #   joblib>=0.10
-  #   numpy>=1.12
-  #   numpydoc
-  #   pandas>=0.19.2
-  #   rdkit-pypi
-  #   scikit-learn>=0.18
-  #   scipy>=0.19
-  #   six
-  # '';
 }
