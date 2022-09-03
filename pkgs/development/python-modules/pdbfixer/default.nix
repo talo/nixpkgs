@@ -2,7 +2,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   numpy,
-  OpenMM,
+  openmm,
   setuptools,
 }:
 buildPythonPackage {
@@ -17,7 +17,7 @@ buildPythonPackage {
   };
   doCheck = false;
   propagatedBuildInputs = [
-    OpenMM
+    openmm
     setuptools
     numpy
   ];

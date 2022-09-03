@@ -1503,7 +1503,7 @@ with pkgs;
 
   openmsx = callPackage ../applications/emulators/openmsx { python = python3; };
 
-  openmm = callPackage ../development/libraries/openmm { };
+  OpenMM = callPackage ../development/libraries/openmm { };
 
   packwiz = callPackage ../tools/games/minecraft/packwiz {
     buildGoModule = buildGo118Module;

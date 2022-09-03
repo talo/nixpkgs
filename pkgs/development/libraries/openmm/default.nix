@@ -9,7 +9,7 @@
   python3,
 }:
 stdenv.mkDerivation rec {
-  pname = "openmm";
+  pname = "OpenMM";
   version = "1dac981a63300a2a53a7925f570995914f7163ed";
   src = fetchFromGitHub {
     owner = "openmm";

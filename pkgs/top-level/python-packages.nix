@@ -7048,7 +7048,7 @@ in {
 
   openapi-core = callPackage ../development/python-modules/openapi-core { };
 
-  OpenMM = callPackage ../development/python-modules/openmm { };
+  openmm = callPackage ../development/python-modules/openmm { };
 
   overly = callPackage ../development/python-modules/overly { };
 
