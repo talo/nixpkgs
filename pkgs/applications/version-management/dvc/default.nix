@@ -35,7 +35,7 @@ in with py.pkgs;
 
 buildPythonApplication rec {
   pname = "dvc";
-  version = "2.12.0";
+  version = "2.12.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
