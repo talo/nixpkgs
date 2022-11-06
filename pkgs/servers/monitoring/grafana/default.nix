@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "grafana";
-  version = "9.0.2";
+  version = "9.2.2";
 
   excludedPackages = [ "alert_webhook_listener" "clean-swagger" "release_publisher" "slow_proxy" "slow_proxy_mac" "macaron" "devenv" ];
 
@@ -10,15 +10,15 @@ buildGoModule rec {
     rev = "v${version}";
     owner = "grafana";
     repo = "grafana";
-    sha256 = "sha256-5N1Buj4bzlkuVXENbZsTajhzjtJUzR1O1JmbOHQU1MQ=";
+    sha256 = "sha256-oXtEAhyCwV9DQfrun9rTPTeTCuzMv2l0sVyi2+pOASw=";
   };
 
   srcStatic = fetchurl {
     url = "https://dl.grafana.com/oss/release/grafana-${version}.linux-amd64.tar.gz";
-    sha256 = "1zamibfjfr4kdixajrb8cs2w95sj2hzhw7ak1yilfgiiq4kpkpah";
+    sha256 = "sha256-trbc2iNDhBa72J15wPZKIlNJHbQUzE6cz/0TmivXJxE=";
   };
 
-  vendorSha256 = "sha256-ncMIu6J7D3xflZSxf8txpaQd0YW62CtzcO5w/PUE1UU=";
+  vendorSha256 = "sha256-021b+Jdk1VUGNSVNef89KLbWLdy4XhhEry4S2S0AhRg=";
 
   nativeBuildInputs = [ wire ];
 
@@ -28,8 +28,8 @@ buildGoModule rec {
     wire gen -tags oss ./pkg/server
     wire gen -tags oss ./pkg/cmd/grafana-cli/runner
 
-    go generate ./pkg/framework/coremodel
-    go generate ./public/app/plugins
+    GOARCH= CGO_ENABLED=0 go generate ./pkg/framework/coremodel
+    GOARCH= CGO_ENABLED=0 go generate ./public/app/plugins
 
     # The testcase makes an API call against grafana.com:
     #

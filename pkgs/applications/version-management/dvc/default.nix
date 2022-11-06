@@ -20,12 +20,12 @@ let
       });
 
       scmrepo = super.scmrepo.overridePythonAttrs (oldAttrs: rec {
-        version = "0.0.19";
+        version = "0.0.25";
         src = fetchFromGitHub {
           owner = "iterative";
           repo = "scmrepo";
           rev = "refs/tags/${version}";
-          hash = "sha256-f/KV3NfIumkZcg9r421QhdyPU/274aAU4b78myi+fFY=";
+          hash = "";
         };
       });
 
@@ -35,26 +35,31 @@ in with py.pkgs;
 
 buildPythonApplication rec {
   pname = "dvc";
-  version = "2.12.1";
+  version = "2.17.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "iterative";
     repo = pname;
     rev = version;
-    hash = "sha256-d1Tjqomr8Lcf+X+LZgi0wHlxXBUqHq/nAzDBbrxHAl4=";
+    hash = "sha256-2h+fy4KMxFrVtKJBtA1RmJDZv0OVm1BxO1akZzAw95Y=";
   };
 
-  nativeBuildInputs = with py.pkgs; [
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "pathspec>=0.9.0,<0.10.0" "pathspec"
+    substituteInPlace dvc/daemon.py \
+      --subst-var-by dvc "$out/bin/dcv"
+  '';
+
+  nativeBuildInputs = with python3.pkgs; [
     setuptools-scm
-    setuptools-scm-git-archive
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
     aiohttp-retry
     appdirs
     colorama
-    configobj
     configobj
     dictdiffer
     diskcache
@@ -63,6 +68,7 @@ buildPythonApplication rec {
     dvclive
     dvc-data
     dvc-render
+    dvc-task
     flatten-dict
     flufl_lock
     funcy
@@ -84,38 +90,28 @@ buildPythonApplication rec {
     shortuuid
     shtab
     tabulate
-    toml
+    tomlkit
     tqdm
     typing-extensions
     voluptuous
     zc_lockfile
-  ] ++ lib.optional enableGoogle [
+  ] ++ lib.optionals enableGoogle [
     gcsfs
     google-cloud-storage
-  ] ++ lib.optional enableAWS [
+  ] ++ lib.optionals enableAWS [
     aiobotocore
     boto3
     s3fs
-  ] ++ lib.optional enableAzure [
+  ] ++ lib.optionals enableAzure [
     azure-identity
     knack
-  ] ++ lib.optional enableSSH [
+  ] ++ lib.optionals enableSSH [
     bcrypt
   ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
   ] ++ lib.optionals (pythonOlder "3.9") [
     importlib-resources
   ];
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "grandalf==0.6" "grandalf" \
-      --replace "scmrepo==0.0.25" "scmrepo" \
-      --replace "dvc-data==0.0.16" "dvc-data" \
-      --replace "dvc-render==0.0.6" "dvc-render"
-    substituteInPlace dvc/daemon.py \
-      --subst-var-by dvc "$out/bin/dcv"
-  '';
 
   # Tests require access to real cloud services
   doCheck = false;
@@ -124,6 +120,6 @@ buildPythonApplication rec {
     description = "Version Control System for Machine Learning Projects";
     homepage = "https://dvc.org";
     license = licenses.asl20;
-    maintainers = with maintainers; [ cmcdragonkai fab ];
+    maintainers = with maintainers; [ cmcdragonkai fab anthonyroussel ];
   };
 }

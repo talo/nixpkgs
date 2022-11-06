@@ -76,6 +76,8 @@ in buildPythonPackage rec {
 
   dontUseCmakeConfigure = true;
 
+  __darwinAllowLocalNetworking = true;
+
   preBuild = ''
     export PYARROW_PARALLEL=$NIX_BUILD_CORES
   '';
@@ -108,8 +110,10 @@ in buildPythonPackage rec {
 
   preCheck = ''
     shopt -s extglob
-    rm -r pyarrow/!(tests)
-  '' + lib.optionalString stdenv.isDarwin  ''
+    rm -r pyarrow/!(conftest.py|tests)
+    mv pyarrow/conftest.py pyarrow/tests/parent_conftest.py
+    substituteInPlace pyarrow/tests/conftest.py --replace ..conftest .parent_conftest
+  '' + lib.optionalString stdenv.isDarwin ''
     # OSError: [Errno 24] Too many open files
     ulimit -n 1024
   '';

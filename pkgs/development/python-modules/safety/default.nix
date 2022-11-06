@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "safety";
-  version = "2.0.0";
+  version = "2.2.1";
 
   disabled = pythonOlder "3.6";
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d739d00a9e4203cfaba34540c822a73ca1d327159ed7776b3dce09391f81c35d";
+    hash = "sha256-2LSMRqxmKLuDRBt93cR1bP4lgqvhOhEu5uTvGjSq0DI=";
   };
 
   postPatch = ''
@@ -53,6 +53,9 @@ buildPythonPackage rec {
     "test_announcements_if_is_not_tty"
     "test_check_live"
     "test_check_live_cached"
+    "test_check_vulnerabilities"
+    "test_license"
+    "test_chained_review"
   ];
 
   preCheck = ''

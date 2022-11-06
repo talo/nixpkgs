@@ -12,7 +12,8 @@
 , lxqt-build-tools
 , libfm-qt
 , libexif
-, lxqtUpdateScript
+, menu-cache
+, gitUpdater
 }:
 
 mkDerivation rec {
@@ -42,9 +43,10 @@ mkDerivation rec {
     xorg.libpthreadstubs
     xorg.libXdmcp
     libexif
+    menu-cache
   ];
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/lximage-qt";

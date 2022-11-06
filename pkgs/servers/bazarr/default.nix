@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bazarr";
-  version = "1.0.3";
+  version = "1.1.2";
 
   sourceRoot = ".";
 
   src = fetchurl {
     url = "https://github.com/morpheus65535/bazarr/releases/download/v${version}/bazarr.zip";
-    sha256 = "sha256-VApcTYARC6NaVmwXgpzW8xRE23refGudBgPsyq7Ypig=";
+    sha256 = "sha256-cTSRfnMYAyoOoTy0wx8sxqyS92zP6GZu8aH5hRRTxU4=";
   };
 
   nativeBuildInputs = [ unzip makeWrapper ];
@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Subtitle manager for Sonarr and Radarr";
     homepage = "https://www.bazarr.media/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ d-xo ];
     platforms = platforms.all;

@@ -1,27 +1,27 @@
 { lib
-, buildGo118Module
+, buildGoModule
 , fetchFromGitHub
 , fetchurl
 , nixosTests
 }:
 
-buildGo118Module rec {
+buildGoModule rec {
   pname = "mattermost";
-  version = "7.0.1";
+  version = "7.4.0";
 
   src = fetchFromGitHub {
     owner = "mattermost";
     repo = "mattermost-server";
     rev = "v${version}";
-    sha256 = "sha256-oxZaOOV5pkK9HAi/AQ+MLZgfwvF6d/ArzYrXzUQGTDA=";
+    sha256 = "sha256-GgspsSzfr1DKcSaLO6tDguCTQlK1c9SuTzRZmTvoNG4=";
   };
 
   webapp = fetchurl {
     url = "https://releases.mattermost.com/${version}/mattermost-${version}-linux-amd64.tar.gz";
-    sha256 = "sha256-NWVDPDqdx7mdWCr/qBi8HsUsCJbT63x37UZGecHsZr4=";
+    sha256 = "sha256-N4wvgrTmg1J06IPmpLlPHOHNNB+bH2BBQgEsv9GWCN0=";
   };
 
-  vendorSha256 = "sha256-0sKuk0klxeep8J96RntDP9DHsVM4vrOmsKXiaWurVis=";
+  vendorSha256 = "sha256-qZQXNVbJZDddVE+xk6F8XJCEg5dhhuXz68wcn2Uvmxk=";
 
   subPackages = [ "cmd/mattermost" ];
 
@@ -45,6 +45,6 @@ buildGo118Module rec {
     description = "Mattermost is an open source platform for secure collaboration across the entire software development lifecycle";
     homepage = "https://www.mattermost.org";
     license = with licenses; [ agpl3 asl20 ];
-    maintainers = with maintainers; [ fpletz ryantm numinit kranzes ];
+    maintainers = with maintainers; [ ryantm numinit kranzes ];
   };
 }

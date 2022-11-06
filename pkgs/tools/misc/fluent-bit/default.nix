@@ -1,19 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, cmake, flex, bison, systemd, openssl }:
+{ lib, stdenv, fetchFromGitHub, cmake, flex, bison, systemd, openssl, libyaml }:
 
 stdenv.mkDerivation rec {
   pname = "fluent-bit";
-  version = "1.9.3";
+  version = "2.0.3";
 
   src = fetchFromGitHub {
     owner = "fluent";
     repo = "fluent-bit";
     rev = "v${version}";
-    sha256 = "sha256-CMkVIWaD4Zt6SJ/4PLGrFDhirqeLbXcVa+96wsAYN/k=";
+    sha256 = "sha256-8P28xaFyaU0GrIrO+D+Rp9H4xgOymHtbAbd2mI79vSI=";
   };
 
   nativeBuildInputs = [ cmake flex bison ];
 
-  buildInputs = [ openssl ]
+  buildInputs = [ openssl libyaml ]
     ++ lib.optionals stdenv.isLinux [ systemd ];
 
   cmakeFlags = [ "-DFLB_METRICS=ON" "-DFLB_HTTP_SERVER=ON" ];

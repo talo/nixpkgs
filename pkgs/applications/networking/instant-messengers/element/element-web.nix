@@ -1,5 +1,5 @@
 { lib
-, mkYarnPackage
+, stdenv
 , runCommand
 , fetchFromGitHub
 , fetchYarnDeps
@@ -7,7 +7,9 @@
 , jq
 , yarn
 , fixup_yarn_lock
+, nodejs
 , jitsi-meet
+, applyPatches
 , conf ? { }
 }:
 
@@ -19,35 +21,43 @@ let
   };
   configOverrides = writeText "element-config-overrides.json" (builtins.toJSON (noPhoningHome // conf));
 
-in
-mkYarnPackage rec {
+in stdenv.mkDerivation rec {
   pname = "element-web";
   inherit (pinData) version;
 
-  src = fetchFromGitHub {
-    owner = "vector-im";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = pinData.webSrcHash;
+  src = applyPatches {
+    src = fetchFromGitHub {
+      owner = "vector-im";
+      repo = pname;
+      rev = "v${version}";
+      sha256 = pinData.webSrcHash;
+    };
+    patches = [ ./regenerate-element-web-yarn.lock.diff ];
   };
 
-  packageJSON = ./element-web-package.json;
-  # Remove the matrix-analytics-events dependency from the matrix-react-sdk
-  # dependencies list. It doesn't seem to be necessary since we already are
-  # installing it individually, and it causes issues with the offline mode.
-  yarnLock = (runCommand "${pname}-modified-lock" {} ''
-    sed '/matrix-analytics-events "github/d' ${src}/yarn.lock > "$out"
-  '');
   offlineCache = fetchYarnDeps {
-    inherit yarnLock;
+    yarnLock = src + "/yarn.lock";
     sha256 = pinData.webYarnHash;
   };
 
-  nativeBuildInputs = [ jq ];
+  nativeBuildInputs = [ yarn fixup_yarn_lock jq nodejs ];
 
   configurePhase = ''
     runHook preConfigure
-    ln -s $node_modules node_modules
+
+    export HOME=$PWD/tmp
+    # with the update of openssl3, some key ciphers are not supported anymore
+    # this flag will allow those codecs again as a workaround
+    # see https://medium.com/the-node-js-collection/node-js-17-is-here-8dba1e14e382#5f07
+    # and https://github.com/vector-im/element-web/issues/21043
+    export NODE_OPTIONS=--openssl-legacy-provider
+    mkdir -p $HOME
+
+    fixup_yarn_lock yarn.lock
+    yarn config --offline set yarn-offline-mirror $offlineCache
+    yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
+    patchShebangs node_modules
+
     runHook postConfigure
   '';
 
@@ -56,6 +66,7 @@ mkYarnPackage rec {
 
     export VERSION=${version}
     yarn build:res --offline
+    yarn build:module_system --offline
     yarn build:bundle --offline
 
     runHook postBuild
@@ -71,9 +82,6 @@ mkYarnPackage rec {
 
     runHook postInstall
   '';
-
-  # Do not attempt generating a tarball for element-web again.
-  doDist = false;
 
   meta = {
     description = "A glossy Matrix collaboration client for the web";

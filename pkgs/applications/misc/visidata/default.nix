@@ -1,22 +1,43 @@
-{ stdenv, lib, buildPythonApplication, fetchFromGitHub, python-dateutil, pandas
-, requests, lxml, openpyxl, xlrd, h5py, odfpy, psycopg2, pyshp, fastparquet
-, fonttools, pyyaml, pdfminer-six, vobject, tabulate, wcwidth, zstandard
-, setuptools, git, withPcap ? true, dpkt, dnslib }:
+{ stdenv
+, lib
+, buildPythonApplication
+, fetchFromGitHub
+, python-dateutil
+, pandas
+, requests
+, lxml
+, openpyxl
+, xlrd
+, h5py
+, odfpy
+, psycopg2
+, pyshp
+, fonttools
+, pyyaml
+, pdfminer-six
+, vobject
+, tabulate
+, wcwidth
+, zstandard
+, setuptools
+, git
+, withPcap ? true, dpkt, dnslib
+, withXclip ? stdenv.isLinux, xclip
+}:
 buildPythonApplication rec {
   pname = "visidata";
-  version = "2.8";
+  version = "2.9.1";
 
   src = fetchFromGitHub {
     owner = "saulpw";
     repo = "visidata";
     rev = "v${version}";
-    sha256 = "1lcx444yrzmcvix977cgaf18lfrf9yrn2r14ln7knx8ghc15vkqb";
+    hash = "sha256-PKj+imTSAGMpF1tkN0WmE3l/4FmWkm/ktIDzF2ku48s=";
   };
 
   propagatedBuildInputs = [
     # from visidata/requirements.txt
     # packages not (yet) present in nixpkgs are commented
-    fastparquet
     python-dateutil
     pandas
     requests
@@ -43,9 +64,12 @@ buildPythonApplication rec {
     zstandard
     odfpy
     setuptools
-  ] ++ lib.optionals withPcap [ dpkt dnslib ];
+  ] ++ lib.optionals withPcap [ dpkt dnslib ]
+  ++ lib.optional withXclip xclip;
 
-  checkInputs = [ git ];
+  checkInputs = [
+    git
+  ];
 
   # check phase uses the output bin, which is not possible when cross-compiling
   doCheck = stdenv.buildPlatform == stdenv.hostPlatform;
@@ -70,7 +94,6 @@ buildPythonApplication rec {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ raskin markus1189 ];
     homepage = "http://visidata.org/";
-    changelog =
-      "https://github.com/saulpw/visidata/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/saulpw/visidata/blob/v${version}/CHANGELOG.md";
   };
 }

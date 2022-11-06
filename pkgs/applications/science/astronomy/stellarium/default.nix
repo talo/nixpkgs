@@ -1,38 +1,63 @@
-{ stdenv, lib, mkDerivation, fetchFromGitHub
-, cmake, freetype, libpng, libGLU, libGL, openssl, perl, libiconv
-, qtscript, qtserialport, qttools, qtcharts
-, qtmultimedia, qtlocation, qtbase, wrapQtAppsHook
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, perl
+, wrapQtAppsHook
+, qtbase
+, qtcharts
+, qtlocation
+, qtmultimedia
+, qtscript
+, qtserialport
+, qtwebengine
+, calcmysky
+, qxlsx
+, indilib
+, libnova
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "stellarium";
-  version = "0.22.1";
+  version = "1.0";
 
   src = fetchFromGitHub {
     owner = "Stellarium";
     repo = "stellarium";
     rev = "v${version}";
-    sha256 = "sha256-zDYZBV/76BDWWfiug0fFvMe3pdE4xfKgSmVJJd3Qu9Y=";
+    sha256 = "sha256-6EAykJ0yWeU1EBR5+7JjWGUVBE1DKW+W8yJOt0smkaE=";
   };
 
-  nativeBuildInputs = [ cmake perl wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    perl
+    wrapQtAppsHook
+  ];
 
   buildInputs = [
-    freetype libpng libGLU libGL openssl libiconv qtscript qtserialport qttools
-    qtmultimedia qtlocation qtbase qtcharts
+    qtbase
+    qtcharts
+    qtlocation
+    qtmultimedia
+    qtscript
+    qtserialport
+    qtwebengine
+    calcmysky
+    qxlsx
+    indilib
+    libnova
   ];
 
   preConfigure = lib.optionalString stdenv.isDarwin ''
     substituteInPlace CMakeLists.txt \
       --replace 'SET(CMAKE_INSTALL_PREFIX "''${PROJECT_BINARY_DIR}/Stellarium.app/Contents")' \
-                'SET(CMAKE_INSTALL_PREFIX "${placeholder "out"}/Stellarium.app/Contents")'
+                'SET(CMAKE_INSTALL_PREFIX "${placeholder "out"}/Applications/Stellarium.app/Contents")'
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Free open-source planetarium";
-    homepage = "http://stellarium.org/";
-    license = licenses.gpl2;
+    homepage = "https://stellarium.org/";
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ ma27 ];
   };
