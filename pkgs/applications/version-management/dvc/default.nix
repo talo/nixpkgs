@@ -25,7 +25,7 @@ let
           owner = "iterative";
           repo = "scmrepo";
           rev = "refs/tags/${version}";
-          hash = "";
+          hash = "sha256-269vJNclTBWEqM9AJbF96R1I6Ru3q8YBd5A8Rmw7Jjo=";
         };
       });
 
@@ -47,6 +47,7 @@ buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
+      --replace "scmrepo==0.0.25" "scmrepo" \
       --replace "pathspec>=0.9.0,<0.10.0" "pathspec"
     substituteInPlace dvc/daemon.py \
       --subst-var-by dvc "$out/bin/dcv"
@@ -56,7 +57,7 @@ buildPythonApplication rec {
     setuptools-scm
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with py.pkgs; [
     aiohttp-retry
     appdirs
     colorama
