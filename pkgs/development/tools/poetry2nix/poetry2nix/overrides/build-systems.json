@@ -2981,10 +2981,6 @@
   "contexttimer": [
     "setuptools"
   ],
-  "contourpy": [
-    "pybind11",
-    "setuptools"
-  ],
   "convertdate": [
     "setuptools"
   ],
