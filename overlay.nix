@@ -8,10 +8,8 @@ _: super: let
   });
 in {
   autodock-vina = super.callPackage ./pkgs/applications/science/autodock-vina {};
-  p2rank = super.callPackage ./pkgs/applications/science/p2rank {};
-  reduce = super.callPackage ./pkgs/applications/science/reduce {};
-
-  dvc = super.callPackage ./pkgs/applications/version-management/dvc {};
+  p2rank = super.callPackage ./pkgs/applications/science/biology/p2rank {};
+  reduce = super.callPackage ./pkgs/applications/science/biology/reduce {};
 
   # non python
   # openmm = super.callPackage ./pkgs/development/libraries/openmm {};

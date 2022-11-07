@@ -309,11 +309,11 @@ lib.composeManyExtensions [
           )
         );
 
-      contourpy = super.contourpy.overridePythonAttrs (
-        old: {
-          buildInputs = (old.buildInputs or [ ]) ++ [ self.pybind11 ];
-        }
-      );
+      # contourpy = super.contourpy.overridePythonAttrs (
+      #   old: {
+      #     buildInputs = (old.buildInputs or [ ]) ++ [ self.pybind11 ];
+      #   }
+      # );
 
       cloudflare = super.cloudflare.overridePythonAttrs (
         old: {
