@@ -4,7 +4,7 @@ super: _: {
   grpcio-reflection = super.callPackage ./pkgs/development/python-modules/grpcio-reflection/default.nix {};
   oddt = super.callPackage ./pkgs/development/python-modules/oddt/default.nix {};
   openmm = super.callPackage ./pkgs/development/python-modules/openmm/default.nix {enableCuda = true;};
-  pdbfixer = super.callPackage ./pkgs/development/python-modules/pdfixer/default.nix {};
+  pdbfixer = super.callPackage ./pkgs/development/python-modules/pdbfixer/default.nix {};
   py-spy = super.callPackage ./pkgs/development/python-modules/py-spy/default.nix {};
   pykeops = super.callPackage ./pkgs/development/python-modules/pykeops/default.nix {};
   torch-cluster = super.callPackage ./pkgs/development/python-modules/torch-cluster/default.nix {};
