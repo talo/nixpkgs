@@ -100,7 +100,7 @@ mapAliases ({
   influxgraph = throw "influxgraph has been removed because it is no longer maintained"; # added 2022-07-10
   itanium_demangler = itanium-demangler; # added 2022-1017
   jupyter_client = jupyter-client; # added 2021-10-15
-  Keras = keras; # added 2021-11-25
+  # Keras = keras; # added 2021-11-25
   ldap = python-ldap; # added 2022-09-16
   lammps-cython = throw "lammps-cython no longer builds and is unmaintained"; # added 2021-07-04
   loo-py = loopy; # added 2022-05-03
