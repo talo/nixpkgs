@@ -1,6 +1,22 @@
-{ stdenv, lib, bcrypt, buildPythonPackage, cryptography, fetchPypi, fido2
-, gssapi, libnacl, libsodium, nettle, openssh, openssl, pyopenssl
-, pytestCheckHook, python-pkcs11, pythonOlder, typing-extensions }:
+{ stdenv
+, lib
+, bcrypt
+, buildPythonPackage
+, cryptography
+, fetchPypi
+, fido2
+, gssapi
+, libnacl
+, libsodium
+, nettle
+, openssh
+, openssl
+, pyopenssl
+, pytestCheckHook
+, python-pkcs11
+, pythonOlder
+, typing-extensions
+}:
 
 buildPythonPackage rec {
   pname = "asyncssh";
@@ -27,7 +43,11 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  checkInputs = [ openssh openssl pytestCheckHook ];
+  checkInputs = [
+    openssh
+    openssl
+    pytestCheckHook
+  ];
 
   patches = [
     # Reverts https://github.com/ronf/asyncssh/commit/4b3dec994b3aa821dba4db507030b569c3a32730
@@ -53,7 +73,9 @@ buildPythonPackage rec {
     "test_forward_remote"
   ];
 
-  pythonImportsCheck = [ "asyncssh" ];
+  pythonImportsCheck = [
+    "asyncssh"
+  ];
 
   meta = with lib; {
     broken = stdenv.isDarwin;
