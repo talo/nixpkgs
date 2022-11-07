@@ -54,7 +54,7 @@
       # attribute it displays `omitted` instead of evaluating all packages,
       # which keeps `nix flake show` on Nixpkgs reasonably fast, though less
       # information rich.
-      legacyPackages = forAllSystems (system: import ./. { inherit system; });
+      legacyPackages = forAllSystems (system: import ./. { inherit system; overlays = [ (import ./overlay.nix) ]; });
 
       nixosModules = {
         notDetected = import ./nixos/modules/installer/scan/not-detected.nix;
