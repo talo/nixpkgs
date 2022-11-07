@@ -56,6 +56,7 @@
       # information rich.
       legacyPackages = forAllSystems (system: import ./. { inherit system; overlays = [ (import ./overlay.nix) ]; });
       overrides = [ (import ./overlay.nix) ];
+      python-overrides = import ./python-overrides.nix;
 
       nixosModules = {
         notDetected = import ./nixos/modules/installer/scan/not-detected.nix;
