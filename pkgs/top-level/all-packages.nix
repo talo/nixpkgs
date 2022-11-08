@@ -37945,4 +37945,9 @@ with pkgs;
   aitrack = libsForQt5.callPackage ../applications/misc/aitrack { };
 
   widevine-cdm = callPackage ../applications/networking/browsers/misc/widevine-cdm.nix { };
+### talo packages
+  autodock-vina = super.callPackage ../applications/science/autodock-vina {};
+  p2rank = super.callPackage ../applications/science/biology/p2rank {};
+  reduce = super.callPackage ../applications/science/biology/reduce {};
+
 }

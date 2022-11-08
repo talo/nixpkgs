@@ -12297,4 +12297,18 @@ self: super: with self; {
   zwave-js-server-python = callPackage ../development/python-modules/zwave-js-server-python { };
 
   zxcvbn = callPackage ../development/python-modules/zxcvbn { };
+
+### talo python packages
+  feast = callPackage ../development/python-modules/feast/default.nix {};
+  googledrivedownloader = callPackage ../development/python-modules/googledrivedownloader/default.nix {};
+  grpcio-reflection = callPackage ../development/python-modules/grpcio-reflection/default.nix {};
+  oddt = callPackage ../development/python-modules/oddt/default.nix {};
+  pdbfixer = callPackage ../development/python-modules/pdbfixer/default.nix {};
+  py-spy = callPackage ../development/python-modules/py-spy/default.nix {};
+  pykeops = callPackage ../development/python-modules/pykeops/default.nix {};
+  torch-cluster = callPackage ../development/python-modules/torch-cluster/default.nix {};
+  torch-geometric = callPackage ../development/python-modules/torch-geometric/default.nix {};
+  torch-scatter = callPackage ../development/python-modules/torch-scatter/default.nix {};
+  torch-sparse = callPackage ../development/python-modules/torch-sparse/default.nix {};
+  torch-spline-conv = callPackage ../development/python-modules/torch-spline-conv/default.nix {};
 }

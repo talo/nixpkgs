@@ -54,9 +54,9 @@
       # attribute it displays `omitted` instead of evaluating all packages,
       # which keeps `nix flake show` on Nixpkgs reasonably fast, though less
       # information rich.
-      legacyPackages = forAllSystems (system: import ./. { inherit system; overlays = [ (import ./overlay.nix) ]; });
-      overrides = [ (import ./overlay.nix) ];
-      python-overrides = import ./python-overrides.nix;
+      legacyPackages = forAllSystems (system: import ./. { inherit system; });
+      overlay = import ./overlay.nix ; # doesn't work for mach-nix :(
+      python-overrides = import ./python-overrides.nix; # doesn't work for mach-nix :(
 
       nixosModules = {
         notDetected = import ./nixos/modules/installer/scan/not-detected.nix;
