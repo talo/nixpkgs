@@ -8,6 +8,7 @@
 , pytestCheckHook
 , torch
 , pyyaml
+, protobuf
 , tensorboard
 , torchmetrics
 , tqdm }:
@@ -25,6 +26,7 @@ buildPythonPackage rec {
     hash = "sha256-CgD5g5nhz2DI4gOQyPl8/Cq6wWHzL0ALgOB5SgUOgaI=";
   };
 
+
   propagatedBuildInputs = [
     packaging
     future
@@ -40,6 +42,11 @@ buildPythonPackage rec {
   # Some packages are not in NixPkgs; other tests try to build distributed
   # models, which doesn't work in the sandbox.
   doCheck = false;
+
+  postPatch = ''
+    substituteInPlace requirements/base.txt \
+      --replace "protobuf<=3.20.1" ""
+  '';
 
   pythonImportsCheck = [ "pytorch_lightning" ];
 
