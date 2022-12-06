@@ -41,7 +41,6 @@ buildPythonPackage rec {
   cmakeFlags = [
     "-DCMAKE_C_COMPILER=${clang}/bin/clang"
     "-DCMAKE_CXX_COMPILER=${clang}/bin/clang++"
-    "-DBUILD_TESTING=ON"
     "-DOPENMM_BUILD_AMOEBA_PLUGIN=ON"
     "-DOPENMM_BUILD_CPU_LIB=ON"
     "-DOPENMM_BUILD_C_AND_FORTRAN_WRAPPERS=ON"
