@@ -12309,18 +12309,18 @@ self: super: with self; {
   zwave-js-server-python = callPackage ../development/python-modules/zwave-js-server-python { };
 
   zxcvbn = callPackage ../development/python-modules/zxcvbn { };
-} // {
-    feast = super.callPackage ../development/python-modules/feast/default.nix {};
-    googledrivedownloader = super.callPackage ../development/python-modules/googledrivedownloader/default.nix {};
-    grpcio-reflection = super.callPackage ../development/python-modules/grpcio-reflection/default.nix {};
-    oddt = super.callPackage ../development/python-modules/oddt/default.nix {};
-    openmm = super.callPackage ../development/python-modules/openmm/default.nix { enableCuda = true; };
-    pdbfixer = super.callPackage ../development/python-modules/pdfixer/default.nix { };
-    py-spy = super.callPackage ../development/python-modules/py-spy/default.nix {};
-    pykeops = super.callPackage ../development/python-modules/pykeops/default.nix {};
-    torch-cluster = super.callPackage ../development/python-modules/torch-cluster/default.nix {};
-    torch-geometric = super.callPackage ../development/python-modules/torch-geometric/default.nix {};
-    torch-scatter = super.callPackage ../development/python-modules/torch-scatter/default.nix {};
-    torch-sparse = super.callPackage ../development/python-modules/torch-sparse/default.nix {};
-    torch-spline-conv = super.callPackage ../development/python-modules/torch-spline-conv/default.nix {};
+
+    feast = callPackage ../development/python-modules/feast/default.nix {};
+    googledrivedownloader = callPackage ../development/python-modules/googledrivedownloader/default.nix {};
+    grpcio-reflection = callPackage ../development/python-modules/grpcio-reflection/default.nix {};
+    oddt = callPackage ../development/python-modules/oddt/default.nix {};
+    #openmm = callPackage ../development/python-modules/openmm/default.nix { enableCuda = true; };
+    pdbfixer = callPackage ../development/python-modules/pdfixer/default.nix { };
+    py-spy = callPackage ../development/python-modules/py-spy/default.nix {};
+    pykeops = callPackage ../development/python-modules/pykeops/default.nix {};
+    torch-cluster = callPackage ../development/python-modules/torch-cluster/default.nix {};
+    torch-geometric = callPackage ../development/python-modules/torch-geometric/default.nix {};
+    torch-scatter = callPackage ../development/python-modules/torch-scatter/default.nix {};
+    torch-sparse = callPackage ../development/python-modules/torch-sparse/default.nix {};
+    torch-spline-conv = callPackage ../development/python-modules/torch-spline-conv/default.nix {};
 }
