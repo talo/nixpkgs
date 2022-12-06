@@ -12315,7 +12315,7 @@ self: super: with self; {
     grpcio-reflection = callPackage ../development/python-modules/grpcio-reflection/default.nix {};
     oddt = callPackage ../development/python-modules/oddt/default.nix {};
     #openmm = callPackage ../development/python-modules/openmm/default.nix { enableCuda = true; };
-    pdbfixer = callPackage ../development/python-modules/pdfixer/default.nix { };
+    pdbfixer = callPackage ../development/python-modules/pdbfixer/default.nix { };
     py-spy = callPackage ../development/python-modules/py-spy/default.nix {};
     pykeops = callPackage ../development/python-modules/pykeops/default.nix {};
     torch-cluster = callPackage ../development/python-modules/torch-cluster/default.nix {};
