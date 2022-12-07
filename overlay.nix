@@ -1,7 +1,7 @@
 final: prev: {
   autodock-vina = prev.callPackage ./pkgs/applications/science/autodock-vina {};
-  p2rank = prev.callPackage ./pkgs/applications/science/p2rank {};
-  reduce = prev.callPackage ./pkgs/applications/science/reduce {};
+  p2rank = prev.callPackage ./pkgs/applications/science/biology/p2rank {};
+  reduce = prev.callPackage ./pkgs/applications/science/biology/reduce {};
 }
 
 # a: super: {
