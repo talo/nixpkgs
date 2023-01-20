@@ -9,7 +9,7 @@
 , python3Packages, enablePython ? false
 , opencl-headers, ocl-icd, enableOpencl ? true
 , clang, enableClang ? true
-, cudatoolkit, enableCuda ? true
+, cudatoolkit, enableCuda ? false
 }:
 
 stdenv.mkDerivation rec {
