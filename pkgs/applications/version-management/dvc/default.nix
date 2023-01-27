@@ -44,6 +44,7 @@ python3.pkgs.buildPythonApplication rec {
     dpath
     dvclive
     dvc-data
+    dvc-http
     dvc-render
     dvc-task
     flatten-dict
