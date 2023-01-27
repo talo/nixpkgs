@@ -10,21 +10,21 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dvc";
-  version = "2.17.0";
-  format = "setuptools";
+  version = "2.43.1";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "iterative";
     repo = pname;
     rev = version;
-    hash = "sha256-2h+fy4KMxFrVtKJBtA1RmJDZv0OVm1BxO1akZzAw95Y=";
+    hash = "sha256-FwJErwAVWFZ95wzBalGi9o+8BTtcGvnC9uQE1qTUaBs=";
   };
 
   postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "grandalf==0.6" "grandalf" \
-      --replace "scmrepo==0.0.25" "scmrepo" \
-      --replace "pathspec>=0.9.0,<0.10.0" "pathspec"
+    substituteInPlace pyproject.toml \
+      --replace "scmrepo==0.1.6" "scmrepo" \
+      --replace "iterative-telemetry==0.0.6" "iterative-telemetry" \
+      --replace "dvc-data==0.35.1" "dvc-data"
     substituteInPlace dvc/daemon.py \
       --subst-var-by dvc "$out/bin/dcv"
   '';
@@ -34,33 +34,30 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
-    aiohttp-retry
     appdirs
     colorama
     configobj
-    dictdiffer
-    diskcache
     distro
     dpath
     dvclive
     dvc-data
     dvc-http
     dvc-render
+    dvc-studio-client
     dvc-task
     flatten-dict
     flufl_lock
     funcy
     grandalf
-    nanotime
+    hydra-core
+    iterative-telemetry
     networkx
     packaging
     pathspec
-    ply
     psutil
     pydot
     pygtrie
     pyparsing
-    python-benedict
     requests
     rich
     ruamel-yaml
