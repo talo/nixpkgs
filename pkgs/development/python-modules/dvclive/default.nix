@@ -5,7 +5,7 @@
 , pytestCheckHook
 , pythonOlder
 , ruamel-yaml
-, setuptools
+, setuptools-scm
 , tabulate
 }:
 
@@ -23,8 +23,10 @@ buildPythonPackage rec {
     hash = "sha256-FAupTvaOLPp5EQ0vvE8tQCa8WnKW/qrQTc7i+6F7F1A=";
   };
 
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
   nativeBuildInputs = [
-    setuptools
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [
