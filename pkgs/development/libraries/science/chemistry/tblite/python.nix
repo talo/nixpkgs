@@ -41,7 +41,7 @@ buildPythonPackage {
   ];
 
   propagatedBuildInputs = [ tblite simple-dftd3 cffi numpy ];
-  applyPatches = [ ./0001-fix-multicharge-dep-needed-for-static-compilation.patch ];
+  patches = [ ./0001-fix-multicharge-dep-needed-for-static-compilation.patch ];
 
   format = "other";
 
