@@ -41,6 +41,8 @@ buildPythonPackage {
   ];
 
   propagatedBuildInputs = [ tblite simple-dftd3 cffi numpy ];
+
+  # Add multicharge to the meson deps; otherwise we get missing mod_multicharge errors
   patches = [ ./0001-fix-multicharge-dep-needed-for-static-compilation.patch ];
 
   format = "other";
