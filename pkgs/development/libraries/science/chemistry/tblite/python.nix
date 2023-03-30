@@ -44,7 +44,7 @@ buildPythonPackage {
   patches = [ ./0001-fix-multicharge-dep-needed-for-static-compilation.patch ];
 
   format = "other";
-
+  pythonImportsCheck = [ "tblite" "tblite.interface" ];
   configurePhase = ''
     runHook preConfigure
 
