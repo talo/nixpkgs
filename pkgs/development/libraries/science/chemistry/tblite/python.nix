@@ -3,24 +3,52 @@
 , ninja
 , pkg-config
 , tblite
+, numpy
+, simple-dftd3
 , cffi
+, gfortran
+, blas
+, lapack
+, mctc-lib
+, mstore
+, toml-f
+, multicharge
+, dftd4
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   inherit (tblite) pname version src meta;
 
-  nativeBuildInputs = [ meson ninja pkg-config ];
+  nativeBuildInputs = [
+    tblite
+    meson
+    ninja
+    pkg-config
+    gfortran
+    mctc-lib
+  ];
 
-  buildInputs = [ tblite ];
+  buildInputs = [
+    tblite
+    simple-dftd3
+    blas
+    lapack
+    mctc-lib
+    mstore
+    toml-f
+    multicharge
+    dftd4
+  ];
 
-  propagatedBuildInputs = [ cffi ];
+  propagatedBuildInputs = [ tblite simple-dftd3 cffi numpy ];
+  applyPatches = [ ./0001-fix-multicharge-dep-needed-for-static-compilation.patch ];
 
   format = "other";
 
   configurePhase = ''
     runHook preConfigure
 
-    meson setup build python --prefix=$out
+    meson setup build -Dpython=true --prefix=$out
     cd build
 
     runHook postConfigure
